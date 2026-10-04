@@ -26,11 +26,10 @@ html,body { margin:0; background:var(--bg); }
 .bar { height:12px; border-radius:6px; background:#2a292d; }
 .fmt { font:500 17px Inter; letter-spacing:.2em; color:var(--muted); text-align:center; }
 .fmt b { color:#fff; font-weight:600; }
-.win { position:absolute; border-radius:16px; overflow:hidden; background:#000; box-shadow:0 34px 90px rgba(0,0,0,.65), 0 0 0 1px #2A292D; }
+.win { position:absolute; border-radius:6px; overflow:hidden; background:#000; box-shadow:0 34px 90px rgba(0,0,0,.65), 0 0 0 1px #2A292D; }
 .win .tb { position:absolute; left:0; top:0; right:0; height:40px; background:#1c1b1f; box-shadow:inset 0 -1px 0 #2A292D; }
-.win .tb i { display:inline-block; width:11px; height:11px; border-radius:6px; background:#3a393d; margin:15px 0 0 8px; }
-.win .tb i:first-child { margin-left:16px; }
-.win .tb span { position:absolute; left:0; right:0; top:0; text-align:center; font:600 14px/40px Inter; color:var(--muted); }
+.win .tb .ctl { position:absolute; right:16px; top:14px; }
+.win .tb > span { position:absolute; left:16px; top:0; font:600 14px/40px Inter; color:var(--muted); }
 .P { box-shadow:0 60px 120px rgba(0,0,0,.7) !important; border-radius:12px; }
 </style></head><body>
 
@@ -52,7 +51,7 @@ html,body { margin:0; background:var(--bg); }
     <div class="L" style="background:rgba(8,7,10,.95);left:-1400px;top:-900px;width:2800px;height:1800px;box-shadow:none"></div>
   </div></div>
   <div class="win" style="left:1065px;top:100px;width:606px;height:880px;background:#fff">
-    <div class="tb"><i></i><i></i><i></i><span>Untitled&nbsp;&nbsp;<span style="color:var(--faint)">·</span>&nbsp;&nbsp;1200 × 1584</span></div>
+    <div class="tb"><svg class="ctl" width="96" height="12" viewBox="0 0 96 12" fill="none" stroke="#9F9EA1" stroke-width="1.3"><path d="M2 6h10"/><rect x="42.5" y=".5" width="11" height="11"/><path d="M84 .5l11 11M95 .5l-11 11"/></svg><span>Untitled&nbsp;&nbsp;<span style="color:var(--faint)">·</span>&nbsp;&nbsp;1200 × 1584</span></div>
     <img class="abs" src="../../build/frames/canvas/70.jpg" style="left:0;top:40px;width:606px;height:840px">
   </div>
   
@@ -104,7 +103,7 @@ html,body { margin:0; background:var(--bg); }
 
   <!-- Instagram -->
   <div class="win" style="left:170px;top:196px;width:440px;height:792px">
-    <div class="tb"><i></i><i></i><i></i><span>Instagram</span></div>
+    <div class="tb"><svg class="ctl" width="96" height="12" viewBox="0 0 96 12" fill="none" stroke="#9F9EA1" stroke-width="1.3"><path d="M2 6h10"/><rect x="42.5" y=".5" width="11" height="11"/><path d="M84 .5l11 11M95 .5l-11 11"/></svg><span>Instagram</span></div>
     <div class="abs" style="left:0;top:40px;width:440px;height:56px;background:#000">
       <span class="abs" style="left:12px;top:10px;width:36px;height:36px;border-radius:18px;box-shadow:0 0 0 2px #000,0 0 0 4px #5b5a5e;background:url(../../assets/logo.png) center/cover"></span>
       <span class="abs" style="left:60px;top:10px;font:600 14px Inter;color:#fff">zexdraws</span>
@@ -127,7 +126,7 @@ html,body { margin:0; background:var(--bg); }
 
   <!-- TikTok: the replay box becomes this video -->
   <div class="win" style="left:670px;top:196px;width:420px;height:792px">
-    <div class="tb"><i></i><i></i><i></i><span>TikTok</span></div>
+    <div class="tb"><svg class="ctl" width="96" height="12" viewBox="0 0 96 12" fill="none" stroke="#9F9EA1" stroke-width="1.3"><path d="M2 6h10"/><rect x="42.5" y=".5" width="11" height="11"/><path d="M84 .5l11 11M95 .5l-11 11"/></svg><span>TikTok</span></div>
     <div class="media" style="left:0;top:40px;width:420px;height:752px;background:url(../../build/frames/fantasy/690.jpg) center/contain no-repeat, linear-gradient(#2C2B27 50%, #161513 50%)"></div>
     <div class="abs" style="left:0;top:40px;width:420px;height:110px;background:linear-gradient(rgba(0,0,0,.45),transparent)"></div>
     <div class="abs" style="left:0;top:582px;width:420px;height:210px;background:linear-gradient(transparent,rgba(0,0,0,.65))"></div>
@@ -152,7 +151,7 @@ html,body { margin:0; background:var(--bg); }
 
   <!-- YouTube -->
   <div class="win" style="left:1150px;top:300px;width:600px;height:572px;background:#0f0f0f">
-    <div class="tb"><i></i><i></i><i></i><span>YouTube</span></div>
+    <div class="tb"><svg class="ctl" width="96" height="12" viewBox="0 0 96 12" fill="none" stroke="#9F9EA1" stroke-width="1.3"><path d="M2 6h10"/><rect x="42.5" y=".5" width="11" height="11"/><path d="M84 .5l11 11M95 .5l-11 11"/></svg><span>YouTube</span></div>
     <div class="media" style="left:0;top:40px;width:600px;height:338px;background:url(../../build/frames/pink/690.jpg) center/contain no-repeat, #DB2A78"></div>
     <div class="abs" style="left:0;top:298px;width:600px;height:80px;background:linear-gradient(transparent,rgba(0,0,0,.7))"></div>
     <div class="abs" style="left:12px;top:342px;width:576px;height:3px;background:rgba(255,255,255,.3)"><div style="width:47%;height:3px;background:#f00"></div></div>
