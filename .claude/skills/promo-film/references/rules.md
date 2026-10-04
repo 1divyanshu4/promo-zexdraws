@@ -16,8 +16,15 @@ Hard rules. Each one exists because breaking it cost us a revision on the refere
   don't, or verify it from the repo and docs. Our first ZexDraws cut sold drawing. The user
   stopped it: drawing is commodity; replay and customisable export are the point. The whole
   structure changed.
-- **Never redraw the product's UI.** Capture it from a running build (see `pipeline.md`) and
-  crop, composite and animate the captures. Fabricated UI reads as fake instantly.
+- **Real UI by default.** Capture it from a running build or use the product's own screenshots
+  (docs, manuals), and crop, composite and animate those. Do not invent UI.
+- **Rebuilt screens only with the user's OK**, and then faithfully: same layout, components, type
+  and colours as the real screens. The reason to rebuild is usually data: real screenshots come
+  from different demo records, so a story that follows one thing (one machine, one customer)
+  needs one consistent dataset across every screen. Keep that dataset in the shot list and use
+  it everywhere; never let numbers drift between shots. (AuditSage: the docs' nameplate, data entry
+  and analysis came from three different sample audits; we rebuilt them around one compressor.)
+- **Fact-check every label against the screen it points at** before showing a frame.
 - Use the user's real footage for the product in use. If footage is weak (e.g. the drawing is
   already finished on frame 0), say so and say what clip would be better. Keep footage swappable
   through a config file so they can drop a better clip in later.
