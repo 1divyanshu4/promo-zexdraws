@@ -90,6 +90,36 @@ html,body { margin:0; background:var(--bg); }
   <div class="abs" style="left:0;width:1920px;top:690px;text-align:center"><span style="display:inline-block;font:500 15px/34px Inter;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:0 18px;border-radius:17px;background:#fff;box-shadow:inset 0 0 0 1px var(--hair)">by GreenSage AI</span></div>
 </div>
 
+
+<!-- Concept A · Follow one compressor: a green thread runs from AC-01's nameplate to the report -->
+<div class="frame" id="fA1" style="background:#E9EDE9">
+  <div class="abs" style="inset:0;background-image:radial-gradient(#C9D1CB 1.2px, transparent 1.2px);background-size:28px 28px"></div>
+  <img class="abs" src="../../product/ui/nameplate.jpg" style="left:250px;top:-180px;width:760px;transform:rotate(-3deg);box-shadow:0 40px 90px rgba(15,26,20,.3)">
+  <svg class="abs" style="left:0;top:0" width="1920" height="1080"><path d="M560 150 C 900 150, 1000 420, 1300 420" fill="none" stroke="#047857" stroke-width="4"/><path d="M590 560 C 900 560, 1000 560, 1300 560" fill="none" stroke="#047857" stroke-width="4"/><path d="M600 960 C 900 960, 1000 700, 1300 700" fill="none" stroke="#047857" stroke-width="4"/><circle cx="560" cy="150" r="9" fill="#047857"/><circle cx="590" cy="560" r="9" fill="#047857"/><circle cx="600" cy="960" r="9" fill="#047857"/></svg>
+  <div class="abs" style="left:1300px;top:392px;padding:10px 18px;background:#fff;border-radius:6px;box-shadow:0 0 0 1px var(--hair);font:600 30px/36px Inter">Atlas Copco <span style="color:var(--muted);font-weight:500">· GA30+</span></div>
+  <div class="abs" style="left:1300px;top:532px;padding:10px 18px;background:#fff;border-radius:6px;box-shadow:0 0 0 1px var(--hair);font:600 30px/36px Inter">30 kW <span style="color:var(--muted);font-weight:500">· 40 HP</span></div>
+  <div class="abs" style="left:1300px;top:672px;padding:10px 18px;background:#fff;border-radius:6px;box-shadow:0 0 0 1px var(--hair);font:600 30px/36px Inter">10 bar <span style="color:var(--muted);font-weight:500">· max pressure</span></div>
+  <div class="abs eyebrow" style="left:1300px;top:330px"><b>Nameplate photo</b>&nbsp;&nbsp;·&nbsp;&nbsp;read by AI</div>
+</div>
+
+<div class="frame" id="fA2" style="background:#E9EDE9">
+  <div class="abs" style="inset:0;background-image:radial-gradient(#C9D1CB 1.2px, transparent 1.2px);background-size:28px 28px"></div>
+  <svg class="abs" style="left:0;top:0" width="1920" height="1080"><path d="M330 560 C 520 560, 560 300, 760 300 S 1040 640, 1240 640 S 1560 420, 1760 420" fill="none" stroke="#047857" stroke-width="5" stroke-linecap="round"/></svg>
+  <div class="phone" style="left:150px;top:250px;transform:scale(.62);transform-origin:0 0"><div class="scr"><img src="../../product/ui/m-photo-caption.png"></div></div>
+  <div class="abs" style="left:560px;top:150px;width:420px;padding:18px 22px;background:#fff;border-radius:6px;box-shadow:0 20px 50px rgba(15,26,20,.14),0 0 0 1px var(--hair)"><div class="eyebrow" style="font-size:14px">Recommendation</div><div style="font:500 22px/30px Inter;margin-top:8px">Inspect and replace insulation sleeve on <b>AC-01</b> discharge line within 2 weeks.</div></div>
+  <div class="win" style="left:1000px;top:470px;width:560px;height:380px"><div class="tb"><span>ASHRAE Analysis</span><svg width="96" height="12"><use href="#ctl"/></svg></div><div class="in"><img src="../../product/ui/w-analysis.png" style="width:900px;left:-450px;top:-200px"></div></div>
+  <div class="win" style="left:1560px;top:160px;width:330px;height:430px"><div class="tb"><span>Report</span><svg width="96" height="12"><use href="#ctl"/></svg></div><div class="in" style="background:#fff"><img src="../../product/ui/w-report.png" style="width:780px;left:-200px;top:-40px"></div></div>
+  <div class="abs stmt" style="left:150px;top:880px;font-size:64px;line-height:76px">One compressor. <span style="color:var(--muted)">Site to report.</span></div>
+</div>
+
+<!-- Concept B · Result first: the number, then how one site visit found it -->
+<div class="frame" id="fB1">
+  <div class="win" style="left:960px;top:200px;width:900px;height:640px;opacity:.9;filter:saturate(.9)"><div class="tb"><span>ASHRAE Analysis</span><svg width="96" height="12"><use href="#ctl"/></svg></div><div class="in"><img src="../../product/ui/w-analysis.png" style="width:1300px;left:-420px;top:-280px"></div></div>
+  <div class="abs eyebrow" style="left:140px;top:330px"><b>Annual savings</b>&nbsp;&nbsp;·&nbsp;&nbsp;one audit</div>
+  <div class="abs" style="left:126px;top:356px;font:700 220px/240px Inter;letter-spacing:-.05em;color:var(--accent)">$28,363</div>
+  <div class="abs" style="left:140px;top:610px;font:600 54px/66px Inter;letter-spacing:-.02em">saved every year.</div>
+  <div class="abs sup" style="left:140px;top:690px">Found by AuditSage. Here's how.</div>
+</div>
 <script>
 const f = new URLSearchParams(location.search).get('f') || '1';
 document.getElementById('f' + f).classList.add('on');
