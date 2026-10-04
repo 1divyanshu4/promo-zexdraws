@@ -7,7 +7,10 @@ Ends on the lockup (no loop back, no infinite card floor).
 
 | # | Beats | Time | Shot | Motion | Sound |
 |---|---|---|---|---|---|
-| 1 | 0–6 | 0.0–2.8 | **Exploded studio.** The real studio stands near-upright, angled about 20° to the side (not lying flat), with a blank white page. In front of it float the real **Brushes, Brush Properties, Colors and Layers** panels (captured from the app), each at its own height and spread over the workspace. | Opens already exploded. On beats 1–4 each panel drops and folds into its button on the right rail, one per beat. The camera levels out on beat 5. | Low hit at 0, a click per panel, swish on the untilt |
+| 1a | 0–1.5 | 0.0–0.7 | **Brushes.** The real Brushes panel, large and turned slightly, over the blurred studio. Left: "01/03 Studio" → *Brushes* (script) → "5 sets · pressure dynamics". | The panel swings in. The Pencil Sketch highlight lands on the beat. | Low hit at 0, click |
+| 1b | 1.5–3 | 0.7–1.4 | **Colours.** The Colors panel on the left, the label on the right (mirrored layout). "02/03" → *Colours* → "HSV · sliders · swatches". | Hard cut on the beat. The picker dot slides across the field. | Click |
+| 1c | 3–4.5 | 1.4–2.1 | **Layers.** The Layers panel on the right, the label on the left. "03/03" → *Layers* → "blend modes · opacity · lock". | Cut. The opacity slider fills. | Click |
+| 1d | 4.5–6 | 2.1–2.8 | **Studio reveal.** The clean studio stands near-upright, turned slightly, with a blank white page. | The panel shrinks into its button on the right rail as the camera pulls back to the full studio, then pushes toward the page. | Swish |
 | 2 | 6–12 | 2.8–5.6 | **Focus on the canvas**, laid out like the skin showcase. The page is a framed card with a "↺ 1,284 strokes saved" chip (the count ticks up), playing the Canvas_drawing video. No recording language. Left block: eyebrow "Every stroke · saved" → "No complicated setup." (white) → "No camera pressure." (grey) → *You just draw.* (script) → accent underline. Right block: Canvas tokens (strokes 1,284 saved / replay ready / setup none). The studio behind is darkened and blurred. | Push-in. Each line rolls up from a mask on 6.5, 8 and 9.5. The token digits count up. | Whoosh in, tick per line, groove starts |
 | 3 | 12–14 | 5.6–6.6 | **Replay.** Copy lifts out. Camera pans to the top-right toolbar. Cursor glides to the clapper (Replay) button and clicks: purple pressed state. | Camera pan, cursor travel, button press dip | Swish, click on 13, drums drop for that beat |
 | 4 | 14–21.5 | 6.6–10.1 | **Skin showcase** (the switcher you liked). The page lifts off the studio and morphs into the replay box while the studio falls away. Left: Look 01/05, frame name, colour dots and ring. Right: skin and colour tokens. | Same as the previous film: Pink, Yellow, Orange, Manga, Fantasy, switching every 1.5 beats | Boom on 14, click per switch |
@@ -18,6 +21,6 @@ Ends on the lockup (no loop back, no infinite card floor).
 ## Notes / open choices
 - The post windows copy each platform's real layout and use the platform name as text. They use no platform
   logo marks, and the counts, captions and channel are made up for ZexDraws. Say if you'd rather they be generic.
-- The panels in shot 1 were re-captured from the Linux build: Brushes, Brush Properties, Colors and Layers.
+- The opener is three single-panel cuts plus a reveal, instead of one busy exploded view. The panels were re-captured from the Linux build.
 - Canvas_drawing is nearly finished from its first frame. Shot 2 shows the last ~3 s of colouring, not a
   drawing from blank. A clip that starts from a sketch would sell "you just draw" better.
