@@ -78,6 +78,14 @@ A phone mockup must read as real hardware: a camera cutout over the screen, a st
 the screen), 30 px outer and 20 px screen corners. Frame it so the **top of the phone is in shot**
 (the cutout is what sells it); cropping the bottom is fine. In 3D, the transform origin is 50% 30%,
 so solve the pose's y for a visible top edge rather than eyeballing it.
+Chromium does not antialias a rounded clip once it is in 3D: the screen's edge stair-steps. Paint
+an inner bezel ring (inset box-shadow, same radius) over the screen edge; painted borders are
+antialiased and hide the steps.
+
+Content inside the screen should look real: a photo, not a drawn shape. If no real photo is
+available (or the photo hosts are blocked), render a lit 3D scene of the subject, add lens
+softness, grain and vignette, keep it as one replaceable file, and tell the user to swap in a
+real photo.
 
 ## Formats (post templates)
 
@@ -105,6 +113,9 @@ Two we have built, as range, not templates:
   circle with one ripple ring while the leaf turns upright; the mark steps left and the wordmark
   rises letter by letter beside it; tagline and pill left-aligned under the wordmark. No slash.
   (The user rejected the slash for this brand: "no need to add the /, try a different layout".)
+
+Keep the lockup to the mark, the name and the tagline unless the brief needs more; a product
+pill under it was cut on GreenSage ("remove the badge below the logo").
 
 Logo files often carry their own background (GreenSage's leaf sits on a white rounded square):
 match the container colour to it, or the square shows.

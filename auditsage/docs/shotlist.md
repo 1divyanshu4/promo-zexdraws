@@ -10,7 +10,7 @@
 **Sound.** Its own palette (timeline.json `music.sound`): D major, marimba lead, warm pad, deep kick, rim,
 swung 8th hats, wooden UI ticks.
 
-**Phone.** Real hardware: camera cutout, status bar, side buttons; framed with its top in shot.
+**Phone.** Real hardware: camera cutout, status bar, side buttons, inner bezel ring; framed with its top in shot. The camera shows a site photo of AC-01 (`product/photos/ac-01.jpg`, rendered by `tools/ac-photo.mjs` as a stand-in; replace with a real photo).
 
 **Copy.** "Streamline your audit workflow." The six steps are named plainly: the statement is the step
 name, and one short line says how it works. No results quoted; the screens carry sample data only.
@@ -23,9 +23,9 @@ name, and one short line says how it works. No results quoted; the screens carry
 | 3 | 14.5–18.75 | 03 Utility uploads. | Bill PDFs, read field by field by AI. | Bills window pans in; values extract row by row; last bill ticks ✓. | Whoosh, ticks |
 | 4 | 18.75–24.75 | 04 Combined analysis. | Field data, evidence and bills, together. | Four input cards land and link into "AI Analysis & Strategy"; pulses run the links; Run AI Analysis → Generating ECMs…. | Ticks, click, riser |
 | 5 | 24.75–32.25 | 05 ECM generation. | Measures ranked by cost and payback. | Analysis rises on the boom (26); rows land, bars rise, ECM 3 lights; camera lifts; Approve click (32). | Boom 26, click 32 |
-| 6 | 32.25–36.5 | 06 Report generation. | ASHRAE Level 2, exported to Word. | Report drafts in; Generate Word click (35); toast. | Click 35 |
+| 6 | 32.25–36.5 | 06 Report generation. | ASHRAE Level 2, exported to Word. | Report drafts in; Generate Word click (35); the .docx jumps out of the button. | Click 35 |
 | 7 | 36.5–40 | (bento) Streamline your audit workflow. | Data · Evidence · Bills · Analysis · ECMs · Report | Pull back to the bento; six chips light in order; tiles collapse into the centre. | Ticks, riser |
-| 8 | 40–44 | Lockup: GreenSage AI | Streamline your audit workflow. · AuditSage app · GreenSage platform | The tiles collapse into a seed that opens as a white circle with one ripple ring, the leaf turns upright; the mark steps left and the wordmark rises letter by letter; tagline and pill left-aligned beneath. No slash. | Crash 40, fade |
+| 8 | 40–44 | Lockup: GreenSage AI | Streamline your audit workflow. | The tiles collapse into a seed that opens as a white circle with one ripple ring, the leaf turns upright; the mark steps left and the wordmark rises letter by letter; tagline left-aligned beneath. No slash, no pill. | Crash 40, fade |
 
 ## Build
 

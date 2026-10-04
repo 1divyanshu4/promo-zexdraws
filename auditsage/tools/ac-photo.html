@@ -1,0 +1,58 @@
+<!doctype html><html><head><meta charset="utf-8">
+<!-- A rendered "site photo" of AC-01 in Compressor Room B: no stock photo host is reachable from
+     the build machine. tools/ac-photo.mjs screenshots this at 2x and adds lens softness, grain and
+     vignette. Replace product/photos/ac-01.jpg with a real photo whenever one is available. -->
+<style>
+html,body{margin:0;background:#000}
+#s{position:relative;width:400px;height:520px;overflow:hidden;font-family:Arial,sans-serif;perspective:700px;perspective-origin:42% 30%}
+.a{position:absolute}
+#wall{left:0;right:0;top:0;height:318px;background:linear-gradient(180deg,#6F777B 0%,#8E969A 50%,#80878B 100%)}
+#wall .blk{position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(0,0,0,.07) 0 1px,transparent 1px 100px),repeating-linear-gradient(0deg,rgba(0,0,0,.07) 0 1px,transparent 1px 50px);background-position:30px 12px}
+#wall .grime{position:absolute;left:0;right:0;bottom:0;height:60px;background:linear-gradient(0deg,rgba(40,44,40,.35),transparent)}
+#floor{left:-200px;right:-200px;top:318px;height:400px;transform-origin:50% 0;transform:rotateX(62deg);background:linear-gradient(180deg,#56625E 0%,#4A5552 100%)}
+#floor .line{position:absolute;left:52%;top:0;width:6px;height:100%;background:#D3B14B;opacity:.8}
+#floor .refl{position:absolute;left:30%;top:0;width:40%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.06),transparent)}
+.pipe{background:linear-gradient(180deg,#50585D 0%,#C3C9CC 30%,#8A9196 62%,#3F464B 100%)}
+.pipev{background:linear-gradient(90deg,#3F464B 0%,#8A9196 38%,#C3C9CC 62%,#50585D 100%)}
+/* the compressor: a real 3D box */
+#box{left:60px;top:150px;width:220px;height:244px;transform-style:preserve-3d;transform:rotateY(-26deg)}
+.f{position:absolute;backface-visibility:hidden}
+#front{left:0;top:0;width:220px;height:244px;transform:translateZ(60px);background:linear-gradient(180deg,#E6E9EA 0%,#D6DADC 60%,#C5CACC 100%);box-shadow:inset 0 0 0 1px rgba(0,0,0,.18),inset 0 -50px 0 #1E5675,inset 0 -10px 0 #1A1E21}
+#right{left:50px;top:0;width:120px;height:244px;transform:rotateY(90deg) translateZ(110px);background:linear-gradient(90deg,#A8AEB1 0%,#959C9F 100%);box-shadow:inset 0 -50px 0 #143F55,inset 0 -10px 0 #121517}
+#topf{left:0;top:62px;width:220px;height:120px;transform:rotateX(90deg) translateZ(122px);background:linear-gradient(180deg,#CFD3D5,#EEF0F1)}
+.seam{position:absolute;background:rgba(0,0,0,.22)}
+.lv{position:absolute;background:repeating-linear-gradient(180deg,#4A5257 0 4px,#C3C8CB 4px 9px)}
+#lcd{left:24px;top:28px;width:86px;height:30px;background:linear-gradient(180deg,#A6DBB9,#82C39C);font:700 14px/30px 'DejaVu Sans Mono',monospace;color:#1D3A28;text-align:center;box-shadow:0 0 0 6px #262C30}
+.btn{position:absolute;top:72px;width:11px;height:11px;border-radius:6px;box-shadow:0 1px 0 rgba(0,0,0,.4)}
+#plate{left:24px;top:110px;width:64px;height:26px;background:#EEF0F1;box-shadow:0 0 0 1px rgba(0,0,0,.3);font:700 12px/26px Arial;text-align:center;color:#25292C}
+#base{left:46px;top:388px;width:300px;height:14px;background:linear-gradient(180deg,#2B3034,#15181A)}
+#shadow{left:20px;top:366px;width:400px;height:60px;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.6),rgba(0,0,0,0));filter:blur(5px)}
+#tank{left:318px;top:96px;width:104px;height:300px;border-radius:50px/22px;background:linear-gradient(90deg,#363E43 0%,#6F797E 25%,#AEB7BB 42%,#7A848A 62%,#30383C 100%)}
+#gauge{left:332px;top:186px;width:30px;height:30px;border-radius:15px;background:radial-gradient(circle at 45% 40%,#FAFAFA,#C9CDCF);box-shadow:0 0 0 3px #2E3438}
+#gauge::after{content:'';position:absolute;left:14px;top:5px;width:2px;height:11px;background:#B8322A;transform-origin:1px 10px;transform:rotate(40deg)}
+#light{inset:0;background:radial-gradient(ellipse 60% 45% at 40% 14%,rgba(255,248,230,.32),rgba(0,0,0,0) 72%),linear-gradient(90deg,rgba(0,0,0,.22),rgba(0,0,0,0) 28%,rgba(0,0,0,0) 72%,rgba(0,0,0,.28))}
+</style></head><body><div id="s">
+<div id="wall" class="a"><div class="blk"></div><div class="grime"></div></div>
+<div id="floor" class="a"><div class="line"></div><div class="refl"></div></div>
+<div class="a pipe" style="left:-10px;top:52px;width:430px;height:13px"></div>
+<div class="a pipe" style="left:-10px;top:80px;width:320px;height:8px;opacity:.85"></div>
+<div class="a pipev" style="left:226px;top:60px;width:13px;height:96px"></div>
+<div class="a" style="left:220px;top:58px;width:25px;height:17px;border-radius:3px;background:linear-gradient(180deg,#B83A2E,#7A2018)"></div>
+<div class="a" style="left:22px;top:108px;width:24px;height:24px;border-radius:12px;background:radial-gradient(circle at 40% 40%,#F4F5F5,#B5BABD);box-shadow:0 0 0 3px #343A3E"></div>
+<div class="a" style="left:60px;top:120px;width:70px;height:40px;background:#F2D34A;box-shadow:inset 0 0 0 3px #2B2B2B;font:700 8px/12px Arial;color:#222;padding:6px;box-sizing:border-box;text-align:center">HEARING<br>PROTECTION</div>
+<div id="shadow" class="a"></div>
+<div id="tank" class="a"></div><div id="gauge" class="a"></div>
+<div id="box" class="a">
+  <div id="topf" class="f"></div>
+  <div id="right" class="f"><div class="lv" style="left:16px;right:16px;top:30px;height:140px"></div><div class="seam" style="left:0;right:0;top:194px;height:1px"></div></div>
+  <div id="front" class="f">
+    <div class="seam" style="left:136px;top:0;width:1px;height:194px"></div><div class="seam" style="left:0;right:0;top:194px;height:1px"></div>
+    <div class="lv" style="left:150px;top:24px;width:52px;height:150px"></div>
+    <div id="lcd" class="a">7.2 bar</div>
+    <div class="btn" style="left:28px;background:#3FBF6A"></div><div class="btn" style="left:46px;background:#D9534A"></div><div class="btn" style="left:64px;background:#D3D7D9"></div>
+    <div id="plate" class="a">AC-01</div>
+    <div class="a" style="left:98px;top:112px;width:0;height:0;border-left:11px solid transparent;border-right:11px solid transparent;border-bottom:20px solid #F2C230"></div>
+  </div>
+</div>
+<div id="light" class="a"></div>
+</div></body></html>

@@ -86,3 +86,10 @@ flashes through). Footage in all variants shares one playhead, so a switch never
 Hide an element only after its spring has settled: windows are `[start, end + settle(preset)]`,
 never a hard-coded few hundredths. When presets change, these must follow, so derive them from
 `settle()`.
+
+## Results come from the click
+
+The result of a click appears **from the click point**, not from a screen edge: a generated file
+jumps out of the button that made it (scale from ~0.15 at the cursor tip, an arc of ~110 px on a
+default spring, settling just beside the button), then clears before the next move. A generic
+corner toast was rejected on GreenSage ("doesn't look good; make it jump in from the click").

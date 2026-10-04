@@ -197,3 +197,11 @@ html, body { margin:0; background:var(--bg); overflow:hidden; }
 .phone .sbar { position:absolute; left:0; right:0; top:0; height:40px; padding:0 26px; display:flex; justify-content:space-between; align-items:center; font:600 13px Inter; color:#0F1A14; letter-spacing:.02em; }
 .phone .sbar span:last-child { font-size:10px; letter-spacing:.06em; }
 .phone .hw { position:absolute; width:3px; border-radius:2px; background:linear-gradient(90deg,#2C3631,#6B7A72,#2C3631); }
+
+/* An inner bezel ring painted over the screen edge: the screen's clip is not antialiased once the
+   phone is in 3D, this ring is (it hides the stair-stepped edge). */
+.phone .rim { position:absolute; inset:9px; border-radius:23px; box-shadow:inset 0 0 0 4px #0A0E0C, inset 0 0 0 5px rgba(10,14,12,.6); z-index:3; pointer-events:none; }
+.cam .strip i.ph { background:url(product/photos/ac-01.jpg) center/cover; }
+#docx { position:absolute; left:0; top:0; display:flex; gap:12px; align-items:center; padding:12px 16px 12px 12px; border-radius:10px; background:#fff; box-shadow:0 18px 40px rgba(0,0,0,.35), 0 0 0 1px #E3E8E5; white-space:nowrap; transform-origin:0 0; }
+#docx .ic { width:34px; height:42px; border-radius:4px; background:linear-gradient(180deg,#2B6CD8,#1E54B0); color:#fff; font:700 18px/42px Inter; text-align:center; clip-path:polygon(0 0,72% 0,100% 22%,100% 100%,0 100%); }
+#docx b { display:block; font:600 15px Inter; color:#0F1A14; } #docx small { display:block; margin-top:3px; font:500 12px Inter; color:#047857; }

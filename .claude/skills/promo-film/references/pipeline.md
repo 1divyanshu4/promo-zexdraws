@@ -38,7 +38,12 @@ Tooling that works, with the traps we already hit.
   | `lead` | `voice`: `bell` (FM), `marimba` (modal), `keys` (electric piano); `pattern`: beat positions in the bar; `octave`; `gain` |
   | `pad` | `voice`: `dark` (filtered saws), `warm` (sines, slow tremolo), `glass` (high detuned sines); `cutoff`; `gain` |
   | `drums` | `kick`: `punchy`, `soft`, `deep`; `snare`: `clap`, `rim`, `snap`; `hats`: `16ths`, `8ths`, `offbeat`; `swing` 0–0.2 |
-  | `ui` | `tone`: `digital`, `wood`, `glass` (clicks and ticks); `pitch` multiplier |
+  | `ui` | `tone`: `digital`, `wood`, `glass` (clicks and ticks); `pitch` multiplier; `gain` |
+  | `mix` | `stereo` (spreads lead and hats, decorrelated reverb); `width` 0–0.6; `duck` sidechain depth (0.3 smooth, 0.6 pumping); `reverb` amount; `hatsLP` Hz to soften hats |
+
+  Polish checklist (the user called an early GreenSage mix "not polished and smooth"): stereo on,
+  duck ≤ 0.35, hats low-passed around 9 kHz, a soft kick and snap rather than distorted ones, the
+  lead a little under the pad, UI ticks at about 0.8 gain when there are many of them.
 
   Swing moves odd 16ths, so expect `maxGridErrorMs` near the 30 ms snap window; hits on beats and
   8ths are unaffected.

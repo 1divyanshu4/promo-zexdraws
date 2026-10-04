@@ -244,9 +244,13 @@
     const gw = press(t, 35);
     $('genWord').style.transform = `scale(${(1 - 0.06 * gw).toFixed(4)})`;
     $('genWord').style.background = t >= B(35) ? mixHex('F3EEFF', 'FFFFFF', clamp(s(t, 35.5))) : '';
-    const ty = track(t, [[0, -90], [B(35.25), 100], [B(36.25), -90, 'snappy']]);
-    $('toast').style.transform = `translate(1440px,${ty.toFixed(2)}px)`;
-    show($('toast'), t >= B(35.2) && t < B(37));
+    // The .docx jumps out of the button that made it: from the click point, on an arc, to rest below-left.
+    const dk = clamp(s(t, 35.0625), 0, 1.02), ds = clamp(s(t, 35.0625, 'snappy'), 0, 1.03), dx = clamp(s(t, 36, 'snappy'));
+    const D0 = CUR.word, D1 = [CUR.word[0] - 400, CUR.word[1] + 64];
+    const ddx = lerp(D0[0], D1[0], dk), ddy = lerp(D0[1], D1[1], dk) - 110 * Math.sin(Math.PI * clamp(dk));
+    $('docx').style.transform = `translate(${ddx.toFixed(2)}px,${ddy.toFixed(2)}px) scale(${(0.15 + 0.85 * ds - 0.1 * dx).toFixed(4)})`;
+    $('docx').style.opacity = (clamp(ds * 3) * (1 - dx)).toFixed(3);
+    show($('docx'), t >= B(35.0625) && t < B(36.75));
     copy('c5', t, 32.75, 35.75);
 
     // Cursor: one hand across both clicks.
@@ -287,9 +291,6 @@
     WORD.forEach((c, i) => { c.style.transform = `translateY(${((1 - clamp(spring(t - B(L0 + 0.875) - i * 0.03, 'heavy'), 0, 1.01)) * 105).toFixed(2)}%)`; });
     $('lkTagMask').style.transform = `translate(${LK.text + 4}px,${LK.y + 160}px)`;
     $('lkTag').style.transform = `translateY(${((1 - s(t, L0 + 1.25, 'heavy')) * 110).toFixed(2)}%)`;
-    const pl = clamp(s(t, L0 + 1.75));
-    $('lkPill').style.opacity = clamp(pl * 1.6).toFixed(3);
-    $('lkPill').style.transform = `translate(${LK.text + 4}px,${(LK.y + 236 + (1 - pl) * 18).toFixed(2)}px)`;
   }
 
   // ------------------------------------------------------------------ measured once at load
@@ -300,7 +301,7 @@
   const W = word.getBoundingClientRect().width;
   $('lkWordMask').style.width = Math.ceil(W + 24) + 'px';
   $('lkTagMask').style.width = '1200px';
-  const LK = { mark: Math.round((1920 - (200 + 52 + W)) / 2), seed: 860, y: 430 };
+  const LK = { mark: Math.round((1920 - (200 + 52 + W)) / 2), seed: 860, y: 432 };
   LK.text = LK.mark + 252;
   // Click targets: where each button sits at the moment it is clicked.
   const CUR = {};

@@ -128,7 +128,16 @@ CHORDS = SOUND.get("progression", DEFAULT_CHORDS)
 LEAD = {"voice": "bell", "pattern": BELL_POS, "octave": 12, "gain": 1.0, **SOUND.get("lead", {})}
 PAD = {"voice": "dark", "cutoff": 1400, "gain": 1.0, **SOUND.get("pad", {})}
 DRUMS = {"kick": "punchy", "snare": "clap", "hats": "16ths", "swing": 0.0, **SOUND.get("drums", {})}
-UI = {"tone": "digital", "pitch": 1.0, **SOUND.get("ui", {})}
+UI = {"tone": "digital", "pitch": 1.0, "gain": 1.0, **SOUND.get("ui", {})}
+# Mix: stereo spreads the lead and hats and decorrelates the reverb; duck is the sidechain depth
+# (lower = smoother, less pump); hatsLP softens the hats (Hz, 0 = off).
+MIX = {"stereo": False, "width": 0.35, "duck": 0.6, "reverb": 0.4, "hatsLP": 0, **SOUND.get("mix", {})}
+STEREO = MIX["stereo"]
+
+
+def pan_gains(p):
+    a = (p + 1) * np.pi / 4
+    return np.cos(a) * np.sqrt(2), np.sin(a) * np.sqrt(2)
 
 
 def lead(note):
@@ -153,10 +162,13 @@ def render_music():
     send = np.zeros(total)
     side = np.ones(total)
     K, C, HC = kick(DRUMS["kick"]) * 1.1, clap(DRUMS["snare"]) * 0.8, hat() * 0.8
+    if MIX["hatsLP"]:
+        HC = lp(HC, MIX["hatsLP"]) * 1.4
+    leadL, leadR, hatL, hatR = (np.zeros(total) for _ in range(4)) if STEREO else (None,) * 4
     HATS = {"16ths": (0, 1, 2, 3), "8ths": (0, 2), "offbeat": (2,)}[DRUMS["hats"]]
     swing = DRUMS["swing"] * BEAT / 4
 
-    def duck(t, depth=0.6):
+    def duck(t, depth=MIX["duck"]):
         i = int(t * SR)
         d = 1 - depth * env_exp(int(0.32 * SR), 0.1)
         side[i : i + len(d)] = np.minimum(side[i : i + len(d)], d[: total - i])
@@ -177,7 +189,14 @@ def render_music():
                 add(send, C * 0.4, t)
             if groove:
                 for s in HATS:
-                    add(drums, HC * (0.9 if s == 2 else 0.45), t + s * BEAT / 4 + (swing if s % 2 else 0))
+                    h = HC * (0.9 if s == 2 else 0.45)
+                    at = t + s * BEAT / 4 + (swing if s % 2 else 0)
+                    if STEREO:
+                        gl, gr = pan_gains(MIX["width"] * (0.6 if s == 2 else -0.4))
+                        add(hatL, h * gl, at)
+                        add(hatR, h * gr, at)
+                    else:
+                        add(drums, h, at)
             elif b < 4 or pulse:
                 add(drums, HC * 0.35, t + BEAT / 2)
         for bar in range(TL["bars"]):
@@ -193,7 +212,12 @@ def render_music():
                     continue
                 note = ch[(k + bar) % len(ch)] + LEAD["octave"]
                 sig = lead(note) * (0.6 if bar == 0 else 1.0)
-                add(music, sig, b0 + pos * BEAT)
+                if STEREO:
+                    gl, gr = pan_gains(MIX["width"] * (1 if k % 2 else -1))
+                    add(leadL, sig * gl, b0 + pos * BEAT)
+                    add(leadR, sig * gr, b0 + pos * BEAT)
+                else:
+                    add(music, sig, b0 + pos * BEAT)
                 add(send, sig * 0.9, b0 + pos * BEAT)
             add(music, pad(ch, 4 * BEAT + 0.4), b0)
         # Risers into the pull-back (beat 18) and the lockup (beat 28).
@@ -215,14 +239,23 @@ def render_music():
     ir_n = int(2.2 * SR)
     ir = rng.standard_normal(ir_n) * env_exp(ir_n, 0.5)
     ir = lp(ir, 5000) / np.sqrt(np.sum(ir**2))
-    verb = fftconvolve(send, ir)[:total] * 0.4
-    mix = drums + (music + verb) * side
+    verb = fftconvolve(send, ir)[:total] * MIX["reverb"]
+    if STEREO:
+        ir2 = rng.standard_normal(ir_n) * env_exp(ir_n, 0.5)
+        ir2 = lp(ir2, 5000) / np.sqrt(np.sum(ir2**2))
+        verbR = fftconvolve(send, ir2)[:total] * MIX["reverb"]
+        L = drums + hatL + (music + leadL + verb) * side
+        R = drums + hatR + (music + leadR + verbR) * side
+        mix = np.stack([L, R], axis=1)
+    else:
+        mix = drums + (music + verb) * side
     if loop:
         return mix[N:]
     # A film that ends (no loop): keep the first pass and let the last half second fade out.
     out = mix[:N].copy()
     f = int(0.5 * SR)
-    out[-f:] *= np.linspace(1, 0, f) ** 2
+    fade = np.linspace(1, 0, f) ** 2
+    out[-f:] *= fade[:, None] if out.ndim == 2 else fade
     return out
 
 
@@ -244,7 +277,7 @@ def sfx(kind):
         return ui("tick", UI["tone"], UI["pitch"]) * 0.5
     if kind == "rewind":
         return ui("whoosh")[::-1] * 0.9
-    return ui(kind, UI["tone"], UI["pitch"])
+    return ui(kind, UI["tone"], UI["pitch"]) * UI["gain"]
 
 
 def measure(y):
@@ -264,7 +297,7 @@ def main():
     music = render_music()
     music /= np.max(np.abs(music)) * 1.05
     sf.write(ROOT / "audio/music.wav", music, SR, subtype="FLOAT")
-    grid = measure(music)
+    grid = measure(music.mean(axis=1) if music.ndim == 2 else music)
     beats = grid[::4]
     errs = [abs(g - i * BEAT / 4) for i, g in enumerate(grid)]
     out = {
@@ -278,7 +311,12 @@ def main():
 
     mix = music.copy()
     for beat, kind in TL["events"]:
-        add(mix, sfx(kind), grid[int(round(beat * 4)) % len(grid)])
+        at, sig = grid[int(round(beat * 4)) % len(grid)], sfx(kind)
+        if mix.ndim == 2:
+            add(mix[:, 0], sig, at)
+            add(mix[:, 1], sig, at)
+        else:
+            add(mix, sig, at)
     mix /= np.max(np.abs(mix)) * 1.05
     tmp = ROOT / "audio/premaster.wav"
     sf.write(tmp, mix, SR, subtype="FLOAT")

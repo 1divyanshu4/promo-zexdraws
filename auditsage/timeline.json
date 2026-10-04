@@ -45,7 +45,7 @@
     ],
     "loop": false,
     "sound": {
-      "_doc": "This film's own sound (D major, warm and organic): marimba lead, warm pad, deep kick, rim, swung 8th hats, wooden UI sounds.",
+      "_doc": "This film's own sound (D major, warm and organic): marimba lead, warm pad, soft kick, snap, light swung 8th hats, wooden UI sounds; stereo, gentle pump, more room.",
       "seed": 41,
       "progression": [
         [
@@ -132,21 +132,30 @@
           3.5
         ],
         "octave": 12,
-        "gain": 1.0
+        "gain": 0.85
       },
       "pad": {
         "voice": "warm",
-        "cutoff": 1500
+        "cutoff": 1600,
+        "gain": 1.15
       },
       "drums": {
-        "kick": "deep",
-        "snare": "rim",
+        "kick": "soft",
+        "snare": "snap",
         "hats": "8ths",
-        "swing": 0.12
+        "swing": 0.05
       },
       "ui": {
         "tone": "wood",
-        "pitch": 1.0
+        "pitch": 1.0,
+        "gain": 0.8
+      },
+      "mix": {
+        "stereo": true,
+        "width": 0.45,
+        "duck": 0.3,
+        "reverb": 0.5,
+        "hatsLP": 9000
       }
     }
   },
