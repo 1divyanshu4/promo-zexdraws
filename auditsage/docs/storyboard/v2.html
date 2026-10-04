@@ -83,6 +83,8 @@ html,body { margin:0; }
 .ed-bar .gw { margin-left:auto; padding:7px 12px; border-radius:6px; box-shadow:0 0 0 1px #C7B5F5; color:#6D28D9; }
 .toast { position:absolute; padding:12px 18px; border-radius:8px; background:#fff; box-shadow:0 12px 30px rgba(15,26,20,.16),0 0 0 1px #E3E8E5; font:500 14px Inter; }
 .cursor { position:absolute; width:44px; filter:drop-shadow(0 4px 8px rgba(0,0,0,.25)); }
+/* The product's own UI keeps the product's colours whatever the stage palette is. */
+.win, .phone, .toast { --ink:#0F1A14; --muted:#6B7570; --hair:#D9DFDA; --accent:#047857; color:var(--ink); }
 </style></head><body>
 <svg width="0" height="0" style="position:absolute"><defs><g id="ctl" fill="none" stroke="#6B7570" stroke-width="1.3"><path d="M2 6h10"/><rect x="42.5" y=".5" width="11" height="11"/><path d="M84 .5l11 11M95 .5l-11 11"/></g>
 <g id="cur"><path d="M4 2l15 11-7 1 4 8-3 1-4-8-5 5z" fill="#fff" stroke="#000" stroke-width="1.2" stroke-linejoin="round"/></g></defs></svg>
@@ -222,6 +224,23 @@ html,body { margin:0; }
 </div>
 
 <script>
+// Palette exploration: ?p=forest|sage|cream|night overrides the stage tokens.
+const PAL = {
+  forest: { '--bg':'#0D2A20', '--ink':'#F2F7F3', '--muted':'#8FB3A2', '--hair':'#1F4535', '--accent':'#4ADE9A', grid:'#1E4636' },
+  sage:   { '--bg':'#D9E3D3', '--ink':'#10241A', '--muted':'#5C6F63', '--hair':'#C2CFBE', '--accent':'#0A6B47', grid:'#BFCDBA', thread:'#0A6B47' },
+  cream:  { '--bg':'#F2EEE3', '--ink':'#1C2A21', '--muted':'#7A7A6A', '--hair':'#E1DCCD', '--accent':'#3F7A3A', grid:'#DCD6C4' },
+  night:  { '--bg':'#0D1210', '--ink':'#EEF3EF', '--muted':'#7F8B85', '--hair':'#1E2723', '--accent':'#B6F24A', grid:'#1C2420' },
+};
+const pal = PAL[new URLSearchParams(location.search).get('p')];
+if (pal) {
+  for (const [k, v] of Object.entries(pal)) if (k.startsWith('--')) document.documentElement.style.setProperty(k, v);
+  const st = document.createElement('style');
+  st.textContent = `.grid{background-image:radial-gradient(${pal.grid} 1.3px, transparent 1.3px)!important}
+    .frame{background:var(--bg)!important;color:var(--ink)}
+    .thread path,.thread g{stroke:var(--accent)!important} .thread circle,.thread g[fill]{fill:var(--accent)!important}
+    .tag{background:${pal['--bg']==='#0D2A20'||pal['--bg']==='#0D1210'?'#16201C':'#fff'};color:var(--ink);box-shadow:0 0 0 1px var(--hair)}`;
+  document.head.appendChild(st);
+}
 for (const host of document.querySelectorAll('[data-t]')) host.appendChild(document.getElementById(host.dataset.t).content.cloneNode(true));
 const f = new URLSearchParams(location.search).get('f') || '1';
 document.getElementById('f' + f).classList.add('on');
