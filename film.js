@@ -430,7 +430,7 @@
     let [x, y] = cursorAt(t);
     // While painting in the studio the cursor rides the measured paint position.
     const tm = mod(t);
-    const wgt = spring(tm - (B(4) + 0.08), 'default') * (1 - spring(tm - (B(7) - 0.12 - settle('default')), 'default'));
+    const wgt = track(tm, [[0, 0], [B(4) + 0.08, 1], [B(7) - 0.12 - settle('default'), 0]], { preset: 'default' });
     if (wgt > 0) {
       const g = containerAt(t);
       const cl = MAN.clips.canvas;

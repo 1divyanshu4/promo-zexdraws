@@ -83,7 +83,7 @@
     [4.6, 0.74, -14, 6, 0, 0],
     [5.0, 1.0, 0, 0, 0, 0],
     [6.0, 1.06, 0, 0, 0, 0],
-    [12.0, 1.9, 0, 0, 640, -330],
+    [11.75, 1.9, 0, 0, 640, -330],
     [14.0, 0.62, 0, 0, 0, 0],
   ];
   const camK = ['s', 'ry', 'rx', 'fx', 'fy'];
@@ -106,11 +106,12 @@
   const TTup = R(TT[0] + TT[2] / 2, TT[1] + TT[3] / 2, TT[2] * 1.03, TT[3] * 1.03);
   const CONV = R(960, 540, TT[2] * 0.03, TT[3] * 0.03);
   const BOX_FREE = [[0, W2], [B(14), S4], [B(21.5), E5], [B(23), TT], [B(26.4), TTup], [B(26.75), CONV]];
-  const dockW = (t) => (t < B(6) ? 1 : 1 - spring(t - B(6), 'default')) + spring(t - B(12), 'default') * (1 - spring(t - B(14), 'default'));
-  const chromeK = (t) => clamp(tr(t, [[0, 0], [B(6), 1], [B(12), 0], [B(23), 1]]), 0, 1.02);
-  const radius = (t) => Math.max(0, tr(t, [[0, 0], [B(6), 6], [B(12), 0], [B(14), 15], [B(23), 6]]));
+  const dockW = (t) => tr(t, [[0, 1], [B(6), 0], [B(11.75), 1], [B(14), 0]]);
+  const chromeK = (t) => clamp(tr(t, [[0, 0], [B(6), 1], [B(11.75), 0], [B(23), 1]]), 0, 1.02);
+  const radius = (t) => Math.max(0, tr(t, [[0, 0], [B(6), 6], [B(11.75), 0], [B(14), 15], [B(23), 6]]));
   const titleAt = (t) => (t < B(18) ? 'Untitled<span class="dim">&nbsp;&nbsp;·&nbsp;&nbsp;</span>1200 × 1584' : 'TikTok');
-  const BOX_ON = [B(6) - 1e-4, B(27) + 0.36];
+  const CONV_AT = B(26.75);
+  const BOX_ON = [B(6) - 1e-4, CONV_AT + settle('default') + 0.05];
 
   const LOOKS = [[B(14), 'pink'], [B(15.5), 'yellow'], [B(17), 'orange'], [B(18.5), 'manga'], [B(20), 'fantasy']];
   const CONTENT = [[0, 'blank'], [B(6.3), 'canvas'], ...LOOKS.map(([b, k]) => [b, 'look:' + k])];
@@ -163,10 +164,10 @@
     };
   }
   // Enter from below at tIn, roll through `steps` ([time, pos]), lift out by tOut (or never).
-  function stripTrack(tIn, steps, tOut, preset = 'heavy') {
+  function stripTrack(tIn, steps, tOut, preset = 'heavy', exitPreset = preset) {
     const keys = [[-1, -1], [tIn, 0], ...steps];
-    const exitAt = tOut === undefined ? Infinity : tOut - settle(preset) - 0.01;
-    return (t) => [track(t, keys, { preset }), clamp(spring(t - exitAt, preset), 0, 1)];
+    const exitAt = tOut === undefined ? Infinity : tOut - settle(exitPreset) - 0.01;
+    return (t) => [track(t, keys, { preset }), clamp(spring(t - exitAt, exitPreset), 0, 1)];
   }
   const block = () => el('div', '', { position: 'absolute', inset: '0' });
 
@@ -183,15 +184,22 @@
   PANELS.forEach((p, i) => {
     p.el = el('img', 'panel', { left: `${p.x}px`, top: `${p.y}px`, width: `${p.w}px`, height: `${p.h}px` }, undefined, pcam);
     p.el.src = p.src;
-    p.t0 = i ? B(p.b0) : -0.12; // the first shot is already moving on frame 0
+    // Shots overlap: each panel arrives a hair before its beat (the first is already moving on
+    // frame 0) and the previous one leaves on the same instant, outward to its own side.
+    p.t0 = i ? B(p.b0) - 0.08 : -0.12;
+    p.tOut = i < 2 ? B(p.b1) - 0.08 : Infinity;
+    p.dx = [[-1, (i ? 760 : 260) * p.side], [p.t0, 0], ...(i < 2 ? [[p.tOut, 1150 * p.side, 'snappy']] : [])];
+    p.ryK = [[-1, p.ry * 3.4], [p.t0, p.ry], ...(i < 2 ? [[p.tOut, p.ry * 3, 'snappy']] : [])];
+    p.on = [i ? p.t0 : 0, i < 2 ? p.tOut + settle('heavy') + 0.02 : B(p.b1) + settle('heavy') + 0.02];
     p.hud = block();
     p.eyebrow = strip(p.hud, p.lx, 380, 400, 24, [`<span class="eyebrow"><b>0${i + 1}</b>/03&nbsp;&nbsp;&nbsp;&nbsp;Studio</span>`], '');
     p.title = strip(p.hud, p.lx - 6, 408, 640, 150, [p.name], 'name');
     p.subl = strip(p.hud, p.lx, 566, 640, 32, [`<span class="row">${p.sub}</span>`], '');
-    const tin = Math.max(0, p.t0);
-    p.ePos = stripTrack(tin + 0.03, [], undefined, 'snappy');
-    p.tPos = stripTrack(tin + 0.07, [], undefined, 'heavy');
-    p.sPos = stripTrack(tin + 0.13, [], undefined, 'heavy');
+    // Labels lead the handover: they are out of the way before the next panel crosses them.
+    const tin = Math.max(0, p.t0), out = (i < 2 ? p.tOut : B(p.b1) - 0.08) - 0.2 + settle('snappy') + 0.01;
+    p.ePos = stripTrack(tin + 0.03, [], out, 'snappy', 'snappy');
+    p.tPos = stripTrack(tin + 0.07, [], out + 0.02, 'heavy', 'snappy');
+    p.sPos = stripTrack(tin + 0.13, [], out + 0.04, 'heavy', 'snappy');
   });
   const RAIL_T = B(4.5);
 
@@ -202,9 +210,10 @@
   const s2rule = el('div', '', { position: 'absolute', left: '258px', top: '561px', width: '520px', height: '3px', borderRadius: '2px', background: 'var(--accent)', transformOrigin: '0 50%' }, undefined, s2);
   const s2l1 = strip(s2, 256, 585, 600, 54, ['<span style="font:600 38px/54px Inter;letter-spacing:-.01em">No complicated setup.</span>'], '');
   const s2l2 = strip(s2, 256, 639, 600, 54, ['<span style="font:600 38px/54px Inter;letter-spacing:-.01em;color:var(--muted)">No camera pressure.</span>'], '');
-  const S2_OUT = B(12);
-  const s2Pos = [stripTrack(B(6.25), [], S2_OUT, 'snappy'), stripTrack(B(6.5), [], S2_OUT), stripTrack(B(8), [], S2_OUT), stripTrack(B(9.5), [], S2_OUT)];
-  const s2RuleK = (t) => spring(t - B(6.75), 'default') * (1 - spring(t - (S2_OUT - settle('default')), 'default'));
+  const S2_OUT = B(12); // the camera leaves for Replay a sixteenth earlier (beat 11.75)
+  const s2Pos = [stripTrack(B(6.25), [], S2_OUT + 0.12, 'snappy'), stripTrack(B(6.5), [], S2_OUT + 0.08, 'heavy', 'snappy'),
+    stripTrack(B(8), [], S2_OUT + 0.14, 'heavy', 'snappy'), stripTrack(B(9.5), [], S2_OUT + 0.18, 'heavy', 'snappy')];
+  const s2RuleK = (t) => tr(t, [[0, 0], [B(6.75), 1], [S2_OUT - 0.2, 0, 'snappy']]);
 
   // ------------------------------------------------------------------ shot 4 showcase HUD
   const LOOK_INFO = {
@@ -217,11 +226,11 @@
   const S4_IN = B(14), S4_OUT = B(21.5);
   const LOOK_NAMES = ['Neubrutalism', 'Manga', 'Fantasy'];
   const lookName = strip(hud, 92, 462, 560, 120, LOOK_NAMES, 'name');
-  const lookNamePos = stripTrack(S4_IN + 0.06, [[B(18.5), 1], [B(20), 2]], S4_OUT);
+  const lookNamePos = stripTrack(S4_IN + 0.06, [[B(18.5), 1], [B(20), 2]], S4_OUT + 0.06, 'heavy', 'snappy');
   const eyebrow = strip(hud, 98, 430, 300, 24, ['<span class="eyebrow">Look</span>'], '');
-  const eyebrowPos = stripTrack(S4_IN + 0.04, [], S4_OUT);
+  const eyebrowPos = stripTrack(S4_IN + 0.04, [], S4_OUT + 0.04, 'heavy', 'snappy');
   const counter = strip(hud, 168, 430, 80, 24, [1, 2, 3, 4, 5].map((n) => `<span class="eyebrow"><b>0${n}</b>/05</span>`), '');
-  const counterPos = stripTrack(S4_IN + 0.04, LOOKS.slice(1).map((l, i) => [l[0], i + 1]), S4_OUT, 'snappy');
+  const counterPos = stripTrack(S4_IN + 0.04, LOOKS.slice(1).map((l, i) => [l[0], i + 1]), S4_OUT + 0.04, 'snappy');
   const underline = el('div', '', { position: 'absolute', left: '98px', top: '596px', height: '3px', borderRadius: '2px' });
   const DOT_X = (i) => 106 + i * 38, DOT_Y = 640;
   const dots = SKINS.map((k, i) => el('div', '', { position: 'absolute', left: `${DOT_X(i) - 7}px`, top: `${DOT_Y - 7}px`, width: '14px', height: '14px', borderRadius: '7px', background: LOOK_INFO[k].hex, boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.25)' }));
@@ -231,9 +240,9 @@
   const tokEyebrow = strip(hud, RX, 470, 300, 24, ['<span class="eyebrow">Frame</span>'], '');
   const tokFrame = strip(hud, RX, 508, 400, 38, LOOK_NAMES.map((n) => `<span class="row">skin&nbsp;&nbsp;<span class="v">${n}</span></span>`), '');
   const tokColour = strip(hud, RX, 550, 400, 38, SKINS.map((k) => `<span class="row"><span style="display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:-2px;background:${LOOK_INFO[k].hex};box-shadow:inset 0 0 0 1px rgba(255,255,255,.25)"></span>&nbsp;&nbsp;colour&nbsp;&nbsp;<span class="v">${LOOK_INFO[k].hex}</span></span>`), '');
-  const tokEyebrowPos = stripTrack(S4_IN + 0.06, [], S4_OUT, 'snappy');
-  const tokFramePos = stripTrack(S4_IN + 0.12, [[B(18.5), 1], [B(20), 2]], S4_OUT, 'snappy');
-  const tokColourPos = stripTrack(S4_IN + 0.18, LOOKS.slice(1).map((l, i) => [l[0], i + 1]), S4_OUT, 'snappy');
+  const tokEyebrowPos = stripTrack(S4_IN + 0.06, [], S4_OUT + 0.04, 'snappy');
+  const tokFramePos = stripTrack(S4_IN + 0.12, [[B(18.5), 1], [B(20), 2]], S4_OUT + 0.07, 'snappy');
+  const tokColourPos = stripTrack(S4_IN + 0.18, LOOKS.slice(1).map((l, i) => [l[0], i + 1]), S4_OUT + 0.1, 'snappy');
 
   // ------------------------------------------------------------------ shot 6 post windows
   const posts = $('posts');
@@ -311,23 +320,25 @@
     </div>
     <div class="plat" style="left:0;top:708px;width:400px;height:3px;background:rgba(255,255,255,.25)"><div id="ttBar" style="width:46%;height:3px;background:#fff"></div></div>`;
   const POST_IN = { ig: B(23.25), yt: B(23.5) };
-  const CONV_AT = B(26.75);
   const postHead = strip(hud, 0, 52, 1920, 70, ['<div style="width:1920px;text-align:center;font:600 46px/70px Inter;letter-spacing:-.01em">Export once. <span style="color:var(--muted)">Post anywhere.</span></div>'], '');
-  const postHeadPos = stripTrack(B(23.2), [], B(26.6));
-  const count = (t, from, to, fmt) => fmt(lerp(from, to, clamp(spring(t - B(23.4), 'heavy'), 0, 1) * clamp((t - B(23.4)) / (B(26.5) - B(23.4)), 0, 1)));
+  const postHeadPos = stripTrack(B(23.2), [], CONV_AT + 0.05, 'heavy', 'snappy');
+  const count = (t, from, to, fmt) => fmt(tr(t, [[0, from], [B(23.4), to]], 'heavy'));
+  // Player progress is a playhead (constant speed), not an easing.
+  const playU = (t) => clock(t, [[B(23), 0], [B(27), 1]]);
   const kfmt = (v) => `${v.toFixed(1)}K`;
   const nfmt = (v) => Math.round(v).toLocaleString('en-US');
 
   // ------------------------------------------------------------------ cursor
   const CUR = [
     // [time, x, y] tip positions; the cursor is shown inside its spans.
-    [B(12.15), 1560, 760], [B(12.35), 1356, 288],
-    [B(21.85), 1420, 1010], [B(22.05), 1002, 878],
+    // Each glide settles (one default spring, ~0.47 s) just before its click.
+    [B(11.85), 1560, 760], [B(11.95), 1356, 288],
+    [B(21.4), 1420, 1010], [B(21.5), 1002, 878],
   ];
   const curX = (t) => tr(t, CUR.map((c) => [c[0], c[1]]), 'default');
   const curY = (t) => tr(t, CUR.map((c) => [c[0], c[2]]), 'default');
-  const CUR_ON = [[B(12.1), B(14) + 0.05], [B(21.8), B(23) + 0.1]];
-  const press = (t, at) => 1 - 0.14 * (spring(t - at, 'snappy') - spring(t - at - 0.09, 'snappy'));
+  const CUR_ON = [[B(11.85), B(14) + 0.05], [B(21.4), B(23) + 0.1]];
+  const press = (t, at) => tr(t, [[0, 1], [at, 0.86], [at + 0.09, 1]], 'snappy');
 
   // ------------------------------------------------------------------ lockup
   const logo = el('img', '', { position: 'absolute', left: '0', top: '0', width: '300px', borderRadius: '23%' });
@@ -362,7 +373,7 @@
   function setRect(e, x, y, w, h) { e.style.left = `${x}px`; e.style.top = `${y}px`; e.style.width = `${w}px`; e.style.height = `${h}px`; }
   // Converge: everything on screen at the end of the posts folds into the centre (the logo's seed).
   const convK = (t) => clamp(spring(t - CONV_AT, 'default'), 0, 1);
-  const anticip = (t) => 1 + 0.03 * spring(t - B(26.4), 'default') * (1 - spring(t - CONV_AT, 'default'));
+  const anticip = (t) => tr(t, [[0, 1], [B(26.4), 1.03], [CONV_AT, 1]]);
 
   function seek(tRaw) {
     const t = clamp(tRaw, 0, LOOP);
@@ -370,19 +381,19 @@
     // The studio (world).
     const c = cam(t);
     const rig = $('rig');
-    show(rig, between(t, RAIL_T - 1e-4, B(15.5)));
+    show(rig, between(t, RAIL_T - 1e-4, B(14) + settle('heavy')));
     rig.style.transform = `translate(960px, 540px) scale(${c.s.toFixed(5)}) rotateY(${c.ry.toFixed(3)}deg) rotateX(${c.rx.toFixed(3)}deg) translate(${(-c.fx).toFixed(2)}px, ${(-c.fy).toFixed(2)}px)`;
     show($('page'), between(t, RAIL_T - 1e-4, BOX_ON[0]));
-    const blurK = tr(t, [[0, 0], [B(6), 1], [B(12), 0], [B(14), 1]]);
+    const blurK = tr(t, [[0, 0], [B(6), 1], [B(11.75), 0], [B(14), 1]]);
     $('studioBlur').style.opacity = clamp(blurK, 0, 1).toFixed(3);
-    $('studioDim').style.opacity = clamp(tr(t, [[0, 0], [B(6), 0.45], [B(12), 0], [B(14), 1]], 'heavy'), 0, 1).toFixed(3);
-    const hiK = clamp(spring(t - B(12.6), 'snappy') * (1 - spring(t - B(14), 'snappy')), 0, 1), prK = clamp(spring(t - B(13), 'snappy'), 0, 1);
+    $('studioDim').style.opacity = clamp(tr(t, [[0, 0], [B(6), 0.45], [B(11.75), 0], [B(14), 1]], 'heavy'), 0, 1).toFixed(3);
+    const hiK = clamp(tr(t, [[0, 0], [B(12.6), 1], [B(14), 0]], 'snappy'), 0, 1), prK = clamp(spring(t - B(13), 'snappy'), 0, 1);
     const hi = $('replayHi');
     hi.style.background = `rgba(139,92,246,${(0.16 * hiK + 0.22 * prK * hiK).toFixed(3)})`;
     hi.style.boxShadow = `inset 0 0 0 ${(2 * hiK).toFixed(2)}px rgba(139,92,246,${hiK.toFixed(3)})`;
     hi.style.transform = `scale(${press(t, B(13)).toFixed(4)})`;
 
-    // Shots 1a-1c: one panel per shot, hard cuts on the beat.
+    // Shots 1a-1c: one panel per shot, each handing over to the next on the beat.
     const back = $('backdrop');
     const studioOn = t >= RAIL_T;
     const backK = studioOn ? 1 - spring(t - RAIL_T, 'snappy') : 1;
@@ -391,12 +402,11 @@
     back.style.transform = `scale(${(1 + 0.012 * t).toFixed(4)})`;
     PANELS.forEach((p, i) => {
       const last = i === PANELS.length - 1;
-      const on = between(t, i ? B(p.b0) : 0, B(p.b1) + (last ? 0.32 : 0));
-      show(p.el, on); show(p.hud, on && t < B(p.b1));
+      const on = between(t, p.on[0], p.on[1]);
+      show(p.el, on); show(p.hud, on);
       if (!on) return;
-      const k = spring(t - p.t0, 'default');
-      const drift = (t - p.t0) * 3 * p.side;
-      let ry = lerp(p.ry * 3.4, p.ry, k) + drift, dx = lerp(170 * p.side, 0, k), sc = lerp(0.9, 1, k), tx = 0, ty = 0;
+      const drift = (t - p.t0) * 3 * p.side; // constant-speed drift while the panel holds
+      let ry = tr(t, p.ryK) + drift, dx = tr(t, p.dx), sc = tr(t, [[-1, 0.9], [p.t0, 1]]), tx = 0, ty = 0;
       if (last && t >= RAIL_T) {
         // The Layers panel folds into its button on the rail as the studio comes up.
         const m = $('railMark').getBoundingClientRect(), st = $('stage').getBoundingClientRect(), f = 1920 / st.width;
@@ -432,19 +442,19 @@
       inner.style.boxShadow = k > 0.01 ? '0 0 0 1px var(--hair)' : 'none';
       paintFace($('face'), t, iw, ih);
       // TikTok UI rides the box's inner rect.
-      const ttK = clamp(spring(t - B(23.3), 'snappy'), 0, 1) * (1 - convK(t));
+      const ttK = clamp(tr(t, [[0, 0], [B(23.3), 1], [CONV_AT, 0]], 'snappy'), 0, 1);
       show(ttui, ttK > 0.002);
       if (ttK > 0.002) {
         const sx = iw / 400;
         ttui.style.transform = `translate(${(x + pad).toFixed(1)}px, ${(y + tb + pad + (1 - ttK) * 18).toFixed(1)}px) scale(${sx.toFixed(4)}, ${(ih / 711).toFixed(4)})`;
         ttui.style.opacity = ttK.toFixed(3);
         $('ttLikes').textContent = count(t, 31.6, 48.2, kfmt);
-        $('ttBar').style.width = `${(46 + 30 * clamp((t - B(23)) / (B(27) - B(23)), 0, 1)).toFixed(1)}%`;
+        $('ttBar').style.width = `${(46 + 30 * playU(t)).toFixed(1)}%`;
       }
     } else show(ttui, false);
 
     // Shot 2 copy.
-    show(s2, between(t, B(6), B(12) + 0.1));
+    show(s2, between(t, B(6), S2_OUT + 0.18 + 0.02));
     [s2eyebrow, s2title, s2l1, s2l2].forEach((f, i) => f(s2Pos[i](t)));
     s2rule.style.transform = `scaleX(${clamp(s2RuleK(t), 0, 1).toFixed(4)})`;
 
@@ -455,7 +465,7 @@
     const ulW = carouselOn ? track(t, [[0, 0], [S4_IN + 0.1, 470], [B(18.5), 260], [B(20), 310], [S4_OUT - settle('snappy'), 0]], { preset: 'snappy' }) : 0;
     underline.style.width = `${Math.max(0, ulW).toFixed(1)}px`;
     underline.style.background = info.hex === '#201E1A' ? '#D9B26A' : info.hex;
-    const dotK = (i) => (carouselOn ? spring(t - (S4_IN + 0.08 + i * 0.04), 'snappy') * (1 - spring(t - (S4_OUT - settle('snappy') - 0.02), 'snappy')) : 0);
+    const dotK = (i) => (carouselOn ? tr(t, [[0, 0], [S4_IN + 0.08 + i * 0.04, 1], [S4_OUT - settle('snappy') - 0.02, 0]], 'snappy') : 0);
     dots.forEach((d, i) => { d.style.transform = `scale(${Math.max(0, dotK(i)).toFixed(3)})`; });
     const [ra, rb] = indicator(t, RING_STOPS);
     ring.style.left = `${ra}px`; ring.style.width = `${Math.max(0, rb - ra)}px`;
@@ -464,7 +474,7 @@
 
     // Shot 5 Export button.
     const btn = $('exportBtn');
-    const bK = clamp(spring(t - B(21.75), 'snappy') * (1 - spring(t - B(23), 'snappy')), 0, 1.02);
+    const bK = clamp(tr(t, [[0, 0], [B(21.75), 1], [B(23), 0]], 'snappy'), 0, 1.02);
     show(btn, bK > 0.002);
     btn.style.transform = `translate(${960 - 162}px, ${840 - 34}px) scale(${(bK * press(t, B(22.5))).toFixed(4)})`;
 
@@ -486,7 +496,7 @@
     }
     $('igLikes').textContent = count(t, 8120, 12408, nfmt);
     $('ytLikes').textContent = count(t, 5.1, 8.4, kfmt);
-    { const u = clamp((t - B(23)) / (B(27) - B(23)), 0, 1); $('ytBar').style.width = `${47 + 20 * u}%`; $('ytDot').style.left = `${279 + 115 * u}px`; $('ytTime').textContent = `0:${String(14 + Math.floor(u * 6)).padStart(2, '0')}`; }
+    { const u = playU(t); $('ytBar').style.width = `${47 + 20 * u}%`; $('ytDot').style.left = `${279 + 115 * u}px`; $('ytTime').textContent = `0:${String(14 + Math.floor(u * 6)).padStart(2, '0')}`; }
     // The box converges with the windows: its free target already lands at CONV.
 
     // Cursor.

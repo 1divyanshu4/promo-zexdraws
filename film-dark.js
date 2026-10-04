@@ -382,7 +382,7 @@
     const ulW = carouselOn ? track(t, [[0, 0], [B(9) + 0.1, 470], [B(13.5), 260], [B(15), 310], [B(16) - settle('snappy'), 0]], { preset: 'snappy' }) : 0;
     underline.style.width = `${Math.max(0, ulW).toFixed(1)}px`;
     underline.style.background = info.hex === '#201E1A' ? '#D9B26A' : info.hex;
-    const dotK = (i) => (carouselOn ? spring(t - (B(9) + 0.08 + i * 0.04), 'snappy') * (1 - spring(t - (B(16) - settle('snappy') - 0.02), 'snappy')) : 0);
+    const dotK = (i) => (carouselOn ? track(t, [[0, 0], [B(9) + 0.08 + i * 0.04, 1], [B(16) - settle('snappy') - 0.02, 0]], { preset: 'snappy' }) : 0);
     dots.forEach((d, i) => { d.style.transform = `scale(${Math.max(0, dotK(i)).toFixed(3)})`; });
     const [ra, rb] = indicator(t, RING_STOPS);
     const ringK = dotK(0);
@@ -398,7 +398,7 @@
     statDigits.forEach((f, i) => f(statPos[i](t)));
     statLabels.forEach((f, i) => f(statLabelPos[i](t)));
     caption(captionPos(t));
-    const linesK = spring(t - B(21), 'default') * (1 - spring(t - (B(26) - settle('default')), 'default'));
+    const linesK = track(t, [[0, 0], [B(21), 1], [B(26) - settle('default'), 0]], { preset: 'default' });
     statLines.forEach((l) => { l.style.transform = `scaleY(${clamp(linesK, 0, 1).toFixed(3)})`; });
     // Lighting, not a fade: the floor darkens behind the numbers while they're up.
     $('scrim').style.opacity = clamp(track(t, [[0, 0], [B(20.5), 1], [B(26), 0]], { preset: 'heavy' }), 0, 1).toFixed(3);
