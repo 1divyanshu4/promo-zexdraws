@@ -97,6 +97,16 @@ html,body { margin:0; }
 .fields .r { display:flex; justify-content:space-between; padding:11px 16px; border-bottom:1px solid #EEF1EF; }
 .fields .r span { color:#6B7570; } .fields .r b { font-weight:600; }
 .fields .r.hi { background:#E6F4EE; }
+/* Tighter mockup corners. */
+.phone { border-radius:30px !important; } .phone .scr { border-radius:20px !important; }
+.tile { border-radius:10px !important; }
+.win { border-radius:6px; }
+/* Shine: the glass is toned very slightly so a bright diagonal band reads on white UI, and the top
+   edge is lit. In the film the band sweeps across on the beat. */
+.phone::after, .win::after, .tile::after { content:''; position:absolute; inset:0; border-radius:inherit; pointer-events:none;
+  background:linear-gradient(112deg, rgba(8,30,20,.10) 0%, rgba(8,30,20,.03) 30%, rgba(255,255,255,.62) 40%, rgba(255,255,255,.22) 46%, rgba(8,30,20,.02) 55%, rgba(8,30,20,.12) 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.8), inset 0 0 0 1px rgba(255,255,255,.12); }
+.phone { background:linear-gradient(135deg,#55615B 0%,#151B18 22%,#0D1210 60%,#2C3631 100%) !important; box-shadow:0 40px 90px rgba(0,0,0,.45), inset 0 0 0 1.5px rgba(255,255,255,.18) !important; }
 </style></head><body><svg width="0" height="0" style="position:absolute"><defs><g id="ctl" fill="none" stroke="#6B7570" stroke-width="1.3"><path d="M2 6h10"/><rect x="42.5" y=".5" width="11" height="11"/><path d="M84 .5l11 11M95 .5l-11 11"/></g>
 <g id="cur"><path d="M4 2l15 11-7 1 4 8-3 1-4-8-5 5z" fill="#fff" stroke="#000" stroke-width="1.2" stroke-linejoin="round"/></g></defs></svg><template id="t-phone-data"><div class="phone"><div class="scr">
   <div class="m-head"><div class="back"></div><div><h3>Air Compressor</h3><p>Bengaluru Office Energy Audit</p></div></div>
