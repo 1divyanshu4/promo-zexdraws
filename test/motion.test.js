@@ -50,4 +50,15 @@ check('swapAlpha: 0 before delay, ~1 mid, 0 by tOut - lead', () => {
 check('loopT pins last frame to first', () => {
   assert.equal(M.loopT(15, 15), 0); assert.equal(M.loopT(-0.5, 15), 14.5);
 });
+for (const p of ['snappy', 'default', 'heavy', 'playful']) check(`springIntegral matches numeric (${p})`, () => {
+  let acc = 0; const h = 1e-5; for (let u = h / 2; u < 0.7; u += h) acc += M.spring(u, p) * h;
+  assert(Math.abs(acc - M.springIntegral(0.7, p)) < 1e-4, `${acc} vs ${M.springIntegral(0.7, p)}`);
+});
+check('glide: constant speed once ramped, stops cleanly', () => {
+  const keys = [[0, 100], [2, 0]];
+  const v = (t) => (M.glide(t + 1e-4, keys) - M.glide(t - 1e-4, keys)) / 2e-4;
+  assert(Math.abs(v(1.5) - 100) < 0.5, v(1.5));
+  assert(Math.abs(v(3)) < 0.5, v(3));
+  assert(v(0.05) < 60, 'ramps in, no jolt');
+});
 process.exit(fails ? 1 : 0);

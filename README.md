@@ -1,4 +1,4 @@
-# ZexDraws launch film
+# ZexDraws launch films
 
 A 15 s, 1920×1080 product film for ZexDraws. It's built from real app UI captured from a Linux
 build, plus replay footage exported from the app. The film loops seamlessly.
@@ -10,6 +10,38 @@ node render.mjs             # full film -> out/zexdraws-launch.mp4 (60 fps, 4-su
 ```
 
 Open `film.html` through any static server to preview it in real time.
+
+### The dark film (`docs/shotlist.md`, in the style recorded in `docs/style_guide.md`)
+
+```
+python3 audio/score_dark.py         # dark 128 BPM score, measured 16th grid -> beats-dark.json
+node render.mjs --film dark --contact
+node render.mjs --film dark         # -> out/zexdraws-dark.mp4
+```
+
+`film-dark.html` is DOM + CSS 3D (tilted planes, a card flip, a floor of cards). It's still
+driven only by `window.seek(t)`. The renderer screenshots 4 subframes per frame, and ffmpeg
+averages them for motion blur.
+
+## Motion (`lib/motion.js`)
+
+All motion in both films comes from closed-form springs, as pure functions of time.
+`node test/motion.test.js` runs the checks.
+
+| Function | Use |
+|---|---|
+| `track(t, keys, {loop})` | Any value with more than one target: one spring per change, summed, never restarted |
+| `indicator(t, stops)` | Tab or segment indicators: the leading edge is stiffer than the trailing edge, so it stretches |
+| `swapAlpha(t, tIn, tOut)` | Text inside a morphing box: enters after the morph starts, gone before the next |
+| `glide(t, keys)` | Slow camera drifts: velocity ramps on a spring, position integrated in closed form |
+| `loopT(t, dur)` | Wraps time so the last frame is pinned to the first |
+
+| Preset | Overshoot | For |
+|---|---|---|
+| `snappy` | about 1% | Buttons, toggles, leading edges, digits |
+| `default` | about 0.5% | Cards, containers, camera |
+| `heavy` | 0% | Big type, logo lockups |
+| `playful` | about 16% | Mascots only |
 
 ## Swapping in a new drawing
 

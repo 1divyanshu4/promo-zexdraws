@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ZexDraws Dark Launch</title>
+<style>
+  :root {
+    --bg: #08070A; --bg-mid: #18171A; --plate: #262626; --text: #FFFFFF;
+    --muted: #9F9EA1; --faint: #5B5A5E; --hair: #2A292D; --accent: #8B5CF6;
+  }
+  html, body { margin: 0; background: var(--bg); overflow: hidden; }
+  #stage { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: var(--bg); transform-origin: 0 0; }
+  #light { position: absolute; inset: 0; background: radial-gradient(ellipse 62% 70% at 50% 50%, var(--bg-mid) 0%, var(--bg) 100%); }
+  #spot { position: absolute; inset: 0; background: radial-gradient(ellipse 75% 85% at 50% 48%, #1F1E22 0%, rgba(31,30,34,0.6) 35%, rgba(31,30,34,0) 75%); opacity: 0; }
+  #scrim { position: absolute; inset: 0; background: radial-gradient(ellipse 60% 38% at 50% 46%, rgba(8,7,10,0.82) 0%, rgba(8,7,10,0.5) 55%, rgba(8,7,10,0) 100%); opacity: 0; }
+  #cam { position: absolute; inset: 0; perspective: 1800px; perspective-origin: 960px 540px; }
+  #rig { position: absolute; left: 0; top: 0; transform-style: preserve-3d; transform-origin: 0 0; }
+  .card, #box { position: absolute; left: 0; top: 0; transform-style: preserve-3d; }
+  .card { width: 980px; height: 694px; border-radius: 14px; overflow: hidden; background: #111; }
+  .card img { width: 100%; height: 100%; display: block; object-fit: cover; filter: grayscale(0.88) brightness(0.62); }
+  .face { position: absolute; inset: 0; backface-visibility: hidden; overflow: hidden; box-shadow: 0 40px 90px rgba(0,0,0,0.55); }
+  .face canvas { width: 100%; height: 100%; display: block; }
+  .back { transform: rotateY(180deg); }
+  #hud { position: absolute; inset: 0; font-family: Inter, sans-serif; color: var(--text); }
+  .mask { position: absolute; overflow: hidden; }
+  .eyebrow { font: 500 15px Inter; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+  .eyebrow b { color: var(--text); font-weight: 500; }
+  .name { font: 84px/1 'Southern Beach'; white-space: nowrap; }
+  .row { font: 500 17px Inter; color: var(--muted); white-space: nowrap; font-feature-settings: 'tnum'; }
+  .row .v { color: var(--text); }
+  .num { font: 700 150px/1 Inter; letter-spacing: -0.02em; font-feature-settings: 'tnum'; }
+  #grain { position: absolute; inset: 0; mix-blend-mode: screen; pointer-events: none; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="light"></div>
+  <div id="spot"></div>
+  <div id="cam"><div id="rig">
+    <div id="floor"></div>
+    <div id="box"><div class="face front"><canvas id="front"></canvas></div><div class="face back"><canvas id="back"></canvas></div></div>
+  </div></div>
+  <div id="scrim"></div>
+  <div id="hud"></div>
+  <canvas id="grain" width="1920" height="1080"></canvas>
+</div>
+<script src="lib/motion.js"></script>
+<script src="film-dark.js"></script>
+</body>
+</html>

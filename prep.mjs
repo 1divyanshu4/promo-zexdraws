@@ -11,6 +11,18 @@ const ROOT = path.dirname(fileURLToPath(import.meta.url));
 const BUILD = path.join(ROOT, 'build');
 const REPLAY_WIDTH = 1280; // the preview box never shows footage wider than this
 const CANVAS_WIDTH = 900;
+const THUMBS = 6;
+
+// Bounding box of the near-white canvas in an extracted frame, in source-video pixels.
+function canvasRect(jpg, info) {
+  const w = 240, h = Math.round((240 * info.height) / info.width);
+  const raw = execFileSync('ffmpeg', ['-v', 'error', '-i', jpg, '-vf', `scale=${w}:${h}:flags=area`, '-f', 'rawvideo', '-pix_fmt', 'gray', '-']);
+  const rowsOk = [], colsOk = [];
+  for (let y = 0; y < h; y++) { let c = 0; for (let x = 0; x < w; x++) if (raw[y * w + x] > 245) c++; if (c > w * 0.3) rowsOk.push(y); }
+  for (let x = 0; x < w; x++) { let c = 0; for (let y = 0; y < h; y++) if (raw[y * w + x] > 245) c++; if (c > h * 0.3) colsOk.push(x); }
+  const sx = info.width / w, sy = info.height / h;
+  return [Math.round(colsOk[0] * sx), Math.round(rowsOk[0] * sy), Math.round((colsOk.at(-1) + 1) * sx), Math.round((rowsOk.at(-1) + 1) * sy)];
+}
 
 function probe(file) {
   const out = JSON.parse(execFileSync('ffprobe', [
@@ -93,11 +105,29 @@ export async function prep({ quiet = false } = {}) {
     clips[job.key] = { ...info, frames: count, stamp, dir: `build/frames/${job.key}` };
     if (job.track) clips[job.key].paint = await paintTrack(abs, info);
   }
+  // Floor thumbnails (dark film): THUMBS per look, evenly spread over the usable range.
+  for (const key of Object.keys(cfg.replay.skins)) {
+    const c = clips[key];
+    if (c.thumbs && c.thumbs.length === THUMBS) continue;
+    const dir = path.join(BUILD, 'thumbs');
+    fs.mkdirSync(dir, { recursive: true });
+    c.thumbs = [];
+    for (let i = 0; i < THUMBS; i++) {
+      const sec = cfg.replay.useFrom + ((i + 0.5) / THUMBS) * (cfg.replay.useTo - cfg.replay.useFrom);
+      const n = Math.min(c.frames - 1, Math.round(sec * c.fps));
+      const out = `build/thumbs/${key}_${i}.jpg`;
+      execFileSync('ffmpeg', ['-v', 'error', '-y', '-i', path.join(c.dir, `${n}.jpg`), '-vf', 'scale=480:-2', '-q:v', '3', path.join(ROOT, out)]);
+      c.thumbs.push(out);
+    }
+  }
+  // The drawing's canvas inside the exported frame: the white rectangle on frame 0.
+  const firstSkin = Object.keys(cfg.replay.skins)[0];
+  if (!clips[firstSkin].canvasRect) clips[firstSkin].canvasRect = canvasRect(path.join(ROOT, clips[firstSkin].dir, '0.jpg'), clips[firstSkin]);
   const lengths = Object.keys(cfg.replay.skins).map((k) => clips[k].duration);
   if (Math.max(...lengths) - Math.min(...lengths) > 0.5) {
     console.warn('prep: replay skins differ in length by more than 0.5 s; skin switches will jump.');
   }
-  const manifest = { replay: cfg.replay, clips };
+  const manifest = { replay: { ...cfg.replay, canvasRect: clips[firstSkin].canvasRect }, clips };
   fs.writeFileSync(manifestPath, JSON.stringify(manifest));
   return manifest;
 }
