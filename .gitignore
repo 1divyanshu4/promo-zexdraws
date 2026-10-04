@@ -8,3 +8,5 @@ frames/
 __pycache__/
 footage/
 build/
+refs/frames/
+refs/contact_all.png
