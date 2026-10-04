@@ -23,6 +23,22 @@ node render.mjs --film dark         # -> out/zexdraws-dark.mp4
 driven only by `window.seek(t)`. The renderer screenshots 4 subframes per frame, and ffmpeg
 averages them for motion blur.
 
+### The studio film (`docs/shotlist-studio.md`, storyboard in `docs/storyboard/`)
+
+```
+python3 tools/studio_assets.py         # page-less + blurred studio, Export button crop
+python3 audio/score_dark.py studio     # score from timeline-studio.json -> beats-studio.json
+node render.mjs --film studio --contact
+node render.mjs --film studio          # -> out/zexdraws-studio.mp4
+```
+
+The Brushes / Colours / Layers panel cuts lead into the studio. The page becomes the drawing
+window, then Replay is clicked and the drawing becomes the skin showcase. Export is clicked
+and the box becomes the TikTok window beside Instagram and YouTube windows. Everything folds
+into the logo. One element (the box) carries the drawing through every shot. This film ends
+on the lockup rather than looping. The panels in `ui/studio/` were captured from the Linux
+build: open a 1200×1584 canvas and click each right-rail button.
+
 ## Motion (`lib/motion.js`)
 
 All motion in both films comes from closed-form springs, as pure functions of time.

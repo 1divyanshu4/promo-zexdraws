@@ -3,6 +3,7 @@
 //   node render.mjs --contact    one frame per beat -> out/contact-<film>.png (look at this first)
 //   node render.mjs --still 7.5  a single frame at t=7.5 s -> out/still.png
 //   --film dark                  the dark launch film (film-dark.html, DOM + CSS 3D, score-dark.wav)
+//   --film studio                the studio launch film (film-studio.html, docs/shotlist-studio.md)
 //   --jobs N                     parallel browsers (default: one per CPU core)
 //
 // Every frame is a pure function of time, so the film is cut into chunks that a pool of
@@ -27,13 +28,14 @@ const mode = args.includes('--contact') ? 'contact' : args.includes('--still') ?
 const FILMS = {
   warm: { html: 'film.html', audio: 'audio/score.wav', out: 'zexdraws-launch', capture: 'canvas' },
   dark: { html: 'film-dark.html', audio: 'audio/score-dark.wav', out: 'zexdraws-dark', capture: 'dom' },
+  studio: { html: 'film-studio.html', audio: 'audio/score-studio.wav', out: 'zexdraws-studio', capture: 'dom' },
 };
 const FILM = FILMS[opt('--film', 'warm')];
 const JOBS = Math.max(1, Number(opt('--jobs', os.cpus().length)));
 const DOM = FILM.capture === 'dom';
 
 const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.json': 'application/json', '.png': 'image/png',
-  '.jpg': 'image/jpeg', '.otf': 'font/otf', '.ttf': 'font/ttf' };
+  '.jpg': 'image/jpeg', '.svg': 'image/svg+xml', '.otf': 'font/otf', '.ttf': 'font/ttf' };
 
 function serve() {
   const server = http.createServer((req, res) => {

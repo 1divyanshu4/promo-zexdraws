@@ -1,11 +1,15 @@
-"""Score for the dark launch film (docs/shotlist.md). Same tools as score.py, darker arrangement.
+"""Score for the dark launch films. Same tools as score.py, darker arrangement.
 
-    python3 audio/score_dark.py
+    python3 audio/score_dark.py            dark film   (timeline-dark.json)
+    python3 audio/score_dark.py studio     studio film (timeline-studio.json)
+
+The arrangement (where the groove, drops, risers and impacts sit) comes from the timeline's
+"music" block; files are named after the film.
 
 Writes:
-  audio/music-dark.wav   the track alone (used for measurement)
-  beats-dark.json        measured times for every 16th of the 8 bars (the film's clock)
-  audio/score-dark.wav   music + UI sounds on measured peaks, -14 LUFS / -1 dBTP
+  audio/music-<film>.wav   the track alone (used for measurement)
+  beats-<film>.json        measured times for every 16th of the 8 bars (the film's clock)
+  audio/score-<film>.wav   music + UI sounds on measured peaks, -14 LUFS / -1 dBTP
 
 The track renders twice and keeps the second pass, so tails wrap and the film loops cleanly.
 """
@@ -24,7 +28,15 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 from score import SR, add, bp, env_exp, hat, hp, kick, clap, lp, midi, saw, ui  # noqa: E402
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-TL = json.loads((ROOT / "timeline-dark.json").read_text())
+FILM = sys.argv[1] if len(sys.argv) > 1 else "dark"
+TL = json.loads((ROOT / f"timeline-{FILM}.json").read_text())
+# Defaults reproduce the dark film's arrangement.
+MUSIC = {
+    "groove": [[8, 16], [18, 28]], "pulse": [[4, 8]], "drop": [16, 17], "holdFrom": 28,
+    "risers": [[14, 18, 0.07], [24, 28, 0.08]], "boom": [18], "crash": [28], "loop": True,
+    **TL.get("music", {}),
+}
+inr = lambda b, spans: any(a <= b < z for a, z in spans)
 BPM = TL["bpm"]
 BEAT = 60.0 / BPM
 NBEATS = TL["bars"] * TL["beatsPerBar"]
@@ -73,7 +85,8 @@ BELL_POS = [0, 0.75, 1.5, 2.5, 3.25]
 
 
 def render_music():
-    total = 2 * N
+    loop = MUSIC["loop"]
+    total = 2 * N if loop else N + int(3 * SR)
     drums = np.zeros(total)
     music = np.zeros(total)
     send = np.zeros(total)
@@ -85,14 +98,14 @@ def render_music():
         d = 1 - depth * env_exp(int(0.32 * SR), 0.1)
         side[i : i + len(d)] = np.minimum(side[i : i + len(d)], d[: total - i])
 
-    for p in range(2):
+    for p in range(2 if loop else 1):
         base = p * LOOP
         for b in range(NBEATS):
             t = base + b * BEAT
-            groove = 8 <= b < 16 or 18 <= b < 28
-            pulse = 4 <= b < 8
-            drop = b in (16, 17)
-            hold = b >= 28
+            groove = inr(b, MUSIC["groove"])
+            pulse = inr(b, MUSIC["pulse"])
+            drop = b in MUSIC["drop"]
+            hold = b >= MUSIC["holdFrom"]
             if (groove or pulse) and not drop:
                 add(drums, K, t)
                 duck(t)
@@ -104,12 +117,10 @@ def render_music():
                     add(drums, HC * (0.9 if s == 2 else 0.45), t + s * BEAT / 4)
             elif b < 4 or pulse:
                 add(drums, HC * 0.35, t + BEAT / 2)
-            if hold and b == 28:
-                pass
         for bar in range(TL["bars"]):
             b0 = base + bar * 4 * BEAT
             root, ch = CHORDS[bar]
-            held = bar == 7
+            held = bar == 7 and loop
             # Sub: half-bar notes, an octave hop on the 'and' of 2 when the groove runs.
             add(music, sub(root, 2 * BEAT - 0.02), b0)
             add(music, sub(root + (12 if 2 <= bar <= 6 else 0), 2 * BEAT - 0.02), b0 + 2 * BEAT)
@@ -122,7 +133,7 @@ def render_music():
                 add(send, sig * 0.9, b0 + pos * BEAT)
             add(music, dark_pad(ch, 4 * BEAT + 0.4), b0)
         # Risers into the pull-back (beat 18) and the lockup (beat 28).
-        for start, end, amt in ((14, 18, 0.07), (24, 28, 0.08)):
+        for start, end, amt in MUSIC["risers"]:
             n = int((end - start) * BEAT * SR)
             k = np.linspace(0, 1, n)
             add(music, bp(rng.standard_normal(n), 1500, 8000) * k**2.5 * amt, base + start * BEAT)
@@ -130,17 +141,25 @@ def render_music():
         n = int(0.9 * SR)
         tt = np.arange(n) / SR
         boom = np.sin(2 * np.pi * (38 + 60 * np.exp(-tt / 0.05)) * tt) * env_exp(n, 0.35) * 0.9
-        add(drums, boom, base + 18 * BEAT)
         crash = hp(rng.standard_normal(int(2.0 * SR)), 3500) * env_exp(int(2.0 * SR), 0.6) * 0.16
-        add(drums, crash, base + 28 * BEAT)
-        add(send, crash * 0.5, base + 28 * BEAT)
-        duck(base + 18 * BEAT, 0.8)
+        for b in MUSIC["boom"]:
+            add(drums, boom, base + b * BEAT)
+            duck(base + b * BEAT, 0.8)
+        for b in MUSIC["crash"]:
+            add(drums, crash, base + b * BEAT)
+            add(send, crash * 0.5, base + b * BEAT)
     ir_n = int(2.2 * SR)
     ir = rng.standard_normal(ir_n) * env_exp(ir_n, 0.5)
     ir = lp(ir, 5000) / np.sqrt(np.sum(ir**2))
     verb = fftconvolve(send, ir)[:total] * 0.4
     mix = drums + (music + verb) * side
-    return mix[N:]
+    if loop:
+        return mix[N:]
+    # A film that ends (no loop): keep the first pass and let the last half second fade out.
+    out = mix[:N].copy()
+    f = int(0.5 * SR)
+    out[-f:] *= np.linspace(1, 0, f) ** 2
+    return out
 
 
 def sfx(kind):
@@ -180,7 +199,7 @@ def measure(y):
 def main():
     music = render_music()
     music /= np.max(np.abs(music)) * 1.05
-    sf.write(ROOT / "audio/music-dark.wav", music, SR, subtype="FLOAT")
+    sf.write(ROOT / f"audio/music-{FILM}.wav", music, SR, subtype="FLOAT")
     grid = measure(music)
     beats = grid[::4]
     errs = [abs(g - i * BEAT / 4) for i, g in enumerate(grid)]
@@ -191,13 +210,13 @@ def main():
         "sixteenths": [round(g, 4) for g in grid],
         "maxGridErrorMs": round(1000 * max(errs), 2),
     }
-    (ROOT / "beats-dark.json").write_text(json.dumps(out) + "\n")
+    (ROOT / f"beats-{FILM}.json").write_text(json.dumps(out) + "\n")
 
     mix = music.copy()
     for beat, kind in TL["events"]:
         add(mix, sfx(kind), grid[int(round(beat * 4)) % len(grid)])
     mix /= np.max(np.abs(mix)) * 1.05
-    tmp = ROOT / "audio/premaster-dark.wav"
+    tmp = ROOT / f"audio/premaster-{FILM}.wav"
     sf.write(tmp, mix, SR, subtype="FLOAT")
     probe = subprocess.run(
         ["ffmpeg", "-hide_banner", "-i", str(tmp), "-af", "loudnorm=I=-14:TP=-1:LRA=11:print_format=json", "-f", "null", "-"],
@@ -210,7 +229,7 @@ def main():
         "alimiter=limit=0.8:attack=1:release=40:level=false"
     )
     subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(tmp), "-af", af, "-ar", str(SR), "-c:a", "pcm_s16le",
-                    str(ROOT / "audio/score-dark.wav")], check=True)
+                    str(ROOT / f"audio/score-{FILM}.wav")], check=True)
     tmp.unlink()
     print(json.dumps({k: v for k, v in out.items() if k not in ("beats", "sixteenths")}))
 
