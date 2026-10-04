@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GreenSage Launch Film</title>
+<style>
+@font-face { font-family: Inter; src: url(product/fonts/Inter-Medium.ttf); font-weight: 500; }
+@font-face { font-family: Inter; src: url(product/fonts/Inter-SemiBold.ttf); font-weight: 600; }
+@font-face { font-family: Inter; src: url(product/fonts/Inter-Bold.ttf); font-weight: 700; }
+/* Stage: deep green, mint accent. The product UI keeps its own colours (see .ui below). */
+:root { --bg:#0D2A20; --ink:#F2F7F3; --muted:#8FB3A2; --hair:#1F4535; --accent:#4ADE9A; --deep:#0F3B2C; }
+html, body { margin:0; background:var(--bg); overflow:hidden; }
+#stage { position:relative; width:1920px; height:1080px; overflow:hidden; background:var(--bg); font-family:Inter; color:var(--ink); transform-origin:0 0; }
+.abs { position:absolute; left:0; top:0; }
+#grid { position:absolute; left:-700px; top:-700px; width:3320px; height:2480px; background-image:radial-gradient(#174635 1.4px, transparent 1.5px); background-size:28px 28px; }
+#light { position:absolute; inset:0; background:radial-gradient(ellipse 70% 80% at 55% 45%, rgba(13,42,32,0) 0%, rgba(8,28,21,.75) 100%); }
+.persp { position:absolute; inset:0; perspective:2200px; perspective-origin:960px 432px; }
+.persp > * { position:absolute; left:0; top:0; }
+
+/* ---------- product UI: rebuilt from the GreenSage platform and AuditSage app screens ---------- */
+.ui { --ink:#0F1A14; --muted:#6B7570; --hair:#D9DFDA; --accent:#047857; --field:#E4EBE6; --app:#F4F6F4; color:var(--ink); }
+.tile { position:absolute; border-radius:10px; overflow:hidden; background:#fff; box-shadow:0 30px 70px rgba(0,0,0,.35); }
+.tile .cap { position:absolute; left:22px; top:18px; font:600 12px Inter; letter-spacing:.16em; text-transform:uppercase; color:#6B7570; white-space:nowrap; }
+.tile.dark { background:var(--deep); box-shadow:none; }
+.kick { font:600 17px Inter; letter-spacing:.2em; text-transform:uppercase; color:var(--accent); white-space:nowrap; }
+.big { font:700 120px/132px Inter; letter-spacing:-.045em; white-space:nowrap; }
+.big i, .hd i { font-style:normal; color:var(--accent); }
+.sub { font:500 28px/40px Inter; color:var(--muted); white-space:nowrap; }
+.mask { position:absolute; overflow:hidden; }
+.mask > div { will-change:transform; }
+
+/* Phone: dark lit bezel; shine lives on the bezel, never on the screen. */
+.phone { width:420px; height:880px; border-radius:30px; background:linear-gradient(135deg,#55615B 0%,#151B18 22%,#0D1210 60%,#2C3631 100%); box-shadow:0 40px 90px rgba(0,0,0,.45), inset 0 0 0 1.5px rgba(255,255,255,.18); }
+.phone::before { content:''; position:absolute; inset:0; border-radius:inherit; background:linear-gradient(118deg, rgba(255,255,255,0) 18%, rgba(255,255,255,.55) 30%, rgba(255,255,255,.08) 36%, rgba(255,255,255,0) 48%, rgba(255,255,255,.22) 78%, rgba(255,255,255,0) 86%); }
+.phone .glint { position:absolute; inset:0; border-radius:inherit; overflow:hidden; }
+.phone .glint div { position:absolute; top:-200px; width:120px; height:1300px; left:0; background:linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.85), rgba(255,255,255,0)); transform:rotate(22deg); }
+.phone .scr { position:absolute; inset:12px; border-radius:20px; overflow:hidden; background:var(--app); z-index:1; }
+.m-head { padding:52px 22px 12px; display:flex; gap:14px; align-items:flex-start; }
+.m-head .back { width:34px; height:34px; border-radius:8px; background:#E4EAE6; flex:none; margin-top:2px; }
+.m-head h3 { margin:0; font:600 21px/26px Inter; }
+.m-head p { margin:2px 0 0; font:500 13px Inter; color:var(--muted); }
+.m-tabs { margin:4px 18px 12px; display:flex; background:#E4EAE6; border-radius:8px; padding:4px; box-shadow:0 0 0 1px #D2DAD5; }
+.m-tabs div { flex:1; text-align:center; font:600 12px/30px Inter; letter-spacing:.08em; color:#334039; border-radius:6px; }
+.m-tabs .on { background:var(--accent); color:#fff; }
+.m-lbl { margin:12px 18px 6px; font:600 11px Inter; letter-spacing:.07em; color:#2A332E; }
+.m-in { position:relative; margin:0 18px; padding:11px 14px; height:18px; background:var(--field); border-radius:6px; box-shadow:0 0 0 1px #D2DAD5; font:500 15px/18px Inter; color:#1E2622; white-space:nowrap; }
+.m-in .ph { color:#7C8781; }
+.m-in .caret { display:inline-block; width:2px; height:18px; margin-left:1px; vertical-align:top; background:var(--accent); }
+.m-btn { margin:16px 18px 0; padding:12px; text-align:center; background:var(--accent); color:#fff; border-radius:6px; font:700 12px Inter; letter-spacing:.08em; }
+.m-nav { position:absolute; left:0; right:0; bottom:0; height:78px; background:#fff; box-shadow:0 -1px 0 #E1E6E2; display:flex; }
+.m-nav div { flex:1; text-align:center; font:500 11px/1 Inter; color:#6B7570; padding-top:44px; position:relative; }
+.m-nav div::before { content:''; position:absolute; left:50%; top:16px; width:20px; height:20px; margin-left:-10px; border-radius:5px; border:2px solid #6B7570; box-sizing:border-box; }
+.m-nav .badge { position:absolute; left:58%; top:8px; width:16px; height:16px; padding:0; border-radius:8px; background:#E5484D; color:#fff; font:700 10px/16px Inter; }
+.m-nav .badge::before { display:none; }
+
+/* Platform windows: flat, title left, line controls right, 6 px corners, lit frame. */
+.win { border-radius:6px; overflow:hidden; background:#fff; box-shadow:0 30px 80px rgba(0,0,0,.4), 0 0 0 1px rgba(255,255,255,.5), 0 0 0 7px #1A2622, 0 0 0 8px rgba(255,255,255,.25); }
+.tb { height:40px; position:relative; box-shadow:inset 0 -1px 0 var(--hair); background:linear-gradient(180deg,#FFFFFF,#F1F4F2); }
+.tb span { position:absolute; left:16px; font:600 14px/40px Inter; color:var(--muted); white-space:nowrap; }
+.tb svg { position:absolute; right:16px; top:14px; }
+.wbody { position:absolute; left:16px; right:16px; top:56px; bottom:16px; box-shadow:0 0 0 1px var(--hair); border-radius:4px; overflow:hidden; background:#fff; }
+.an-head { display:flex; justify-content:space-between; align-items:center; padding:16px 20px; border-bottom:1px solid #EEF1EF; }
+.an-head h4 { margin:0; font:700 20px Inter; } .an-head small { display:block; font:600 10px Inter; letter-spacing:.12em; color:#8A948F; margin-top:3px; }
+.pill { display:inline-block; padding:7px 14px; border-radius:6px; font:600 13px Inter; white-space:nowrap; }
+.pill.g { background:var(--accent); color:#fff; } .pill.s { background:#E6F4EE; color:var(--accent); font-size:10px; letter-spacing:.1em; padding:5px 9px; }
+.an-side { position:absolute; left:0; top:62px; bottom:0; width:170px; padding:12px; border-right:1px solid #EEF1EF; box-sizing:border-box; }
+.an-side div { font:600 11px/30px Inter; letter-spacing:.06em; color:#6B7570; padding-left:10px; border-radius:6px; }
+.an-side .on { background:#E6F4EE; color:var(--accent); }
+.an-main { position:absolute; left:186px; right:16px; top:78px; bottom:16px; }
+.kpis { display:flex; gap:10px; }
+.kpi { flex:1; padding:12px; border-radius:8px; box-shadow:0 0 0 1px #E3E8E5; }
+.kpi small { display:block; font:600 9px/12px Inter; letter-spacing:.1em; color:#8A948F; text-transform:uppercase; white-space:nowrap; }
+.kpi b { display:block; font:700 17px Inter; margin-top:6px; white-space:nowrap; }
+.ecm { display:grid; grid-template-columns:70px 1fr 110px 110px 90px; gap:8px; align-items:center; padding:12px 14px; border-radius:8px; font:500 14px Inter; box-shadow:0 0 0 1px #E3E8E5; margin-top:8px; white-space:nowrap; }
+.ecm.hi { box-shadow:0 0 0 2px var(--accent); background:#F1FAF6; }
+.ecm b { font-weight:700; } .ecm .num { text-align:right; font-variant-numeric:tabular-nums; }
+.chart { position:relative; height:190px; margin-top:14px; border-radius:8px; box-shadow:0 0 0 1px #E3E8E5; padding:28px 16px 26px 40px; box-sizing:border-box; display:flex; align-items:flex-end; gap:12px; }
+.chart .bar { flex:1; background:#9FD3BE; border-radius:2px 2px 0 0; position:relative; }
+.chart .bar.hi { background:var(--accent); }
+.chart .bar small { position:absolute; bottom:-20px; left:50%; transform:translateX(-50%); font:500 10px Inter; color:#8A948F; white-space:nowrap; }
+.fields { font:500 15px Inter; }
+.fields .r { position:relative; display:flex; justify-content:space-between; padding:11px 16px; border-bottom:1px solid #EEF1EF; }
+.fields .r span { color:#6B7570; } .fields .r b { font-weight:600; }
+.fields .r.hi { background:#E6F4EE; }
+.fields .sk { position:absolute; right:16px; top:14px; height:14px; border-radius:7px; background:#E6EBE8; }
+.doc { position:absolute; left:220px; right:240px; top:58px; bottom:0; background:#fff; box-shadow:0 0 0 1px #E7EBE8; padding:36px 48px; box-sizing:border-box; }
+.doc h5 { margin:0 0 14px; font:700 17px Inter; letter-spacing:.02em; }
+.doc p { margin:0 0 12px; font:500 14px/22px Inter; color:#2B332E; }
+.doc .hl { background:#E3F4EC; box-shadow:0 0 0 6px #E3F4EC; border-radius:2px; }
+.nav { position:absolute; left:0; top:58px; bottom:0; width:206px; padding:12px; box-sizing:border-box; font:500 12px/26px Inter; color:#4C5651; }
+.nav .on { color:var(--accent); background:#E6F4EE; border-radius:6px; padding-left:8px; }
+.ed-bar { position:absolute; left:0; right:0; top:0; height:58px; border-bottom:1px solid #EEF1EF; display:flex; align-items:center; gap:10px; padding:0 14px; font:600 13px Inter; white-space:nowrap; }
+.ed-bar .gw { margin-left:auto; padding:7px 12px; border-radius:6px; box-shadow:0 0 0 1px #C7B5F5; color:#6D28D9; }
+.toast { position:absolute; left:0; top:0; padding:14px 20px; border-radius:8px; background:#fff; box-shadow:0 14px 34px rgba(0,0,0,.28),0 0 0 1px #E3E8E5; font:500 16px Inter; white-space:nowrap; }
+.toast b { color:#047857; }
+.chip { padding:10px 16px; border-radius:6px; box-shadow:inset 0 0 0 1.5px var(--accent); color:var(--ink); }
+#cursor { position:absolute; left:0; top:0; width:44px; height:44px; filter:drop-shadow(0 4px 8px rgba(0,0,0,.35)); transform-origin:7px 4px; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute"><defs><g id="ctl" fill="none" stroke="#6B7570" stroke-width="1.3"><path d="M2 6h10"/><rect x="42.5" y=".5" width="11" height="11"/><path d="M84 .5l11 11M95 .5l-11 11"/></g></defs></svg>
+
+<template id="t-analysis-compact"><div class="ui" style="width:780px;padding:56px 22px 22px;box-sizing:border-box">
+  <div class="kpis"><div class="kpi"><small>Electricity savings</small><b style="color:var(--accent)">171,889 kWh</b></div><div class="kpi"><small>Annual savings</small><b style="color:var(--accent)">$28,363</b></div><div class="kpi"><small>GHG reduction</small><b style="color:var(--accent)">112 t CO₂</b></div><div class="kpi"><small>Measures</small><b>15 ECMs</b></div></div>
+  <div class="ecm"><b>ECM 1</b><span>LED retrofit, office floors</span><span class="num">$6,940/yr</span><span class="num">$21,400</span><span class="num">3.1 yrs</span></div>
+  <div class="ecm hi"><b>ECM 3</b><span><b>VFD retrofit, AC-01</b></span><span class="num"><b>$4,820/yr</b></span><span class="num">$8,600</span><span class="num"><b>1.8 yrs</b></span></div>
+  <div class="ecm"><b>ECM 5</b><span>Chiller setpoint reset</span><span class="num">$3,110/yr</span><span class="num">$1,900</span><span class="num">0.6 yrs</span></div>
+  <div class="chart" style="height:130px;padding-top:18px"><div class="bar" style="height:78%"><small>ECM 1</small></div><div class="bar" style="height:30%"><small>2</small></div><div class="bar hi" style="height:54%"><small>ECM 3</small></div><div class="bar" style="height:22%"><small>4</small></div><div class="bar" style="height:36%"><small>5</small></div><div class="bar" style="height:18%"><small>6</small></div><div class="bar" style="height:26%"><small>7</small></div><div class="bar" style="height:12%"><small>8</small></div><div class="bar" style="height:20%"><small>9</small></div><div class="bar" style="height:9%"><small>10</small></div></div>
+</div></template>
+
+<div id="stage">
+  <div id="grid"></div>
+  <div id="light"></div>
+
+  <!-- 1 · Bento opener -->
+  <div id="bento1" class="abs">
+    <div id="b1head" class="tile dark ui" style="left:550px;top:60px;width:820px;height:470px">
+      <div class="kick" style="position:absolute;left:48px;top:48px;color:#4ADE9A">GreenSage AI</div>
+      <div class="mask" style="left:44px;top:92px;width:740px;height:100px"><div class="hd" style="font:700 88px/100px Inter;letter-spacing:-.045em;color:#F2F7F3">Site visit</div></div>
+      <div class="mask" style="left:44px;top:186px;width:740px;height:100px"><div class="hd" style="font:700 88px/100px Inter;letter-spacing:-.045em;color:#F2F7F3">to <span style="color:#4ADE9A">final report.</span></div></div>
+      <img src="product/logo.png" style="position:absolute;right:44px;bottom:40px;width:86px;filter:brightness(1.6) saturate(.9)" alt="">
+    </div>
+    <div id="b1phone" class="tile ui" style="left:60px;top:60px;width:470px;height:960px;background:#F4F6F4"></div>
+    <div id="b1bill" class="tile ui" style="left:1390px;top:60px;width:470px;height:470px"><div class="cap">Utility bill · extracted</div>
+      <div class="fields" style="position:absolute;left:0;top:56px;width:470px"><div class="r"><span>Bill month</span><b>October 2023</b></div><div class="r"><span>Units used</span><b>618,470 kWh</b></div><div class="r hi"><span>Contract demand</span><b>1,000 kW</b></div><div class="r"><span>Bill total</span><b>₹46,74,196</b></div><div class="r"><span>Tariff</span><b>HT-3.4 · 33 kV</b></div><div class="r"><span>Account</span><b>H4526904000</b></div></div></div>
+    <div id="b1anal" class="tile ui" style="left:550px;top:550px;width:820px;height:470px"><div class="cap">ASHRAE analysis · ECM details</div><div data-t="t-analysis-compact" style="position:absolute;left:20px;top:0"></div></div>
+    <div id="b1rep" class="tile ui" style="left:1390px;top:550px;width:470px;height:470px"><div class="cap">Report · 4.1 ECM details</div>
+      <div style="position:absolute;left:22px;right:22px;top:58px;font:500 16px/25px Inter;color:#2B332E"><b style="font-weight:700">ECM 3 · VFD for air compressor AC-01.</b><br><br><span style="background:#E3F4EC;box-shadow:0 0 0 5px #E3F4EC">AC-01 runs loaded at part demand. A VFD saves an estimated 41,600 kWh and $4,820 a year: a 1.8-year payback.</span></div>
+      <div style="position:absolute;left:22px;bottom:22px" class="pill g">Generate Word</div></div>
+  </div>
+
+  <!-- 6 · Pull-back bento (the phone tile is shared with shot 1) -->
+  <div id="bento6" class="abs">
+    <div id="b6head" class="tile dark ui" style="left:550px;top:60px;width:1310px;height:470px">
+      <div class="kick" style="position:absolute;left:48px;top:48px;color:#4ADE9A">GreenSage AI · one audit, end to end</div>
+      <div class="mask" style="left:44px;top:96px;width:1200px;height:116px"><div style="font:700 104px/116px Inter;letter-spacing:-.045em;color:#F2F7F3">Site visit</div></div>
+      <div class="mask" style="left:44px;top:208px;width:1200px;height:116px"><div style="font:700 104px/116px Inter;letter-spacing:-.045em;color:#F2F7F3">to <span style="color:#4ADE9A">final report.</span></div></div>
+      <div id="chips" style="position:absolute;left:48px;bottom:44px;display:flex;gap:12px;font:600 18px Inter;letter-spacing:.02em;--accent:#4ADE9A;--ink:#F2F7F3">
+        <span class="chip">On site</span><span class="chip">Bills</span><span class="chip">Analysis</span><span class="chip">Report</span></div>
+    </div>
+    <div id="b6anal" class="tile ui" style="left:550px;top:550px;width:640px;height:470px"><div class="cap">ASHRAE analysis · ECM details</div><div data-t="t-analysis-compact" style="position:absolute;left:10px;top:14px;transform:scale(.795);transform-origin:0 0"></div></div>
+    <div id="b6rep" class="tile ui" style="left:1210px;top:550px;width:650px;height:470px"><div class="cap">Report · 4.1 ECM details</div>
+      <div style="position:absolute;left:22px;right:22px;top:58px;font:500 17px/26px Inter;color:#2B332E"><b style="font-weight:700">ECM 3 · Variable-speed drive for air compressor AC-01.</b><br><br><span style="background:#E3F4EC;box-shadow:0 0 0 5px #E3F4EC">AC-01 (Atlas Copco GA55, 55 kW) in Compressor Room B runs loaded at part demand. A VFD and new discharge-line insulation save an estimated 41,600 kWh and $4,820 a year: a 1.8-year payback.</span></div>
+      <div style="position:absolute;left:22px;bottom:22px" class="pill g">Generate Word</div></div>
+  </div>
+
+  <div class="persp" id="world">
+    <!-- AuditSage app -->
+    <div id="phone" class="phone ui" style="transform-origin:50% 30%">
+      <div class="glint"><div id="glint"></div></div>
+      <div class="scr">
+        <div class="m-head"><div class="back"></div><div><h3>Air Compressor</h3><p>Sample Office · Energy Audit</p></div></div>
+        <div class="m-tabs"><div class="on">DATA</div><div>NOTES</div><div>PHOTOS</div></div>
+        <div class="m-lbl">EQUIPMENT</div><div class="m-in" data-v="AC-01 · Compressor Room B" data-p="Equipment tag and location"></div>
+        <div class="m-lbl">RATED POWER (HP)</div><div class="m-in" data-v="75" data-p="Enter rated power"></div>
+        <div class="m-lbl">MOTOR EFFICIENCY (%)</div><div class="m-in" data-v="95.2" data-p="Enter efficiency"></div>
+        <div class="m-lbl">MAX PRESSURE (BAR)</div><div class="m-in" data-v="10" data-p="Enter pressure"></div>
+        <div class="m-lbl">VFD CONTROL INSTALLED</div><div class="m-in" data-v="No" data-p="Select"></div>
+        <div class="m-btn" id="saveBtn">SAVE ENTRY</div>
+        <div class="m-nav"><div>Home</div><div>Browse</div><div>Sync<span class="badge" id="badge">1</span></div><div>Profile</div></div>
+      </div>
+    </div>
+
+    <!-- GreenSage platform: utility bills -->
+    <div id="bills" class="win ui" style="width:1120px;height:640px;transform-origin:0% 50%"><div class="tb"><span>GreenSage&nbsp;&nbsp;·&nbsp;&nbsp;Utility Bills</span><svg width="96" height="12"><use href="#ctl"/></svg></div><div class="wbody">
+      <div class="an-head"><div><h4>Extracted Data Details</h4><small>MAL OCTOBER 2023.PDF · AI-EXTRACTED</small></div><div><span class="pill s">EXTRACTED</span>&nbsp;&nbsp;<span class="pill g">Save</span></div></div>
+      <div style="position:absolute;left:20px;top:84px;width:330px;bottom:20px;border-radius:8px;box-shadow:0 0 0 1px #E3E8E5;padding:14px;box-sizing:border-box;font:500 13px Inter;color:#4C5651">
+        <div style="font:600 11px Inter;letter-spacing:.1em;color:#8A948F;margin-bottom:10px">UTILITY BILLS</div>
+        <div style="display:flex;justify-content:space-between;padding:10px 8px;border-radius:6px;background:#E6F4EE;color:#0F1A14;font-weight:600">MAL October 2023.pdf<span class="pill s" style="padding:3px 7px">✓</span></div>
+        <div style="display:flex;justify-content:space-between;padding:10px 8px">MAL September 2023.pdf<span class="pill s" style="padding:3px 7px">✓</span></div>
+        <div style="display:flex;justify-content:space-between;padding:10px 8px">MCPL August 2023.pdf<span class="pill s" style="padding:3px 7px">✓</span></div>
+        <div style="display:flex;justify-content:space-between;padding:10px 8px;position:relative">MCPL April 2023.pdf<span id="exing" style="color:#7C3AED;font-weight:600">Extracting…</span><span id="exdone" class="pill s" style="position:absolute;right:8px;top:8px;padding:3px 7px">✓</span></div>
+      </div>
+      <div class="fields" id="billFields" style="position:absolute;left:370px;right:20px;top:84px;border-radius:8px;box-shadow:0 0 0 1px #E3E8E5">
+        <div class="r" style="border-radius:8px 8px 0 0;background:#F6F8F7;font-weight:600;color:#6B7570;font-size:12px;letter-spacing:.06em"><span>FIELD</span><span>VALUE</span></div>
+        <div class="r"><span>Consumer</span><b>Sample Office · HT</b></div>
+        <div class="r"><span>Bill month</span><b>October 2023</b></div>
+        <div class="r" id="unitsRow"><span>Units used</span><b>618,470 kWh</b></div>
+        <div class="r"><span>Contract demand</span><b>1,000 kW</b></div>
+        <div class="r"><span>Tariff</span><b>HT-3.4 · 33 kV</b></div>
+        <div class="r"><span>Bill total</span><b>₹46,74,196</b></div>
+        <div class="r"><span>Due date</span><b>21-11-2023</b></div>
+      </div></div></div>
+
+    <!-- GreenSage platform: ASHRAE analysis -->
+    <div id="analysis" class="win ui" style="width:1120px;height:700px;transform-origin:50% 40%"><div class="tb"><span>GreenSage&nbsp;&nbsp;·&nbsp;&nbsp;ASHRAE Analysis</span><svg width="96" height="12"><use href="#ctl"/></svg></div><div class="wbody">
+      <div class="an-head"><div><h4>ASHRAE Analysis</h4><small>REVIEW PIPELINE · SAMPLE OFFICE</small></div><div><span class="pill s">SYNCED</span>&nbsp;&nbsp;<span class="pill g" id="approve" style="position:relative">Approve Analysis</span></div></div>
+      <div class="an-side"><div>EXECUTIVE SUMMARY</div><div class="on">ECM DETAILS</div><div>AIR COMPRESSORS</div><div>BUILDING</div><div>HVAC</div><div>LIGHTING</div></div>
+      <div class="an-main">
+        <div class="kpis"><div class="kpi"><small>Electricity savings</small><b style="color:var(--accent)">171,889 kWh</b></div><div class="kpi"><small>Annual savings</small><b style="color:var(--accent)">$28,363</b></div><div class="kpi"><small>GHG reduction</small><b style="color:var(--accent)">112 t CO₂</b></div><div class="kpi"><small>Measures</small><b>15 ECMs</b></div></div>
+        <div class="ecm" id="ecm1"><b>ECM 1</b><span>LED retrofit, office floors</span><span class="num">$6,940/yr</span><span class="num">$21,400</span><span class="num">3.1 yrs</span></div>
+        <div class="ecm" id="ecm3"><b>ECM 3</b><span><b>VFD retrofit, AC-01</b> · Compressor Room B</span><span class="num"><b>$4,820/yr</b></span><span class="num">$8,600</span><span class="num"><b>1.8 yrs</b></span></div>
+        <div class="ecm" id="ecm5"><b>ECM 5</b><span>Chiller setpoint reset</span><span class="num">$3,110/yr</span><span class="num">$1,900</span><span class="num">0.6 yrs</span></div>
+        <div class="chart" id="chart"><div class="bar" data-h="78"><small>ECM 1</small></div><div class="bar" data-h="30"><small>2</small></div><div class="bar" data-h="54"><small>ECM 3</small></div><div class="bar" data-h="22"><small>4</small></div><div class="bar" data-h="36"><small>5</small></div><div class="bar" data-h="18"><small>6</small></div><div class="bar" data-h="26"><small>7</small></div><div class="bar" data-h="12"><small>8</small></div><div class="bar" data-h="20"><small>9</small></div><div class="bar" data-h="9"><small>10</small></div></div>
+      </div></div></div>
+
+    <!-- GreenSage platform: report editor -->
+    <div id="report" class="win ui" style="width:1120px;height:720px;transform-origin:0% 50%"><div class="tb"><span>GreenSage&nbsp;&nbsp;·&nbsp;&nbsp;Report Editor</span><svg width="96" height="12"><use href="#ctl"/></svg></div><div class="wbody">
+      <div class="ed-bar">← Back to ECMs&nbsp;&nbsp;&nbsp;<span style="color:var(--muted);font-weight:500">Sample Office · ASHRAE Level 2</span><span class="gw" id="genWord">Generate Word</span><span class="pill g" style="padding:7px 12px">Save</span></div>
+      <div class="nav"><div style="font-weight:600;letter-spacing:.1em;font-size:10px;color:#8A948F">SECTIONS</div><div>1.0 Executive Summary</div><div>2.0 Background</div><div>3.0 Building Overview</div><div class="on">4.1 ECM Details</div><div>4.2 No/Low Cost ECMs</div><div>5.0 Utility Analysis</div></div>
+      <div class="doc"><h5>4.1 ECM DETAILS</h5>
+        <p id="p1"><b>ECM 3 · Variable-speed drive for air compressor AC-01.</b></p>
+        <p id="p2">AC-01 (Atlas Copco GA55, 55 kW) in Compressor Room B runs loaded at part demand. Fitting a VFD and replacing the worn discharge-line insulation saves an estimated 41,600 kWh and $4,820 a year, for an $8,600 investment: a simple payback of 1.8 years.</p>
+        <p id="p3">Savings were calculated from the logged operating profile and nameplate data, following ASHRAE Level 2 methods.</p>
+      </div></div></div>
+  </div>
+
+  <div id="topfade" class="abs" style="width:1920px;height:470px;background:linear-gradient(var(--bg) 70%, rgba(13,42,32,0))"></div>
+
+  <!-- Copy: one block per macro shot; every line rolls through its own mask. -->
+  <div id="copy" class="abs">
+    <div id="c2"><div class="mask kick" style="left:120px;top:636px;height:28px">01 · On site</div><div class="mask big" style="left:112px;top:670px;height:140px"><div>Logged <i>once.</i></div></div><div class="mask sub" style="left:120px;top:820px;height:42px"><div>Equipment, photos and notes,</div></div><div class="mask sub" style="left:120px;top:860px;height:42px"><div>offline in the AuditSage app.</div></div></div>
+    <div id="c3"><div class="mask kick" style="left:120px;top:636px;height:28px">02 · Utility bills</div><div class="mask big" style="left:112px;top:670px;height:140px"><div>Bills, <i>read.</i></div></div><div class="mask sub" style="left:120px;top:820px;height:42px"><div>Every field pulled from the PDF</div></div><div class="mask sub" style="left:120px;top:860px;height:42px"><div>by AI, on the GreenSage platform.</div></div></div>
+    <div id="c4"><div class="mask kick" style="left:120px;top:106px;height:28px">03 · AI analysis</div><div class="mask big" style="left:112px;top:140px;height:140px"><div>Savings, <i>found.</i></div></div><div class="mask sub" style="left:120px;top:290px;height:42px"><div>AI turns the data into measures, ranked by cost and payback.</div></div></div>
+    <div id="c5"><div class="mask kick" style="left:120px;top:636px;height:28px">04 · Report</div><div class="mask big" style="left:112px;top:670px;height:140px"><div>Written <i>in.</i></div></div><div class="mask sub" style="left:120px;top:820px;height:42px"><div>The ASHRAE Level 2 report, drafted.</div></div><div class="mask sub" style="left:120px;top:860px;height:42px"><div>Edit, then export to Word.</div></div></div>
+  </div>
+
+  <div id="toast" class="toast ui"><b>✓</b>&nbsp;&nbsp;Word document downloaded</div>
+
+  <!-- 7 · Lockup -->
+  <div id="lockup" class="abs">
+    <div id="lkLogo" class="abs" style="width:188px;height:188px;border-radius:22px;background:#F2F7F3"><img src="product/logo.png" style="position:absolute;left:14px;top:14px;width:160px" alt=""></div>
+    <div id="lkSlash" class="abs" style="width:6px;height:180px;border-radius:3px;background:var(--accent)"></div>
+    <div id="lkWordMask" class="mask" style="height:180px"><div id="lkWord" style="font:700 140px/180px Inter;letter-spacing:-.045em;white-space:nowrap">GreenSage AI</div></div>
+    <div class="mask" style="left:0;width:1920px;top:620px;height:66px"><div id="lkTag" style="text-align:center;font:600 46px/62px Inter;letter-spacing:-.015em">Site visit to <span style="color:var(--accent)">final report.</span></div></div>
+    <div id="lkPill" class="abs" style="left:0;width:1920px;top:712px;text-align:center"><span style="display:inline-block;font:500 15px/34px Inter;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:0 18px;border-radius:17px;box-shadow:inset 0 0 0 1px var(--hair)">AuditSage app&nbsp;&nbsp;·&nbsp;&nbsp;GreenSage platform</span></div>
+  </div>
+
+  <svg id="cursor" viewBox="0 0 24 24"><path d="M4 2l15 11-7 1 4 8-3 1-4-8-5 5z" fill="#fff" stroke="#000" stroke-width="1.2" stroke-linejoin="round"/></svg>
+</div>
+<script src="lib/motion.js"></script>
+<script src="film.js"></script>
+</body>
+</html>

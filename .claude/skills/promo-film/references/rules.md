@@ -25,6 +25,10 @@ Hard rules. Each one exists because breaking it cost us a revision on the refere
   it everywhere; never let numbers drift between shots. (AuditSage: the docs' nameplate, data entry
   and analysis came from three different sample audits; we rebuilt them around one compressor.)
 - **Fact-check every label against the screen it points at** before showing a frame.
+- **Get the names right.** Confirm which name is the company, which is each product, and which screen
+  belongs to which product, from the docs or the user. (GreenSage AI is the company; AuditSage is its
+  mobile app; the GreenSage platform is the web side. We first branded every screen and the lockup
+  "AuditSage".) Window titles, copy and the lockup follow that split.
 - Use the user's real footage for the product in use. If footage is weak (e.g. the drawing is
   already finished on frame 0), say so and say what clip would be better. Keep footage swappable
   through a config file so they can drop a better clip in later.

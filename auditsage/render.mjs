@@ -16,7 +16,6 @@ import http from 'node:http';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { prep } from './prep.mjs';
 
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
 const OUT = path.join(ROOT, 'out');
@@ -99,7 +98,8 @@ async function renderChunk(w, a, b, file) {
   await done;
 }
 
-if (fs.existsSync(path.join(ROOT, 'footage.json'))) await prep();
+// Footage films extract their clips first (prep.mjs); UI-only films have no footage.json.
+if (fs.existsSync(path.join(ROOT, 'footage.json'))) await (await import('./prep.mjs')).prep();
 if (!fs.existsSync(path.join(ROOT, FILM.audio))) await run('python3', [path.join(ROOT, 'audio/score.py')]);
 fs.mkdirSync(OUT, { recursive: true });
 const server = await serve();
