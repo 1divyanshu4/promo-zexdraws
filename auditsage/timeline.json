@@ -1,30 +1,234 @@
 {
   "bpm": 128,
-  "bars": 8,
+  "bars": 11,
   "beatsPerBar": 4,
-  "_doc": "GreenSage AI film (docs/shotlist.md): arrangement and UI sounds in beats, 8 bars at 128 BPM = 15 s. Beats are 0-based and may be fractional (16ths); each sound lands on the measured peak nearest that grid point.",
+  "_doc": "GreenSage AI film (docs/shotlist.md): arrangement and UI sounds in beats, 11 bars at 128 BPM = 20.6 s. Beats are 0-based and may be fractional (16ths); each sound lands on the measured peak nearest that grid point.",
   "music": {
     "_doc": "Beat spans [from, to). pulse = kick + light hats, groove = full kit; drop beats lose the drums; hold silences drums from that beat; risers [from, to, gain]; boom/crash beats. loop false = the film ends, last half second fades.",
-    "pulse": [[0, 5]],
-    "groove": [[5, 15], [16, 29]],
-    "drop": [15],
-    "holdFrom": 29,
-    "risers": [[12, 16, 0.08], [26, 29, 0.08]],
-    "boom": [16],
-    "crash": [29],
+    "pulse": [
+      [
+        0,
+        4
+      ]
+    ],
+    "groove": [
+      [
+        4,
+        25
+      ],
+      [
+        26,
+        40
+      ]
+    ],
+    "drop": [
+      25
+    ],
+    "holdFrom": 40,
+    "risers": [
+      [
+        22,
+        26,
+        0.08
+      ],
+      [
+        36.5,
+        40,
+        0.08
+      ]
+    ],
+    "boom": [
+      26
+    ],
+    "crash": [
+      40
+    ],
     "loop": false
   },
   "events": [
-    [0, "hit"], [0.5, "tick"], [1, "tick"], [1.5, "tick"], [2, "tick"],
-    [4.25, "whoosh"],
-    [6, "tick"], [6.5, "tick"], [7, "tick"], [7.5, "tick"], [8, "tick"], [9, "click"],
-    [10.5, "whoosh"],
-    [11.5, "tick"], [12, "tick"], [12.5, "tick"], [13, "tick"], [14.5, "tick"],
-    [15, "swish"],
-    [17, "tick"], [17.5, "tick"], [18, "tick"], [19, "tick"],
-    [22, "click"], [22.25, "whoosh"],
-    [25, "click"], [25.25, "tick"],
-    [26.5, "whoosh"], [27.25, "tick"], [27.5, "tick"], [27.75, "tick"], [28, "tick"],
-    [29, "crash"], [29.25, "swish"]
+    [
+      0,
+      "hit"
+    ],
+    [
+      0.5,
+      "tick"
+    ],
+    [
+      1,
+      "tick"
+    ],
+    [
+      1.5,
+      "tick"
+    ],
+    [
+      2,
+      "tick"
+    ],
+    [
+      4.25,
+      "whoosh"
+    ],
+    [
+      5.75,
+      "tick"
+    ],
+    [
+      6.125,
+      "tick"
+    ],
+    [
+      6.5,
+      "tick"
+    ],
+    [
+      6.875,
+      "tick"
+    ],
+    [
+      7.25,
+      "tick"
+    ],
+    [
+      8,
+      "click"
+    ],
+    [
+      9.75,
+      "swish"
+    ],
+    [
+      11.25,
+      "click"
+    ],
+    [
+      12.25,
+      "click"
+    ],
+    [
+      14.5,
+      "whoosh"
+    ],
+    [
+      15.5,
+      "tick"
+    ],
+    [
+      16,
+      "tick"
+    ],
+    [
+      16.5,
+      "tick"
+    ],
+    [
+      17,
+      "tick"
+    ],
+    [
+      18.25,
+      "tick"
+    ],
+    [
+      18.75,
+      "swish"
+    ],
+    [
+      19.125,
+      "tick"
+    ],
+    [
+      19.375,
+      "tick"
+    ],
+    [
+      19.625,
+      "tick"
+    ],
+    [
+      19.875,
+      "tick"
+    ],
+    [
+      20.75,
+      "tick"
+    ],
+    [
+      23.25,
+      "click"
+    ],
+    [
+      24.5,
+      "swish"
+    ],
+    [
+      27,
+      "tick"
+    ],
+    [
+      27.5,
+      "tick"
+    ],
+    [
+      28,
+      "tick"
+    ],
+    [
+      29,
+      "tick"
+    ],
+    [
+      32,
+      "click"
+    ],
+    [
+      32.25,
+      "whoosh"
+    ],
+    [
+      35,
+      "click"
+    ],
+    [
+      35.25,
+      "tick"
+    ],
+    [
+      36.5,
+      "whoosh"
+    ],
+    [
+      37.25,
+      "tick"
+    ],
+    [
+      37.5,
+      "tick"
+    ],
+    [
+      37.75,
+      "tick"
+    ],
+    [
+      38.0,
+      "tick"
+    ],
+    [
+      38.25,
+      "tick"
+    ],
+    [
+      38.5,
+      "tick"
+    ],
+    [
+      40,
+      "crash"
+    ],
+    [
+      40.25,
+      "swish"
+    ]
   ]
 }

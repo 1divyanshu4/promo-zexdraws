@@ -112,8 +112,9 @@ def render_music():
                 add(drums, HC * 0.35, t + BEAT / 2)
         for bar in range(TL["bars"]):
             b0 = base + bar * 4 * BEAT
-            root, ch = CHORDS[bar]
-            held = bar == 7 and loop
+            # The progression repeats every 8 bars; the last bar always takes the turnaround chord.
+            root, ch = CHORDS[-1] if bar == TL["bars"] - 1 else CHORDS[bar % len(CHORDS)]
+            held = bar == TL["bars"] - 1 and loop
             # Sub: half-bar notes, an octave hop on the 'and' of 2 when the groove runs.
             add(music, sub(root, 2 * BEAT - 0.02), b0)
             add(music, sub(root + (12 if 2 <= bar <= 6 else 0), 2 * BEAT - 0.02), b0 + 2 * BEAT)

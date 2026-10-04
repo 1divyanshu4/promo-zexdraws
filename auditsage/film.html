@@ -25,8 +25,8 @@
   <div id="bento1" class="abs">
     <div id="b1head" class="tile dark ui" style="left:550px;top:60px;width:820px;height:470px">
       <div class="kick" style="position:absolute;left:48px;top:48px;color:#4ADE9A">GreenSage AI</div>
-      <div class="mask" style="left:44px;top:92px;width:740px;height:100px"><div class="hd" style="font:700 88px/100px Inter;letter-spacing:-.045em;color:#F2F7F3">Site visit</div></div>
-      <div class="mask" style="left:44px;top:186px;width:740px;height:100px"><div class="hd" style="font:700 88px/100px Inter;letter-spacing:-.045em;color:#F2F7F3">to <span style="color:#4ADE9A">final report.</span></div></div>
+      <div class="mask" style="left:44px;top:92px;width:740px;height:100px"><div class="hd" style="font:700 88px/100px Inter;letter-spacing:-.045em;color:#F2F7F3">Streamline your</div></div>
+      <div class="mask" style="left:44px;top:186px;width:740px;height:100px"><div class="hd" style="font:700 88px/100px Inter;letter-spacing:-.045em;color:#F2F7F3"><span style="color:#4ADE9A">audit workflow.</span></div></div>
       <img src="product/logo.png" style="position:absolute;right:44px;bottom:40px;width:86px;filter:brightness(1.6) saturate(.9)" alt="">
     </div>
     <div id="b1phone" class="tile ui" style="left:60px;top:60px;width:470px;height:960px;background:#F4F6F4"></div>
@@ -42,10 +42,10 @@
   <div id="bento6" class="abs">
     <div id="b6head" class="tile dark ui" style="left:550px;top:60px;width:1310px;height:470px">
       <div class="kick" style="position:absolute;left:48px;top:48px;color:#4ADE9A">GreenSage AI · one audit, end to end</div>
-      <div class="mask" style="left:44px;top:96px;width:1200px;height:116px"><div style="font:700 104px/116px Inter;letter-spacing:-.045em;color:#F2F7F3">Site visit</div></div>
-      <div class="mask" style="left:44px;top:208px;width:1200px;height:116px"><div style="font:700 104px/116px Inter;letter-spacing:-.045em;color:#F2F7F3">to <span style="color:#4ADE9A">final report.</span></div></div>
+      <div class="mask" style="left:44px;top:96px;width:1200px;height:116px"><div style="font:700 104px/116px Inter;letter-spacing:-.045em;color:#F2F7F3">Streamline your</div></div>
+      <div class="mask" style="left:44px;top:208px;width:1200px;height:116px"><div style="font:700 104px/116px Inter;letter-spacing:-.045em;color:#F2F7F3"><span style="color:#4ADE9A">audit workflow.</span></div></div>
       <div id="chips" style="position:absolute;left:48px;bottom:44px;display:flex;gap:12px;font:600 18px Inter;letter-spacing:.02em;--accent:#4ADE9A;--ink:#F2F7F3">
-        <span class="chip">On site</span><span class="chip">Bills</span><span class="chip">Analysis</span><span class="chip">Report</span></div>
+        <span class="chip">Data</span><span class="chip">Evidence</span><span class="chip">Bills</span><span class="chip">Analysis</span><span class="chip">ECMs</span><span class="chip">Report</span></div>
     </div>
     <div id="b6anal" class="tile ui" style="left:550px;top:550px;width:640px;height:470px"><div class="cap">ASHRAE analysis · ECM details</div><div data-t="t-analysis-compact" style="position:absolute;left:10px;top:14px;transform:scale(.795);transform-origin:0 0"></div></div>
     <div id="b6rep" class="tile ui" style="left:1210px;top:550px;width:650px;height:470px"><div class="cap">Report · 4.1 ECM details</div>
@@ -67,6 +67,15 @@
         <div class="m-lbl">VFD CONTROL INSTALLED</div><div class="m-in" data-v="No" data-p="Select"></div>
         <div class="m-btn" id="saveBtn">SAVE ENTRY</div>
         <div class="m-nav"><div>Home</div><div>Browse</div><div>Sync<span class="badge" id="badge">1</span></div><div>Profile</div></div>
+      </div>
+      <!-- AuditSage camera: wipes up over the data screen for evidence collection -->
+      <div class="scr cam" id="camScr">
+        <div class="bar"><span>✕</span><span>Capture photo</span><span>✓</span></div>
+        <div class="loc">Air Compressor · Compressor Room B (AC-01)</div>
+        <div class="vf"><div class="g" style="left:132px;top:0;bottom:0;width:1px"></div><div class="g" style="left:264px;top:0;bottom:0;width:1px"></div><div class="g" style="top:173px;left:0;right:0;height:1px"></div><div class="g" style="top:346px;left:0;right:0;height:1px"></div>
+          <div class="unit"></div><div class="gps">18.5204° N, 73.8567° E<br>Sample Office · 14:02</div><div id="flash" style="position:absolute;inset:0;background:#fff;opacity:0"></div></div>
+        <div class="strip">SNAPPED IN THIS SESSION (<span id="camCount">0</span>)<br><i id="th1"></i><i id="th2"></i></div>
+        <div class="shutter" id="shutter"></div>
       </div>
     </div>
 
@@ -114,14 +123,26 @@
       </div></div></div>
   </div>
 
-  <div id="topfade" class="abs" style="width:1920px;height:470px;background:linear-gradient(var(--bg) 70%, rgba(13,42,32,0))"></div>
+  <div id="topfade" class="abs" style="width:1920px;height:560px;background:linear-gradient(var(--bg) 74%, rgba(13,42,32,0))"></div>
+
+  <!-- 4 · Combined analysis: the inputs meet in one analysis -->
+  <div id="conv" class="abs">
+    <svg id="convLines" class="abs" width="1920" height="1080"></svg>
+    <div class="src ui" style="left:800px;top:250px;width:440px;height:104px"><b>Field data</b><small>Equipment sheets · AuditSage app</small><i class="dot"></i></div>
+    <div class="src ui" style="left:800px;top:400px;width:440px;height:104px"><b>Photo evidence</b><small>Geotagged · nameplates read by AI</small><i class="dot"></i></div>
+    <div class="src ui" style="left:800px;top:550px;width:440px;height:104px"><b>Utility bills</b><small>Extracted fields</small><i class="dot"></i></div>
+    <div class="src ui" style="left:800px;top:700px;width:440px;height:104px"><b>Assumptions</b><small>Rates · emissions factors</small><i class="dot"></i></div>
+    <div id="node" class="node ui" style="left:1400px;top:412px;width:420px"><small>ASHRAE WORKFLOW · STAGE 02</small><b>AI Analysis &amp; Strategy</b><p>Observations and ECMs, generated from every input at once.</p><span class="pill g" id="runAI" style="position:absolute;left:24px;bottom:22px">⟳&nbsp;&nbsp;Run AI Analysis</span></div>
+  </div>
 
   <!-- Copy: one block per macro shot; every line rolls through its own mask. -->
   <div id="copy" class="abs">
-    <div id="c2"><div class="mask kick" style="left:120px;top:636px;height:28px">01 · On site</div><div class="mask big" style="left:112px;top:670px;height:140px"><div>Logged <i>once.</i></div></div><div class="mask sub" style="left:120px;top:820px;height:42px"><div>Equipment, photos and notes,</div></div><div class="mask sub" style="left:120px;top:860px;height:42px"><div>offline in the AuditSage app.</div></div></div>
-    <div id="c3"><div class="mask kick" style="left:120px;top:636px;height:28px">02 · Utility bills</div><div class="mask big" style="left:112px;top:670px;height:140px"><div>Bills, <i>read.</i></div></div><div class="mask sub" style="left:120px;top:820px;height:42px"><div>Every field pulled from the PDF</div></div><div class="mask sub" style="left:120px;top:860px;height:42px"><div>by AI, on the GreenSage platform.</div></div></div>
-    <div id="c4"><div class="mask kick" style="left:120px;top:106px;height:28px">03 · AI analysis</div><div class="mask big" style="left:112px;top:140px;height:140px"><div>Savings, <i>found.</i></div></div><div class="mask sub" style="left:120px;top:290px;height:42px"><div>AI turns the data into measures, ranked by cost and payback.</div></div></div>
-    <div id="c5"><div class="mask kick" style="left:120px;top:636px;height:28px">04 · Report</div><div class="mask big" style="left:112px;top:670px;height:140px"><div>Written <i>in.</i></div></div><div class="mask sub" style="left:120px;top:820px;height:42px"><div>The ASHRAE Level 2 report, drafted.</div></div><div class="mask sub" style="left:120px;top:860px;height:42px"><div>Edit, then export to Word.</div></div></div>
+    <div id="c2"><div class="mask kick" style="left:120px;top:560px;height:28px">01 · AuditSage app</div><div class="mask stmt4" style="left:112px;top:594px;height:232px"><div>Data<br><i>collection.</i></div></div><div class="mask sub" style="left:120px;top:838px;height:42px"><div>Equipment data, logged on site, offline.</div></div></div>
+    <div id="cEv"><div class="mask kick" style="left:120px;top:560px;height:28px">02 · AuditSage app</div><div class="mask stmt4" style="left:112px;top:594px;height:232px"><div>Evidence<br><i>collection.</i></div></div><div class="mask sub" style="left:120px;top:838px;height:42px"><div>Geotagged photos, linked to each entry.</div></div></div>
+    <div id="c3"><div class="mask kick" style="left:120px;top:560px;height:28px">03 · GreenSage platform</div><div class="mask stmt4" style="left:112px;top:594px;height:232px"><div>Utility<br><i>uploads.</i></div></div><div class="mask sub" style="left:120px;top:838px;height:42px"><div>Bill PDFs, read field by field by AI.</div></div></div>
+    <div id="cCo"><div class="mask kick" style="left:120px;top:560px;height:28px">04 · GreenSage platform</div><div class="mask stmt4" style="left:112px;top:594px;height:232px"><div>Combined<br><i>analysis.</i></div></div><div class="mask sub" style="left:120px;top:838px;height:42px"><div>Field data, evidence and bills, together.</div></div></div>
+    <div id="c4"><div class="mask kick" style="left:120px;top:96px;height:28px">05 · GreenSage platform</div><div class="mask stmt4" style="left:112px;top:130px;height:232px"><div>ECM<br><i>generation.</i></div></div><div class="mask sub" style="left:120px;top:374px;height:42px"><div>Measures ranked by cost and payback.</div></div></div>
+    <div id="c5"><div class="mask kick" style="left:120px;top:560px;height:28px">06 · GreenSage platform</div><div class="mask stmt4" style="left:112px;top:594px;height:232px"><div>Report<br><i>generation.</i></div></div><div class="mask sub" style="left:120px;top:838px;height:42px"><div>ASHRAE Level 2, exported to Word.</div></div></div>
   </div>
 
   <div id="toast" class="toast ui"><b>✓</b>&nbsp;&nbsp;Word document downloaded</div>
@@ -131,7 +152,7 @@
     <div id="lkLogo" class="abs" style="width:188px;height:188px;border-radius:22px;background:#F2F7F3"><img src="product/logo.png" style="position:absolute;left:14px;top:14px;width:160px" alt=""></div>
     <div id="lkSlash" class="abs" style="width:6px;height:180px;border-radius:3px;background:var(--accent)"></div>
     <div id="lkWordMask" class="mask" style="height:180px"><div id="lkWord" style="font:700 140px/180px Inter;letter-spacing:-.045em;white-space:nowrap">GreenSage AI</div></div>
-    <div class="mask" style="left:0;width:1920px;top:620px;height:66px"><div id="lkTag" style="text-align:center;font:600 46px/62px Inter;letter-spacing:-.015em">Site visit to <span style="color:var(--accent)">final report.</span></div></div>
+    <div class="mask" style="left:0;width:1920px;top:620px;height:66px"><div id="lkTag" style="text-align:center;font:600 46px/62px Inter;letter-spacing:-.015em">Streamline your <span style="color:var(--accent)">audit workflow.</span></div></div>
     <div id="lkPill" class="abs" style="left:0;width:1920px;top:712px;text-align:center"><span style="display:inline-block;font:500 15px/34px Inter;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:0 18px;border-radius:17px;box-shadow:inset 0 0 0 1px var(--hair)">AuditSage app&nbsp;&nbsp;·&nbsp;&nbsp;GreenSage platform</span></div>
   </div>
 
