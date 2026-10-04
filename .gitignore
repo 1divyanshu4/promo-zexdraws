@@ -1,0 +1,8 @@
+node_modules/
+out/
+frames/
+*.mp4
+*.wav
+!assets/**/*.wav
+.DS_Store
+__pycache__/
