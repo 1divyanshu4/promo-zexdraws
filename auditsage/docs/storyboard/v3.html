@@ -146,7 +146,13 @@ html,body { margin:0; }
     <p class="hl">AC-01 (Atlas Copco GA55, 55 kW) in Compressor Room B runs loaded at part demand. Fitting a VFD and replacing the worn discharge-line insulation saves an estimated 41,600 kWh and $4,820 a year, for an $8,600 investment: a simple payback of 1.8 years.</p>
     <p>Savings were calculated from the logged operating profile and nameplate data, following ASHRAE Level 2 methods.</p>
   </div></div></div></template>
-<template id="t-bills"><div class="win" style="width:1120px;height:640px"><div class="tb"><span>Utility Bills&nbsp;&nbsp;·&nbsp;&nbsp;Electricity bill extraction</span><svg width="96" height="12"><use href="#ctl"/></svg></div><div class="wbody">
+<template id="t-analysis-compact"><div style="width:780px;padding:56px 22px 22px;box-sizing:border-box">
+  <div class="kpis"><div class="kpi"><small>Electricity savings</small><b style="color:var(--accent)">171,889 kWh</b></div><div class="kpi"><small>Annual savings</small><b style="color:var(--accent)">$28,363</b></div><div class="kpi"><small>GHG reduction</small><b style="color:var(--accent)">112 t CO₂</b></div><div class="kpi"><small>Measures</small><b>15 ECMs</b></div></div>
+  <div class="ecm"><b>ECM 1</b><span>LED retrofit, office floors</span><span class="num">$6,940/yr</span><span class="num">$21,400</span><span class="num">3.1 yrs</span></div>
+  <div class="ecm hi"><b>ECM 3</b><span><b>VFD retrofit, AC-01</b></span><span class="num"><b>$4,820/yr</b></span><span class="num">$8,600</span><span class="num"><b>1.8 yrs</b></span></div>
+  <div class="ecm"><b>ECM 5</b><span>Chiller setpoint reset</span><span class="num">$3,110/yr</span><span class="num">$1,900</span><span class="num">0.6 yrs</span></div>
+  <div class="chart" style="height:130px;padding-top:18px"><div class="bar" style="height:78%"><small>ECM 1</small></div><div class="bar" style="height:30%"><small>2</small></div><div class="bar hi" style="height:54%"><small>ECM 3</small></div><div class="bar" style="height:22%"><small>4</small></div><div class="bar" style="height:36%"><small>5</small></div><div class="bar" style="height:18%"><small>6</small></div><div class="bar" style="height:26%"><small>7</small></div><div class="bar" style="height:12%"><small>8</small></div><div class="bar" style="height:20%"><small>9</small></div><div class="bar" style="height:9%"><small>10</small></div></div>
+</div></template><template id="t-bills"><div class="win" style="width:1120px;height:640px"><div class="tb"><span>Utility Bills&nbsp;&nbsp;·&nbsp;&nbsp;Electricity bill extraction</span><svg width="96" height="12"><use href="#ctl"/></svg></div><div class="wbody">
   <div class="an-head"><div><h4>Extracted Data Details</h4><small>MAL OCTOBER 2023.PDF · AI-EXTRACTED</small></div><div><span class="pill s">EXTRACTED</span>&nbsp;&nbsp;<span class="pill g">Save</span></div></div>
   <div style="position:absolute;left:20px;top:84px;width:330px;bottom:20px;border-radius:8px;box-shadow:0 0 0 1px #E3E8E5;padding:14px;box-sizing:border-box;font:500 13px Inter;color:#4C5651">
     <div style="font:600 11px Inter;letter-spacing:.1em;color:#8A948F;margin-bottom:10px">UTILITY BILLS</div>
@@ -175,7 +181,7 @@ html,body { margin:0; }
   </div>
   <div class="tile" style="left:1390px;top:60px;width:470px;height:470px"><div class="cap">Utility bill · extracted</div>
     <div class="fields" style="position:absolute;left:0;top:56px;width:470px"><div class="r"><span>Bill month</span><b>October 2023</b></div><div class="r"><span>Units used</span><b>618,470 kWh</b></div><div class="r hi"><span>Contract demand</span><b>1,000 kW</b></div><div class="r"><span>Bill total</span><b>₹46,74,196</b></div><div class="r"><span>Tariff</span><b>HT-3.4 · 33 kV</b></div><div class="r"><span>Account</span><b>H4526904000</b></div></div></div>
-  <div class="tile" style="left:550px;top:550px;width:820px;height:470px;background:#fff"><div data-t="t-analysis" style="position:absolute;left:-200px;top:-110px;transform:scale(.95);transform-origin:0 0"></div></div>
+  <div class="tile" style="left:550px;top:550px;width:820px;height:470px;background:#fff"><div class="cap">ASHRAE analysis · ECM details</div><div data-t="t-analysis-compact" style="position:absolute;left:20px;top:0"></div></div>
   <div class="tile" style="left:1390px;top:550px;width:470px;height:470px"><div class="cap">Report · 4.1 ECM details</div>
     <div style="position:absolute;left:22px;right:22px;top:58px;font:500 16px/25px Inter;color:#2B332E"><b style="font-weight:700">ECM 3 · VFD for air compressor AC-01.</b><br><br><span style="background:#E3F4EC;box-shadow:0 0 0 5px #E3F4EC">AC-01 runs loaded at part demand. A VFD saves an estimated 41,600 kWh and $4,820 a year: a 1.8-year payback.</span></div>
     <div style="position:absolute;left:22px;bottom:22px" class="pill g">Generate Word</div></div>
@@ -224,8 +230,10 @@ html,body { margin:0; }
     <div style="position:absolute;left:44px;top:110px;font:700 190px/200px Inter;letter-spacing:-.05em;color:#4ADE9A">$28,363</div>
     <div style="position:absolute;left:52px;top:320px;font:600 48px Inter;letter-spacing:-.02em;color:#F2F7F3">a year in savings. 171,889 kWh.</div>
   </div>
-  <div class="tile" style="left:550px;top:550px;width:640px;height:470px"><div data-t="t-analysis" style="position:absolute;left:-200px;top:-110px;transform:scale(.95);transform-origin:0 0"></div></div>
-  <div class="tile" style="left:1210px;top:550px;width:650px;height:470px"><div data-t="t-report" style="position:absolute;left:-230px;top:-40px;transform:scale(.9);transform-origin:0 0"></div></div>
+  <div class="tile" style="left:550px;top:550px;width:640px;height:470px"><div class="cap">ASHRAE analysis · ECM details</div><div data-t="t-analysis-compact" style="position:absolute;left:10px;top:14px;transform:scale(.795);transform-origin:0 0"></div></div>
+  <div class="tile" style="left:1210px;top:550px;width:650px;height:470px"><div class="cap">Report · 4.1 ECM details</div>
+    <div style="position:absolute;left:22px;right:22px;top:58px;font:500 17px/26px Inter;color:#2B332E"><b style="font-weight:700">ECM 3 · Variable-speed drive for air compressor AC-01.</b><br><br><span style="background:#E3F4EC;box-shadow:0 0 0 5px #E3F4EC">AC-01 (Atlas Copco GA55, 55 kW) in Compressor Room B runs loaded at part demand. A VFD and new discharge-line insulation save an estimated 41,600 kWh and $4,820 a year: a 1.8-year payback.</span></div>
+    <div style="position:absolute;left:22px;bottom:22px" class="pill g">Generate Word</div></div>
 </div>
 
 <!-- 7 · Lockup -->
