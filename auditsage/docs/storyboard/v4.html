@@ -1,0 +1,83 @@
+<!doctype html><html><head><meta charset="utf-8"><title>GreenSage storyboard v4</title>
+<link rel="stylesheet" href="../../film.css">
+<style>
+.frame { position:relative; width:1920px; height:1080px; overflow:hidden; background:var(--bg); font-family:Inter; color:var(--ink); }
+.persp > * { position:absolute; left:0; top:0; }
+.tagline { position:absolute; font:600 13px Inter; letter-spacing:.14em; text-transform:uppercase; color:#8FB3A2; white-space:nowrap; }
+.tagline b { color:#4ADE9A; font-weight:600; }
+</style></head><body>
+<div id="ui"></div>
+<div class="frame" id="frame"><div id="grid" style="opacity:.8"></div><div id="light"></div></div>
+<script>
+const STEPS = [
+  ['Data collection', 'Structured<br><i>field data.</i>', 'Schema-driven equipment sheets in the AuditSage app. Offline-first, synced to the platform.', 'AuditSage app'],
+  ['Evidence collection', 'Evidence,<br><i>geotagged.</i>', 'Photos linked to each entry. AI reads nameplates straight into the sheet.', 'Geotagged photos'],
+  ['Utility uploads', 'Bills in,<br><i>data out.</i>', 'Electricity, gas and water PDFs, field-extracted by AI. Coverage gaps flagged.', 'PDF extraction'],
+  ['Combined analysis', 'One model<br><i>of the site.</i>', 'Field data, evidence, bills and assumptions, analysed together to ASHRAE Level 2.', 'ASHRAE Level 2'],
+  ['ECM generation', 'ECMs, with<br><i>the math.</i>', 'Savings, investment and payback per measure. Every formula traceable and editable.', 'Traceable math'],
+  ['Report generation', 'Report,<br><i>drafted.</i>', 'Confidence-scored AI sections, reviewed in the editor, exported to .docx.', '.docx export'],
+];
+// Sub-scene: [template, left, top, transform, origin, tagline]
+const PHONE = 'rotateY(-24deg) rotateX(10deg) rotateZ(4deg) scale(1.22)';
+const WIN = 'rotateY(-16deg) rotateX(5deg) scale(.9)';
+const FRAMES = {
+  '1a': [0, 't-phone-data', 1120, 170, PHONE, '50% 30%', 'Equipment sheet · <b>schema-driven fields</b>'],
+  '1b': [0, 't-phone-sync', 1120, 170, PHONE, '50% 30%', 'Offline queue · <b>sync when online</b>'],
+  '2a': [1, 't-phone-cam', 1120, 170, PHONE, '50% 30%', 'Capture · <b>GPS overlay, linked to AC-01</b>'],
+  '2b': [1, 't-nameplate', 740, 230, WIN, '0% 50%', 'Nameplate · <b>AI extraction into the sheet</b>'],
+  '3a': [2, 't-bill-files', 740, 250, WIN, '0% 50%', 'Bulk upload · <b>queued AI extraction</b>'],
+  '3b': [2, 't-bills', 740, 230, WIN, '0% 50%', 'Review · <b>fields + coverage check</b>'],
+  '4a': [3, null, 0, 0, '', '', 'Inputs · <b>one ASHRAE model</b>'],
+  '4b': [3, 't-workflow', 740, 240, WIN, '0% 50%', 'Pipeline · <b>observations → ECMs</b>'],
+  '5a': [4, 't-ecms', 740, 210, WIN, '0% 50%', 'ECMs · <b>ranked, tiered, costed</b>'],
+  '5b': [4, 't-ecm-calc', 740, 200, WIN, '0% 50%', 'Calculation · <b>every step editable</b>'],
+  '6a': [5, 't-report', 740, 210, WIN, '0% 50%', 'Editor · <b>confidence + reasoning per block</b>'],
+  '6b': [5, 't-report', 740, 210, WIN, '0% 50%', 'Export · <b>Generate Word → .docx</b>'],
+};
+fetch('../../ui.html').then((r) => r.text()).then((html) => {
+  document.getElementById('ui').innerHTML = html;
+  const F = document.getElementById('frame');
+  const add = (h) => { F.insertAdjacentHTML('beforeend', h); return F.lastElementChild; };
+  const tpl = (id) => document.getElementById(id).content.firstElementChild.cloneNode(true);
+  const f = new URLSearchParams(location.search).get('f') || '0';
+  const rail = (k) => add(`<div class="rail">${STEPS.map((s, i) => `<div class="st ${i < k ? 'done' : i === k ? 'on' : ''}"><span class="fill" style="width:${i < k ? 'calc(100% - 16px)' : i === k ? '55%' : '0'}"></span><b>0${i + 1}</b>${s[0]}</div>`).join('')}</div>`);
+  if (f === '0') {
+    add(`<div class="abs kick" style="left:120px;top:258px">GreenSage AI · AuditSage app + GreenSage platform</div>`);
+    add(`<div class="abs stmt4" style="left:112px;top:300px;font-size:128px;line-height:136px">Streamline your<br><i>audit workflow.</i></div>`);
+    STEPS.forEach((s, i) => add(`<div class="stepc" style="left:${120 + i * 282}px;top:660px;height:250px${i === 0 ? ';box-shadow:inset 0 0 0 2px #4ADE9A' : ''}"><div class="n">0${i + 1}</div><div class="t">${s[0].replace(' ', '<br>')}</div><div class="d">${s[3]}</div></div>`));
+    add(`<svg class="abs" width="1920" height="1080"><path d="M382 785h20M664 785h20M946 785h20M1228 785h20M1510 785h20" stroke="#4ADE9A" stroke-width="2"/></svg>`);
+  } else if (f === '7') {
+    add(`<div class="abs" style="left:590px;top:386px;width:188px;height:188px;border-radius:22px;background:#F2F7F3"><img src="../../product/logo.png" style="position:absolute;left:14px;top:14px;width:160px"></div>`);
+    add(`<div class="abs" style="left:802px;top:390px;width:6px;height:180px;border-radius:3px;background:#4ADE9A;transform:rotate(14deg)"></div>`);
+    add(`<div class="abs" style="left:840px;top:386px;font:700 140px/180px Inter;letter-spacing:-.045em;white-space:nowrap">GreenSage AI</div>`);
+    add(`<div class="abs" style="left:0;width:1920px;top:620px;text-align:center;font:600 46px/62px Inter;letter-spacing:-.015em">Streamline your <span style="color:#4ADE9A">audit workflow.</span></div>`);
+    add(`<div class="abs" style="left:0;width:1920px;top:712px;text-align:center"><span style="display:inline-block;font:500 15px/34px Inter;letter-spacing:.12em;text-transform:uppercase;color:#8FB3A2;padding:0 18px;border-radius:17px;box-shadow:inset 0 0 0 1px #1F4535">AuditSage app&nbsp;&nbsp;·&nbsp;&nbsp;GreenSage platform</span></div>`);
+  } else {
+    const [k, t, x, y, tr, org, tag] = FRAMES[f];
+    rail(k);
+    const S = STEPS[k];
+    add(`<div class="abs kick" style="left:120px;top:560px">0${k + 1} · ${S[0]}</div>`);
+    add(`<div class="abs stmt4" style="left:112px;top:594px">${S[1]}</div>`);
+    add(`<div class="abs sub4" style="left:120px;top:826px">${S[2]}</div>`);
+    const tg = add(`<div class="tagline" style="left:120px;top:170px">${f.slice(1) === 'a' ? '◆' : '◆◆'}&nbsp;&nbsp;${tag}</div>`);
+    if (t) {
+      const P = add('<div class="persp"></div>');
+      const el = tpl(t); el.style.transform = `translate(${x}px,${y}px) ${tr}`; el.style.transformOrigin = org; P.appendChild(el);
+      if (f === '6a') el.querySelector('[data-k=reason]').style.display = 'block';
+      else if (t === 't-report') el.querySelector('[data-k=reason]').style.display = 'none';
+      if (f === '6b') {
+        el.querySelector('[data-k=gen]').textContent = 'Generating…';
+        add('<div class="toast ui" style="left:1300px;top:150px;z-index:5"><b>✓</b>&nbsp;&nbsp;Sample_Office_ASHRAE_L2.docx downloaded</div>');
+      }
+      if (f === '2b') el.querySelector('[data-k=apply]').style.boxShadow = '0 0 0 3px rgba(4,120,87,.25)';
+    } else {
+      // 4a: the four inputs converge on the analysis.
+      const src = [['Equipment sheets', 'AuditSage app · schema-driven'], ['Photo evidence', 'Geotagged · nameplates extracted'], ['Utility bills', 'Extracted fields · coverage checked'], ['Assumptions', 'Rates · emissions factors · financial']];
+      src.forEach((s, i) => add(`<div class="src ui" style="left:800px;top:${240 + i * 160}px;width:440px;height:110px"><b>${s[0]}</b><small>${s[1]}</small><i class="dot"></i></div>`));
+      add(`<svg class="abs" width="1920" height="1080" style="pointer-events:none">${src.map((_, i) => `<path d="M1246 ${295 + i * 160} C1340 ${295 + i * 160}, 1340 535, 1400 535" fill="none" stroke="#4ADE9A" stroke-width="2" stroke-dasharray="6 6"/>`).join('')}</svg>`);
+      add(`<div class="node ui" style="left:1400px;top:420px;width:440px"><small>ASHRAE WORKFLOW · STAGE 02</small><b>AI Analysis &amp; Strategy</b><p>Observations and ECMs generated from every input, at once.</p><span class="pill g" style="position:absolute;left:24px;bottom:22px">⟳&nbsp;&nbsp;Run AI Analysis</span></div>`);
+    }
+  }
+  document.fonts.ready.then(() => Promise.all([...document.images].map((i) => i.decode().catch(() => {})))).then(() => { window.ready = true; });
+});
+</script></body></html>

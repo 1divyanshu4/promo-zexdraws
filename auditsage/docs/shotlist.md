@@ -1,34 +1,42 @@
-# GreenSage AI launch film v3 (built: `film.html` + `film.js`)
+# GreenSage AI launch film v4 (storyboard, for approval)
+
+22.5 s, 16:9, 1920×1080, 60 fps, 128 BPM, 12 bars (48 beats, 0.469 s each).
+Board: `docs/storyboard/board-v4.png` (source `docs/storyboard/v4.html?f=0..7`; screens in `ui.html`).
 
 **Names.** GreenSage AI is the company. **AuditSage** is the mobile app for data collection on site; the
-**GreenSage platform** (web) is where the audit is managed: bills, analysis, report. Window titles read
-"GreenSage · …"; the phone is the AuditSage app; the lockup is GreenSage AI.
+**GreenSage platform** (web) is where the audit is managed. Window titles read "GreenSage · …".
 
-15 s, 16:9, 1920×1080, 60 fps, 128 BPM, 8 bars (32 beats, 0.469 s each). Board: `docs/storyboard/board-v3.png`
-(source `docs/storyboard/v3.html?f=1..7`).
+**Tone.** Technical and concise. The film walks the workflow in six numbered steps. Each step has a
+two-line statement and one line saying what the product does mechanically (schema-driven
+sheets, offline-first sync, GPS overlay, AI extraction, ASHRAE Level 2, formula trail,
+confidence scores, .docx). It names steps and mechanisms, not results.
 
-**Look (Forest):** stage `#0D2A20`, type `#F2F7F3`, muted `#8FB3A2`, one accent mint `#4ADE9A`. The product's
-own UI keeps its own colours (white, `#047857`). Inter Bold statements, Inter Medium copy.
-**Layout:** UI-led. A bento opener shows the whole product; then each step is the product UI full-frame,
-big and in perspective, with one large statement over the empty side. No illustrative images: only
-AuditSage app and GreenSage platform screens (rebuilt faithfully from the gs-doc screenshots).
-**Mockups:** tight corners (phone screen 20 px, windows 6 px, tiles 10 px). Shine on the hardware only:
-the phone bezel catches a diagonal highlight and window frames have a lit dark edge; screens stay clean.
-In the film the bezel highlight sweeps on the beat as each device lands.
-**The film explains the process, not results.** Statements name steps (logged, read, found, written);
-no headline quotes a saving, a total or a specific ECM. The screens carry **sample data only**,
-labelled "Sample Office · Energy Audit", kept consistent across screens so the UI reads as one audit
-(sample equipment AC-01 in Compressor Room B, a sample bill, sample ECM rows, a sample report paragraph).
+**Structure.** A workflow rail runs along the top through every step. The current step is lit and its bar fills while the
+step plays; finished steps stay lit. Each step has two **sub-scenes** (◆ / ◆◆), each about 1.5 s.
+The copy stays put and the screen changes, with a small caption naming what the sub-scene shows.
 
-| # | Beats | Time | Shot | Motion | Sound |
+**Look.** As v3: forest stage `#0D2A20`, mint accent `#4ADE9A`, Inter. The product UI keeps its own colours.
+Formulas use the platform's monospace. Mockups have tight corners and shine on the hardware only.
+
+**Sample dataset.** This is the one dataset everywhere; numbers never drift between screens:
+- Sample Office · Energy Audit; air compressor AC-01, Compressor Room B.
+- Atlas Copco GA55, 55 kW / 75 HP, 10 bar (145 psi), 2024, serial AC-2024-0117.
+- ECM 3, VFD on AC-01:
+  - Baseline: 55 × 0.78 × 6,000 = 257,400 kWh/yr.
+  - Savings: × 0.16 = 41,184 kWh/yr.
+  - At $0.117/kWh: $4,819/yr.
+  - Investment $8,600, payback 1.8 yrs.
+
+| # | Beats | Time | Statement / line | Sub-scenes (◆ ◆◆) | Motion and sound |
 |---|---|---|---|---|---|
-| 1 | 0–5.3 | 0.0–2.5 | **Bento.** Five tiles: app data entry, "Site visit to final report." tile with the mark, extracted bill, ASHRAE analysis, report paragraph. | Tiles snap in one per beat (already moving on frame 0); camera dives into the phone tile on 5. | Hit 0, tick per tile |
-| 2 | 5.3–10.7 | 2.5–5.0 | **Logged once.** The app full-frame in perspective; values fill field by field. "Equipment, photos and notes, offline in the AuditSage app." | Phone glides in with a bezel glint; fields fill on the 16th grid; statement rolls up. | Whoosh, ticks |
-| 3 | 10.7–16 | 5.0–7.5 | **Bills, read.** Extracted Data Details: the bill list ticks to ✓, fields appear row by row, Units used highlights. | Window swings in from the right; rows reveal; highlight sweeps. | Ticks, riser into 16 |
-| 4 | 16–22.4 | 7.5–10.5 | **Savings, found.** ASHRAE analysis seen low and close: "AI turns the data into measures, ranked by cost and payback." Rows land, bars rise, one ECM row lights (sample data). Camera lifts on 20.5; cursor clicks Approve Analysis on 22. | Window rises on the boom; dolly along the table, then a lift. | Boom 16, click 22 |
-| 5 | 22.4–26.7 | 10.5–12.5 | **Written in.** Report editor, 4.1 ECM Details with a sample paragraph highlighted; cursor clicks Generate Word, "Word document downloaded". | Pans in from the right as the analysis leaves left; the paragraph drafts in word by word; click on 25. | Click 25 |
-| 6 | 26.7–29 | 12.5–13.6 | **Pull back: one audit, end to end.** Back out to the bento; the big tile reads "Site visit to final report." with the four steps lighting in turn: On site · Bills · Analysis · Report. | Report window shrinks into its tile; the other tiles settle back from a zoom; step chips fill one per 16th. | Riser |
-| 7 | 29–32 | 13.6–15.0 | **Lockup.** Mark, slash, GreenSage AI; "Site visit to final report."; "AuditSage app · GreenSage platform". Holds. | Tiles collapse into the centre, the mark lands; wordmark slides; tagline rolls. | Crash 29, fade |
+| 0 | 0–4 | 0.0–1.9 | **Streamline your audit workflow.** Six step cards: Data collection · Evidence collection · Utility uploads · Combined analysis · ECM generation · Report generation. | (a) Cards snap in one per 16th, connectors draw. | Hit 0, ticks. The cards fly up and shrink into the top rail as step 01 opens. |
+| 1 | 4–10.5 | 1.9–4.9 | **01 Structured field data.** "Schema-driven equipment sheets in the AuditSage app. Offline-first, synced to the platform." | ◆ Equipment sheet: fields type in, Save. ◆◆ Sync: Pending 4 → 0, outbox rows tick to ✓ SYNCED. | Phone glides in with a bezel glint; the screen swaps under the glass. Ticks per field, click on Sync now. |
+| 2 | 10.5–17 | 4.9–8.0 | **02 Evidence, geotagged.** "Photos linked to each entry. AI reads nameplates straight into the sheet." | ◆ Camera: shutter on the beat, flash, GPS overlay, session strip counts 1 → 2. ◆◆ Nameplate review: a scan line runs down the plate; extracted values fill (10 BAR → 145 psi); Apply changes. | Shutter clicks; phone hands off to the window (pan). |
+| 3 | 17–23.5 | 8.0–11.0 | **03 Bills in, data out.** "Electricity, gas and water PDFs, field-extracted by AI. Coverage gaps flagged." | ◆ File table: statuses step Queued → Processing → ✓ Extracted. ◆◆ Extracted fields fill row by row; the coverage gap card lights. | Rows on 16ths; riser into 24. |
+| 4 | 23.5–30 | 11.0–14.1 | **04 One model of the site.** "Field data, evidence, bills and assumptions, analysed together to ASHRAE Level 2." | ◆ Four input cards; dashed links draw and pulse into AI Analysis & Strategy; Run AI Analysis clicks. ◆◆ Workflow stage 2: status rail steps Queued → Generating observations → Generating ECMs. | Boom on 24. Click 26. |
+| 5 | 30–36.5 | 14.1–17.1 | **05 ECMs, with the math.** "Savings, investment and payback per measure. Every formula traceable and editable." | ◆ ECM cards land, tiered; ECM 3 lights. ◆◆ Calculation trail: camera pushes in on formula 1, Load factor field focuses, values tick; Approve Analysis click. | Push-in; click 36. |
+| 6 | 36.5–43 | 17.1–20.2 | **06 Report, drafted.** "Confidence-scored AI sections, reviewed in the editor, exported to .docx." | ◆ The ECM 3 paragraph drafts in word by word; Confidence 92% badge and reasoning tooltip. ◆◆ Generate Word → Generating… → ".docx downloaded". | Click 41. |
+| 7 | 43–48 | 20.2–22.5 | **Lockup.** GreenSage AI · "Streamline your audit workflow." · AuditSage app · GreenSage platform. | The full rail collapses into the mark. | Crash 43, fade. |
 
 ## Build
 

@@ -28,7 +28,7 @@ const FILM = { html: opt('--html', 'film.html'), audio: 'audio/score.wav', out: 
 const JOBS = Math.max(1, Number(opt('--jobs', os.cpus().length)));
 const DOM = FILM.capture === 'dom';
 
-const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.json': 'application/json', '.png': 'image/png',
+const TYPES = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.json': 'application/json', '.png': 'image/png',
   '.jpg': 'image/jpeg', '.svg': 'image/svg+xml', '.otf': 'font/otf', '.ttf': 'font/ttf' };
 
 function serve() {

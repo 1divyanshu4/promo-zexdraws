@@ -5,7 +5,7 @@ import { chromium } from 'playwright';
 import { execFileSync } from 'node:child_process';
 import http from 'node:http'; import fs from 'node:fs'; import path from 'node:path'; import { fileURLToPath } from 'node:url';
 const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
-const srv = http.createServer((q, r) => { const p = path.join(ROOT, decodeURIComponent(new URL(q.url, 'http://x').pathname)); if (!fs.existsSync(p) || fs.statSync(p).isDirectory()) { r.writeHead(404); return r.end(); } r.end(fs.readFileSync(p)); });
+const srv = http.createServer((q, r) => { const p = path.join(ROOT, decodeURIComponent(new URL(q.url, 'http://x').pathname)); if (!fs.existsSync(p) || fs.statSync(p).isDirectory()) { r.writeHead(404); return r.end(); } r.writeHead(200, { 'content-type': { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.json': 'application/json', '.png': 'image/png', '.jpg': 'image/jpeg', '.svg': 'image/svg+xml', '.ttf': 'font/ttf' }[path.extname(p)] || 'application/octet-stream' }); r.end(fs.readFileSync(p)); });
 await new Promise((r) => srv.listen(0, r));
 const b = await chromium.launch(); const pg = await b.newPage({ viewport: { width: 1920, height: 1080 } });
 pg.on('pageerror', (e) => console.error('page error', e.message));
