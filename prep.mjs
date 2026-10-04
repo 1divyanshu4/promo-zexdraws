@@ -108,15 +108,15 @@ export async function prep({ quiet = false } = {}) {
   // Floor thumbnails (dark film): THUMBS per look, evenly spread over the usable range.
   for (const key of Object.keys(cfg.replay.skins)) {
     const c = clips[key];
-    if (c.thumbs && c.thumbs.length === THUMBS) continue;
+    if (c.thumbs && c.thumbs.length === THUMBS && c.thumbs[0].endsWith('_g.jpg')) continue;
     const dir = path.join(BUILD, 'thumbs');
     fs.mkdirSync(dir, { recursive: true });
     c.thumbs = [];
     for (let i = 0; i < THUMBS; i++) {
       const sec = cfg.replay.useFrom + ((i + 0.5) / THUMBS) * (cfg.replay.useTo - cfg.replay.useFrom);
       const n = Math.min(c.frames - 1, Math.round(sec * c.fps));
-      const out = `build/thumbs/${key}_${i}.jpg`;
-      execFileSync('ffmpeg', ['-v', 'error', '-y', '-i', path.join(c.dir, `${n}.jpg`), '-vf', 'scale=480:-2', '-q:v', '3', path.join(ROOT, out)]);
+      const out = `build/thumbs/${key}_${i}_g.jpg`; // grey, dimmed: the floor's look, baked in
+      execFileSync('ffmpeg', ['-v', 'error', '-y', '-i', path.join(c.dir, `${n}.jpg`), '-vf', "scale=480:-2,hue=s=0.12,curves=all='0/0 1/0.62'", '-q:v', '3', path.join(ROOT, out)]);
       c.thumbs.push(out);
     }
   }

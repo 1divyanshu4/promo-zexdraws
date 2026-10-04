@@ -207,7 +207,7 @@ def main():
     af = (
         f"loudnorm=I=-14:TP=-1:LRA=11:measured_I={m['input_i']}:measured_TP={m['input_tp']}:"
         f"measured_LRA={m['input_lra']}:measured_thresh={m['input_thresh']}:offset={m['target_offset']}:linear=true,"
-        "alimiter=limit=0.85:attack=1:release=40:level=false"
+        "alimiter=limit=0.8:attack=1:release=40:level=false"
     )
     subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(tmp), "-af", af, "-ar", str(SR), "-c:a", "pcm_s16le",
                     str(ROOT / "audio/score-dark.wav")], check=True)

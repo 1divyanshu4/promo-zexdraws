@@ -64,7 +64,7 @@
   const lookAt = (t) => pick(t, [[0, 'pink'], ...LOOKS]);
 
   // ------------------------------------------------------------------ the box (one object, many states)
-  const RES = 1.8; // face canvas pixels per world pixel (the camera reaches 1.8x in the open)
+  const RES = 2.2; // face canvas pixels per world pixel (the camera reaches 1.8x in the open)
   const BOX = [
     // The open is a strip of the dialog: title, both fields and the orientation row. The app's
     // own 'Each side must be 64-4096 px' hint sits below the cut while the fields are empty.
@@ -81,7 +81,8 @@
   const BW = boxTrack('w'), BH = boxTrack('h'), BR = boxTrack('r');
   const loopTrack = (keys, preset) => (t) => track(t, keys, { loop: LOOP, preset });
   const boxW = loopTrack(BW, 'default'), boxH = loopTrack(BH, 'default'), boxR = loopTrack(BR, 'default');
-  const boxFlip = loopTrack([[B(17), 180], [B(31), 360]], 'default');
+  // The return half-turn happens while the box is hidden (beats 27.4-31), so the loop-back slab never spins.
+  const boxFlip = loopTrack([[B(17), 180], [B(28), 360]], 'default');
   // Lift, converge, re-emerge: one spring per change, periodic.
   const boxLift = {
     z: loopTrack([[B(26), 520], [B(27), 260], [B(31), 0]], 'default'),
@@ -160,13 +161,13 @@
   // Spring targets per shot plus closed-form drifts (glide). Drifts are balanced by one
   // counter-drift hidden in the scatter, so they sum to zero and the loop closes exactly.
   const CAM = [
-    { b: 0, s: 1.75, rx: 14, rz: -6, fx: 0, fy: 10 },
+    { b: 0, s: 2.15, rx: 14, rz: -6, fx: 0, fy: 10 },
     { b: 4, s: 1.0, rx: 0, rz: 0, fx: 0, fy: 0 },
     { b: 5, s: 1.35, rx: 0, rz: 0, fx: 0, fy: -130 },
     { b: 9, s: 0.92, rx: 6, rz: 0, fx: -44, fy: 0 },
     { b: 18, s: 0.3, rx: 55, rz: -18, fx: 0, fy: 0 },
     { b: 27, s: 1.0, rx: 0, rz: 0, fx: 0, fy: 0 },
-    { b: 31, s: 1.75, rx: 14, rz: -6, fx: 0, fy: 10 },
+    { b: 31, s: 2.15, rx: 14, rz: -6, fx: 0, fy: 10 },
   ];
   // Drift segments [start, end, velocity] per axis; glide() ramps each in and out on springs.
   const DRIFT = {
@@ -255,15 +256,15 @@
 
   // Carousel (beats 9-16): left block.
   const LOOK_NAMES = ['Neubrutalism', 'Manga', 'Fantasy'];
-  const lookName = strip(hud, 96, 470, 520, 100, LOOK_NAMES, 'name');
+  const lookName = strip(hud, 92, 462, 560, 120, LOOK_NAMES, 'name');
   const lookNamePos = stripTrack(B(9) + 0.06, [[B(13.5), 1], [B(15), 2]], B(16), 3, 'heavy');
   const eyebrow = strip(hud, 98, 430, 300, 24, ['<span class="eyebrow">Look</span>'], '');
   const eyebrowPos = stripTrack(B(9) + 0.04, [], B(16), 1, 'heavy');
   const counter = strip(hud, 168, 430, 80, 24, [1, 2, 3, 4, 5].map((n) => `<span class="eyebrow"><b>0${n}</b>/05</span>`), '');
   const counterPos = stripTrack(B(9) + 0.04, LOOKS.slice(1).map((l, i) => [l[0], i + 1]), B(16), 5, 'snappy');
-  const underline = el('div', '', { position: 'absolute', left: '98px', top: '584px', height: '3px', borderRadius: '2px' });
+  const underline = el('div', '', { position: 'absolute', left: '98px', top: '596px', height: '3px', borderRadius: '2px' });
   hud.appendChild(underline);
-  const DOT_X = (i) => 104 + i * 34, DOT_Y = 622;
+  const DOT_X = (i) => 106 + i * 38, DOT_Y = 640;
   const dots = SKINS.map((k, i) => {
     const d = el('div', '', { position: 'absolute', left: `${DOT_X(i) - 7}px`, top: `${DOT_Y - 7}px`, width: '14px', height: '14px', borderRadius: '7px', background: LOOK_INFO[k].hex, boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.25)' });
     hud.appendChild(d);
@@ -274,10 +275,10 @@
   const RING_STOPS = LOOKS.map((l, i) => [l[0], DOT_X(i) - 13, DOT_X(i) + 13]);
 
   // Carousel: right block (tokens).
-  const RX = 1508;
+  const RX = 1496;
   const tokEyebrow = strip(hud, RX, 470, 300, 24, ['<span class="eyebrow">Frame</span>'], '');
-  const tokFrame = strip(hud, RX, 506, 330, 34, LOOK_NAMES.map((n) => `<span class="row">skin&nbsp;&nbsp;<span class="v">${n}</span></span>`), '');
-  const tokColour = strip(hud, RX, 544, 330, 34, SKINS.map((k) => `<span class="row"><span style="display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:-2px;background:${LOOK_INFO[k].hex};box-shadow:inset 0 0 0 1px rgba(255,255,255,.25)"></span>&nbsp;&nbsp;colour&nbsp;&nbsp;<span class="v">${LOOK_INFO[k].hex}</span></span>`), '');
+  const tokFrame = strip(hud, RX, 508, 400, 38, LOOK_NAMES.map((n) => `<span class="row">skin&nbsp;&nbsp;<span class="v">${n}</span></span>`), '');
+  const tokColour = strip(hud, RX, 550, 400, 38, SKINS.map((k) => `<span class="row"><span style="display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:-2px;background:${LOOK_INFO[k].hex};box-shadow:inset 0 0 0 1px rgba(255,255,255,.25)"></span>&nbsp;&nbsp;colour&nbsp;&nbsp;<span class="v">${LOOK_INFO[k].hex}</span></span>`), '');
   const tokEyebrowPos = stripTrack(B(9) + 0.06, [], B(16), 1, 'snappy');
   const tokFramePos = stripTrack(B(9) + 0.12, [[B(13.5), 1], [B(15), 2]], B(16), 3, 'snappy');
   const tokColourPos = stripTrack(B(9) + 0.18, LOOKS.slice(1).map((l, i) => [l[0], i + 1]), B(16), 5, 'snappy');
@@ -376,7 +377,7 @@
     const look = lookAt(t), info = LOOK_INFO[look];
     const carouselOn = between(t, B(9), B(16));
     const nameW = { Neubrutalism: 410, Manga: 230, Fantasy: 270 }[info.frame];
-    const ulW = carouselOn ? track(t, [[0, 0], [B(9) + 0.1, 410], [B(13.5), 230], [B(15), 270], [B(16) - settle('snappy'), 0]], { preset: 'snappy' }) : 0;
+    const ulW = carouselOn ? track(t, [[0, 0], [B(9) + 0.1, 470], [B(13.5), 260], [B(15), 310], [B(16) - settle('snappy'), 0]], { preset: 'snappy' }) : 0;
     underline.style.width = `${Math.max(0, ulW).toFixed(1)}px`;
     underline.style.background = info.hex === '#201E1A' ? '#D9B26A' : info.hex;
     const dotK = (i) => (carouselOn ? spring(t - (B(9) + 0.08 + i * 0.04), 'snappy') * (1 - spring(t - (B(16) - settle('snappy') - 0.02), 'snappy')) : 0);
