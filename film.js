@@ -1,8 +1,9 @@
 // ZexDraws launch film. One canvas, one container, every frame a pure function of time:
 //   window.seek(t)   paints frame t (seconds, wraps at the loop length)
 //   window.prepare(ts) loads every image the times in `ts` need (call before seek in render mode)
-// No timers, no CSS transitions, no state carried between frames. Springs are closed-form and
-// periodic, so the last frame flows into the first with matching position and velocity.
+// No timers, no CSS transitions, no state carried between frames. All motion comes from the
+// closed-form springs in lib/motion.js; looping tracks flow from the last frame into the first
+// with matching position and velocity.
 (async () => {
   'use strict';
   const W = 1920, H = 1080;
@@ -14,10 +15,12 @@
   const LOOP = BEATS.duration;
   const NB = BEATS.beats.length;
   const B = (i) => BEATS.beats[((i % NB) + NB) % NB] + LOOP * Math.floor(i / NB);
-  const mod = (t) => ((t % LOOP) + LOOP) % LOOP;
+  const { spring, settle, track, indicator, swapAlpha, loopT, clock } = Motion;
+  const mod = (t) => loopT(t, LOOP);
   const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
   const lerp = (a, b, k) => a + (b - a) * k;
-  const smooth = (e0, e1, x) => { const k = clamp((x - e0) / (e1 - e0), 0, 1); return k * k * (3 - 2 * k); };
+  // Looping tracks, compiled once: a function of t.
+  const loopTrack = (keys, preset) => (t) => track(t, keys, { loop: LOOP, preset });
 
   // ------------------------------------------------------------------ assets
   const fonts = [
@@ -42,38 +45,6 @@
   const uiImg = (key) => image(UI.images[key]);
   const LOGO = image('assets/logo-mark.png');
   await Promise.all([LOGO.ready, ...Object.keys(UI.images).map((k) => uiImg(k).ready)]);
-
-  // ------------------------------------------------------------------ springs
-  // Step response of a damped spring (zeta 0.86: overshoot ~0.6%, i.e. "at most a tiny").
-  const ZETA = 0.86;
-  function step(tau, w) {
-    if (tau <= 0) return 0;
-    const wd = w * Math.sqrt(1 - ZETA * ZETA);
-    return 1 - Math.exp(-ZETA * w * tau) * (Math.cos(wd * tau) + ((ZETA * w) / wd) * Math.sin(wd * tau));
-  }
-  // A value with many targets = sum of one spring per change. Keys [[t, v], ...] sorted, t in
-  // [0, LOOP). The loop is treated as periodic: changes from the previous pass still settle
-  // into the start, so value and velocity match across the wrap.
-  function track(keys, w = 22) {
-    const last = keys[keys.length - 1][1];
-    const d = keys.map((k, i) => [k[0], k[1] - (i ? keys[i - 1][1] : last)]);
-    return (t) => {
-      t = mod(t);
-      let v = last;
-      for (const [tk, dv] of d) v += dv * (step(t - tk, w) + step(t - tk + LOOP, w));
-      return v;
-    };
-  }
-  // Piecewise-linear (for playback clocks, which should run at constant speed).
-  function linear(keys) {
-    return (t) => {
-      if (t <= keys[0][0]) return keys[0][1];
-      for (let i = 1; i < keys.length; i++) {
-        if (t <= keys[i][0]) return lerp(keys[i - 1][1], keys[i][1], (t - keys[i - 1][0]) / (keys[i][0] - keys[i - 1][0]));
-      }
-      return keys[keys.length - 1][1];
-    };
-  }
 
   // ------------------------------------------------------------------ footage
   const RP = MAN.replay;
@@ -167,7 +138,7 @@
   const SKIN = [[0, 'pink'], [B(12), 'yellow'], [B(13), 'orange'], [B(14), 'pink'], [B(17), 'manga'], [B(20), 'fantasy']];
   const skinAt = (t) => SKIN.filter((k) => k[0] <= t).pop()[1];
   // Replay clock, u in 0..1 of the usable range.
-  const replayU = linear([[B(1), 0], [B(4), 0.3], [B(8), 0.3], [B(11), 0.46], [B(16), 0.6], [B(24), 0.86], [B(28), 0.975], [B(31), 1]]);
+  const replayU = (t) => clock(t, [[B(1), 0], [B(4), 0.3], [B(8), 0.3], [B(11), 0.46], [B(16), 0.6], [B(24), 0.86], [B(28), 0.975], [B(31), 1]]);
 
   // Container geometry tracks.
   const geo = {};
@@ -175,7 +146,7 @@
     const keys = [];
     for (const s of SHOTS) if (s.view[k] !== undefined && !(keys.length && keys[keys.length - 1][1] === s.view[k])) keys.push([s.t, s.view[k]]);
     // Logo / toast have no capture transform: hold the previous one (dedupe above keeps it flat).
-    geo[k] = track(keys.length > 1 ? keys : [[0, keys[0][1]]], 21);
+    geo[k] = loopTrack(keys, 'default');
   }
   const containerAt = (t) => Object.fromEntries(Object.entries(geo).map(([k, f]) => [k, f(t)]));
 
@@ -236,8 +207,9 @@
     [30.2, ...REST],
   ];
   const LEAD = 0.3;
-  const curX = track(MOVES.map((m) => [mod(B(Math.floor(m[0])) + (m[0] % 1) * (B(1) - B(0)) - (m[3] ? LEAD : 0)), m[1]]).sort((a, b) => a[0] - b[0]), 13);
-  const curY = track(MOVES.map((m) => [mod(B(Math.floor(m[0])) + (m[0] % 1) * (B(1) - B(0)) - (m[3] ? LEAD : 0)), m[2]]).sort((a, b) => a[0] - b[0]), 13);
+  // The cursor is UI: default preset (tiny overshoot). One [x, y] track, one spring per move.
+  const curKeys = MOVES.map((m) => [mod(B(Math.floor(m[0])) + (m[0] % 1) * (B(1) - B(0)) - (m[3] ? LEAD : 0)), [m[1], m[2]]]).sort((a, b) => a[0] - b[0]);
+  const cursorAt = loopTrack(curKeys, 'default');
   const CLICKS = MOVES.filter((m) => m[3]).map((m) => B(m[0]));
 
   // ------------------------------------------------------------------ drawing helpers
@@ -317,14 +289,12 @@
   // Segmented "Length" control: the indicator's leading and trailing edges ride different
   // springs, so it stretches toward the click and the far edge catches up.
   const SEG = UI.segments;
-  const segFast = 34, segSlow = 15;
-  const segL = track([[B(24), SEG.short[0]], [B(25), SEG.full[0]]], segFast);
-  const segR = track([[B(24), SEG.short[2]], [B(25), SEG.full[2]]], segSlow);
+  const SEG_STOPS = [[B(24), SEG.short[0], SEG.short[2]], [B(25), SEG.full[0], SEG.full[2]]];
   function paintLengthControl(c, t) {
     // Plate: both segments unselected (Full from the Short capture, Short from the Full one).
     drawCrop(c, 'export_short', SEG.full);
     drawCrop(c, 'export_full', SEG.short);
-    const x0 = segL(t), x1 = segR(t);
+    const [x0, x1] = indicator(t, SEG_STOPS);
     c.save();
     rrect(c, x0, SEG.full[1], x1 - x0, rh(SEG.full), SEG.radius);
     c.fillStyle = SEG.color;
@@ -343,7 +313,7 @@
 
   function paintToast(c, box, t, tin, tout) {
     // Text enters after the morph starts and leaves before the next one begins.
-    const a = smooth(tin + 0.06, tin + 0.2, t) * (1 - smooth(tout - 0.14, tout - 0.02, t));
+    const a = swapAlpha(t, tin, tout, { loop: LOOP });
     if (a <= 0) return;
     const rise = (1 - a) * 18;
     c.save();
@@ -384,8 +354,9 @@
     // Content swaps behind a short blur: the outgoing state blurs away over the first 90 ms,
     // the incoming one sharpens in from 50 ms to 200 ms.
     // Incoming state is opaque underneath and sharpens; outgoing blurs and fades on top of it.
-    const layers = [{ c: cur.c, alpha: 1, blur: (1 - smooth(0, 0.17, since)) * 12 }];
-    if (since < 0.1 && prev !== cur) layers.push({ c: prev.c, alpha: 1 - smooth(0, 0.1, since), blur: smooth(0, 0.1, since) * 16 });
+    const k = spring(since, 'snappy');
+    const layers = [{ c: cur.c, alpha: 1, blur: (1 - k) * 12 }];
+    if (since < settle('snappy') && prev !== cur) layers.push({ c: prev.c, alpha: 1 - k, blur: k * 16 });
     for (const L of layers) {
       if (L.alpha <= 0) continue;
       c.save();
@@ -418,8 +389,9 @@
         const leaving = !(nextKeeps !== undefined && i < nextKeeps);
         const tm = mod(t);
         if (tm < (kept ? h.t : h.t) || tm >= h.end) return;
-        const enter = kept ? 1 : step(tm - tin, 20);
-        const exit = leaving ? step(tm - (tout - 0.1), 26) : 0;
+        // Type: heavy preset, no overshoot. The exit has fully settled by the next head.
+        const enter = kept ? 1 : spring(tm - tin, 'heavy');
+        const exit = leaving ? spring(tm - (tout - settle('heavy')), 'heavy') : 0;
         const size = h.top ? 104 : HEAD_SIZE;
         const bx = h.top ? 96 : HEAD_X;
         const by = h.top ? 150 : HEAD_Y + i * HEAD_LH - (h.lines.length - 1) * HEAD_LH * 0.5;
@@ -441,8 +413,8 @@
     // Visible in the logo state: enters after the closing morph starts, leaves on beat 1.
     const tin = B(31) + 0.08, tout = B(1);
     const tm = mod(t);
-    const inK = tm >= tin - 0.0001 ? step(tm - tin, 20) : step(tm - tin + LOOP, 20);
-    const outK = tm < tin ? step(tm - tout + 0.02, 26) : 0;
+    const inK = spring(mod(tm - tin), 'heavy');
+    const outK = tm < tin ? spring(tm - (tout - settle('heavy')), 'heavy') : 0;
     if (tm >= tout + 0.4 && tm < tin) return;
     const bx = V.logo.cx + V.logo.w / 2 + GAP, by = H / 2 + WM_SIZE * 0.3;
     const dy = (1 - inK) * WM_SIZE * 0.9 - outK * WM_SIZE * 0.9;
@@ -455,10 +427,10 @@
   }
 
   function paintCursor(c, t) {
-    let x = curX(t), y = curY(t);
+    let [x, y] = cursorAt(t);
     // While painting in the studio the cursor rides the measured paint position.
     const tm = mod(t);
-    const wgt = smooth(B(4) + 0.08, B(4) + 0.32, tm) * (1 - smooth(B(6) + 0.2, B(7) - 0.12, tm));
+    const wgt = spring(tm - (B(4) + 0.08), 'default') * (1 - spring(tm - (B(7) - 0.12 - settle('default')), 'default'));
     if (wgt > 0) {
       const g = containerAt(t);
       const cl = MAN.clips.canvas;
@@ -472,7 +444,7 @@
     let press = 0, ring = null;
     for (const tc of CLICKS) {
       const d = mod(tm - tc + 0.5) - 0.5; // signed distance, wrapped
-      press = Math.max(press, step(d + 0.03, 40) - step(d - 0.07, 30));
+      press = Math.max(press, spring(d + 0.03, 'snappy') - spring(d - 0.07, 'snappy'));
       if (d >= 0 && d < 0.4) ring = d / 0.4;
     }
     press = Math.max(press, wgt * 0.6);
