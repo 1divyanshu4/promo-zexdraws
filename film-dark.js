@@ -203,11 +203,9 @@
     if (r === 5 && c === 5) continue;
     const x = (c - 5) * PITCH_X, y = (r - 5) * PITCH_Y;
     const ring = Math.max(Math.abs(c - 5), Math.abs(r - 5));
-    const el = document.createElement('div');
+    const el = document.createElement('img');
     el.className = 'card';
-    const img = document.createElement('img');
-    img.src = THUMBS[Math.floor(R() * THUMBS.length)];
-    el.appendChild(img);
+    el.src = THUMBS[Math.floor(R() * THUMBS.length)];
     floorEl.appendChild(el);
     const d1 = 0.035 * ring + R() * 0.04, d2 = R() * 0.12, d3 = R() * 0.1;
     const lz = 300 + R() * 700, lr = () => (R() - 0.5) * 70;
@@ -348,6 +346,10 @@
     // Camera rig.
     const s = cam('s', t), rx = cam('rx', t), rz = cam('rz', t), fx = cam('fx', t), fy = cam('fy', t);
     $('rig').style.transform = `translate(960px, 540px) scale(${s}) rotateX(${rx}deg) rotateZ(${rz}deg) translate3d(${-fx}px, ${-fy}px, 0)`;
+    // True depth sorting only while something leaves the floor plane (the flip, the cards
+    // rising at the pull-back, the scatter). Elsewhere everything is coplanar, so a flat rig
+    // renders the same picture at a fraction of the cost.
+    $('rig').style.transformStyle = between(t, B(15.9), B(18) + 0.7) || between(t, B(25.9), B(27.8)) ? 'preserve-3d' : 'flat';
 
     // Box.
     const w = boxW(t), h = boxH(t), r = boxR(t);
