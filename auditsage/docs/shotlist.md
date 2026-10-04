@@ -1,40 +1,26 @@
-# AuditSage launch film v2: follow one compressor (storyboard, for approval)
+# AuditSage launch film v3 (storyboard, for approval)
 
-15 s, 16:9, 1920×1080, 60 fps, 128 BPM, 8 bars (32 beats, 0.469 s each).
+15 s, 16:9, 1920×1080, 60 fps, 128 BPM, 8 bars (32 beats, 0.469 s each). Board: `docs/storyboard/board-v3.png`
+(source `docs/storyboard/v3.html?f=1..7`).
 
-**Idea:** follow one real-world thing through the whole product. Air compressor **AC-01** in
-Compressor Room B goes from a nameplate on site to a paragraph in the ASHRAE report, joined by one
-green line, and the film ends on what the whole audit found. Specific to energy audits; nothing a
-generic SaaS film could say.
+**Look (Forest):** stage `#0D2A20`, type `#F2F7F3`, muted `#8FB3A2`, one accent mint `#4ADE9A`. The product's
+own UI keeps its own colours (white, `#047857`). Inter Bold statements, Inter Medium copy.
+**Layout:** UI-led. A bento opener shows the whole product; then each step is the product UI full-frame,
+big and in perspective, with one large statement over the empty side. No illustrative images: only
+AuditSage screens (rebuilt faithfully from the gs-doc screenshots).
+**Mockups:** tight corners (phone screen 20 px, windows 6 px, tiles 10 px). Shine on the hardware only:
+the phone bezel catches a diagonal highlight and window frames have a lit dark edge; screens stay clean.
+In the film the bezel highlight sweeps on the beat as each device lands.
+**One consistent audit on every screen:** Bengaluru Office Energy Audit · AC-01 (Compressor Room B, 75 HP,
+95.2%, no VFD) · bill: October 2023, 618,470 kWh, 1,000 kW, HT-3.4 · ECM 3: VFD on AC-01, $4,820/yr,
+$8,600, 1.8 yr · audit total: 15 ECMs, 171,889 kWh, $28,363/yr, 112 t CO₂.
 
-**Screens** are rebuilt in HTML to match the real AuditSage / GreenSage UI (layouts, type, colours
-and components taken from the gs-doc screenshots), so every screen shows **one consistent audit**:
-
-| Thing | Value used on every screen |
-|---|---|
-| Audit | Bengaluru Office Energy Audit · ASHRAE Level 2 |
-| Equipment | AC-01 · Compressor Room B · Atlas Copco GA55 · 55 kW / 75 HP · 10 bar · 95.2% motor efficiency · no VFD |
-| Observation | Runs loaded at part demand; discharge line insulation worn (GPS-stamped photo) |
-| Recommendation | Fit a VFD to AC-01 and replace the discharge line insulation |
-| ECM 3 | VFD retrofit, AC-01 · 41,600 kWh/yr · $4,820/yr · $8,600 · 1.8 yr payback |
-| Audit total | 15 ECMs · 171,889 kWh · $28,363 a year · 112 t CO₂ |
-
-**Look:** a light engineering board (`#E9EDE9` with a fine dot grid), product green `#047857` as the one
-accent and the thread, Inter Bold / Inter Medium, white flat windows (title left, line controls right,
-6 px corners, 16 px padding). One continuous camera travels along the line; nothing cuts.
-
-| # | Beats | Time | On screen | Motion | Sound |
+| # | Beats | Time | Shot | Motion | Sound |
 |---|---|---|---|---|---|
-| 1 | 0–5 | 0.0–2.3 | **Nameplate, read by AI.** Close on AC-01's plate. Green dots land on asset tag, rated power, max pressure; lines pull out tags "AC-01 · Atlas Copco GA55", "55 kW · 75 HP", "10 bar · max pressure". | Already drifting on frame 0; one tag per beat (1, 2, 3). | Hit 0, tick per tag |
-| 2 | 5–9 | 2.3–4.2 | **Captured once.** Camera pulls right along the line; the plate shrinks, the AuditSage phone arrives with those values in its Data tab. "On site · Compressor Room B". | Values fly from tags into fields on the 16th grid. | Whoosh 5, ticks |
-| 3 | 9–13 | 4.2–6.1 | **Photo, note, recommendation.** Photos tab (GPS overlay on AC-01), then Notes (observation + recommendation). | Screens slide in step; line runs off right. Sync badge clears on 12.5. | Ticks, click 12.5 |
-| 4 | 13–19 | 6.1–8.9 | **AC-01 → ECM 3.** The line enters the ASHRAE Analysis window; the ECM 3 row highlights, its bar rises in the chart; "$4,820 a year · 1.8 yr payback". Cursor clicks Approve Analysis on 18. | Boom 13 as the window lands; row highlight on 14; bar on 15. | Boom 13, click 18 |
-| 5 | 19–24 | 8.9–11.3 | **Written into the report.** Report editor, 4.1 ECM Details, the AC-01 paragraph highlighted. Cursor clicks Generate Word on 22.5; "Word document downloaded". | Window morphs from analysis to editor; paragraph highlight sweeps. | Click 22.5 |
-| 6 | 24–28 | 11.3–13.1 | **Pull back: $28,363 a year.** Everything shrinks onto one line (plate → phone → notes → analysis → report) and the audit total counts up above it. "Bengaluru Office · one audit · 15 ECMs". | Camera pull-back; number counts up on heavy. | Riser into 28 |
-| 7 | 28–32 | 13.1–15.0 | **Lockup.** The line pulls into the GreenSage mark; **AuditSage**; "Site visit to final report."; pill "by GreenSage AI". Holds. | Mark opens, wordmark slides, tagline rolls. | Crash 28, fade |
-
-## Open questions (default in brackets)
-1. The numbers are a plausible demo audit, consistent across screens. Use real figures from a real
-   audit instead? [demo numbers, consistent]
-2. Tagline [Site visit to final report.]
-3. Lockup [AuditSage, "by GreenSage AI"]
+| 1 | 0–5.3 | 0.0–2.5 | **Bento.** Five tiles: app data entry, "Site visit to final report." tile with the mark, extracted bill, ASHRAE analysis, report paragraph. | Tiles snap in one per beat (already moving on frame 0); camera dives into the phone tile on 5. | Hit 0, tick per tile |
+| 2 | 5.3–10.7 | 2.5–5.0 | **Logged once.** The app full-frame in perspective; values fill field by field. "Equipment, photos and notes, offline in the AuditSage app." | Phone glides in with a bezel glint; fields fill on the 16th grid; statement rolls up. | Whoosh, ticks |
+| 3 | 10.7–16 | 5.0–7.5 | **Bills, read.** Extracted Data Details: the bill list ticks to ✓, fields appear row by row, Units used highlights. | Window swings in from the right; rows reveal; highlight sweeps. | Ticks, riser into 16 |
+| 4 | 16–22.4 | 7.5–10.5 | **$4,820 a year.** ASHRAE analysis seen low and close; the ECM 3 row (VFD retrofit, AC-01) lights, its bar rises; the number counts up. Cursor clicks Approve Analysis on 22. | Boom on 16; camera dolly along the table. | Boom 16, click 22 |
+| 5 | 22.4–26.7 | 10.5–12.5 | **Written in.** Report editor, 4.1 ECM Details with the AC-01 paragraph highlighted; cursor clicks Generate Word, "Word document downloaded". | Window morphs from the analysis; click on 25. | Click 25 |
+| 6 | 26.7–29 | 12.5–13.6 | **Pull back: $28,363 a year.** Back out to the bento; the big tile now carries the audit total. | Camera pull-back; number counts up. | Riser |
+| 7 | 29–32 | 13.6–15.0 | **Lockup.** Mark, slash, AuditSage; "Site visit to final report."; "by GreenSage AI". Holds. | Mark opens from the bento tile; wordmark slides; tagline rolls. | Crash 29, fade |

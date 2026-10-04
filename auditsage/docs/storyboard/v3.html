@@ -101,11 +101,13 @@ html,body { margin:0; }
 .phone { border-radius:30px !important; } .phone .scr { border-radius:20px !important; }
 .tile { border-radius:10px !important; }
 .win { border-radius:6px; }
-/* Shine: the glass is toned very slightly so a bright diagonal band reads on white UI, and the top
-   edge is lit. In the film the band sweeps across on the beat. */
-.phone::after, .win::after, .tile::after { content:''; position:absolute; inset:0; border-radius:inherit; pointer-events:none;
-  background:linear-gradient(112deg, rgba(8,30,20,.10) 0%, rgba(8,30,20,.03) 30%, rgba(255,255,255,.62) 40%, rgba(255,255,255,.22) 46%, rgba(8,30,20,.02) 55%, rgba(8,30,20,.12) 100%);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.8), inset 0 0 0 1px rgba(255,255,255,.12); }
+/* Shine lives on the hardware only: the phone bezel and the window frame, never on the screen. */
+.phone { padding:0; }
+.phone::before { content:''; position:absolute; inset:0; border-radius:inherit; pointer-events:none;
+  background:linear-gradient(118deg, rgba(255,255,255,0) 18%, rgba(255,255,255,.55) 30%, rgba(255,255,255,.08) 36%, rgba(255,255,255,0) 48%, rgba(255,255,255,.22) 78%, rgba(255,255,255,0) 86%); }
+.phone .scr { z-index:1; }
+.win { box-shadow:0 30px 80px rgba(0,0,0,.4), 0 0 0 1px rgba(255,255,255,.5), 0 0 0 7px #1A2622, 0 0 0 8px rgba(255,255,255,.25) !important; }
+.win .tb { background:linear-gradient(180deg,#FFFFFF,#F1F4F2); }
 .phone { background:linear-gradient(135deg,#55615B 0%,#151B18 22%,#0D1210 60%,#2C3631 100%) !important; box-shadow:0 40px 90px rgba(0,0,0,.45), inset 0 0 0 1.5px rgba(255,255,255,.18) !important; }
 </style></head><body><svg width="0" height="0" style="position:absolute"><defs><g id="ctl" fill="none" stroke="#6B7570" stroke-width="1.3"><path d="M2 6h10"/><rect x="42.5" y=".5" width="11" height="11"/><path d="M84 .5l11 11M95 .5l-11 11"/></g>
 <g id="cur"><path d="M4 2l15 11-7 1 4 8-3 1-4-8-5 5z" fill="#fff" stroke="#000" stroke-width="1.2" stroke-linejoin="round"/></g></defs></svg><template id="t-phone-data"><div class="phone"><div class="scr">
@@ -144,6 +146,25 @@ html,body { margin:0; }
     <p class="hl">AC-01 (Atlas Copco GA55, 55 kW) in Compressor Room B runs loaded at part demand. Fitting a VFD and replacing the worn discharge-line insulation saves an estimated 41,600 kWh and $4,820 a year, for an $8,600 investment: a simple payback of 1.8 years.</p>
     <p>Savings were calculated from the logged operating profile and nameplate data, following ASHRAE Level 2 methods.</p>
   </div></div></div></template>
+<template id="t-bills"><div class="win" style="width:1120px;height:640px"><div class="tb"><span>Utility Bills&nbsp;&nbsp;·&nbsp;&nbsp;Electricity bill extraction</span><svg width="96" height="12"><use href="#ctl"/></svg></div><div class="wbody">
+  <div class="an-head"><div><h4>Extracted Data Details</h4><small>MAL OCTOBER 2023.PDF · AI-EXTRACTED</small></div><div><span class="pill s">EXTRACTED</span>&nbsp;&nbsp;<span class="pill g">Save</span></div></div>
+  <div style="position:absolute;left:20px;top:84px;width:330px;bottom:20px;border-radius:8px;box-shadow:0 0 0 1px #E3E8E5;padding:14px;box-sizing:border-box;font:500 13px Inter;color:#4C5651">
+    <div style="font:600 11px Inter;letter-spacing:.1em;color:#8A948F;margin-bottom:10px">UTILITY BILLS</div>
+    <div style="display:flex;justify-content:space-between;padding:10px 8px;border-radius:6px;background:#E6F4EE;color:#0F1A14;font-weight:600">MAL October 2023.pdf<span class="pill s" style="padding:3px 7px">✓</span></div>
+    <div style="display:flex;justify-content:space-between;padding:10px 8px">MAL September 2023.pdf<span class="pill s" style="padding:3px 7px">✓</span></div>
+    <div style="display:flex;justify-content:space-between;padding:10px 8px">MCPL August 2023.pdf<span class="pill s" style="padding:3px 7px">✓</span></div>
+    <div style="display:flex;justify-content:space-between;padding:10px 8px">MCPL April 2023.pdf<span style="color:#7C3AED;font-weight:600">Extracting…</span></div>
+  </div>
+  <div class="fields" style="position:absolute;left:370px;right:20px;top:84px;width:auto;border-radius:8px;box-shadow:0 0 0 1px #E3E8E5;overflow:hidden">
+    <div class="r" style="background:#F6F8F7;font-weight:600;color:#6B7570;font-size:12px;letter-spacing:.06em"><span>FIELD</span><span>VALUE</span></div>
+    <div class="r"><span>Consumer</span><b>Bengaluru Office · HT</b></div>
+    <div class="r"><span>Bill month</span><b>October 2023</b></div>
+    <div class="r hi"><span>Units used</span><b>618,470 kWh</b></div>
+    <div class="r"><span>Contract demand</span><b>1,000 kW</b></div>
+    <div class="r"><span>Tariff</span><b>HT-3.4 · 33 kV</b></div>
+    <div class="r"><span>Bill total</span><b>₹46,74,196</b></div>
+    <div class="r"><span>Due date</span><b>21-11-2023</b></div>
+  </div></div></div></template>
 <!-- 1 · Bento opener: the whole product at a glance, real UI only -->
 <div class="frame" id="f1">
   <div class="tile" style="left:60px;top:60px;width:470px;height:960px;background:#F4F6F4"><div data-t="t-phone-data" style="position:absolute;left:25px;top:40px;transform:scale(1.0);transform-origin:0 0"></div></div>
@@ -165,16 +186,55 @@ html,body { margin:0; }
   <div class="persp"><div data-t="t-phone-data" style="position:absolute;left:1080px;top:40px;transform:rotateY(-24deg) rotateX(10deg) rotateZ(4deg) scale(1.45);transform-origin:50% 30%"></div></div>
   <div class="abs kick" style="left:120px;top:640px">01 · On site</div>
   <div class="abs big" style="left:112px;top:676px">Logged <i>once.</i></div>
-  <div class="abs" style="left:120px;top:820px;font:500 28px/40px Inter;color:#8FB3A2">Equipment, photos and notes, offline in the AuditSage app.</div>
+  <div class="abs" style="left:120px;top:820px;font:500 28px/40px Inter;color:#8FB3A2">Equipment, photos and notes,<br>offline in the AuditSage app.</div>
 </div>
 
-<!-- 3 · Macro: the analysis, the camera low across the ECM table -->
-<div class="frame" id="f3">
+<!-- 4 · Macro: the analysis, the camera low across the ECM table -->
+<div class="frame" id="f4">
   <div class="persp"><div data-t="t-analysis" style="position:absolute;left:420px;top:330px;transform:rotateX(28deg) rotateZ(-6deg) scale(1.4);transform-origin:50% 40%"></div></div>
   <div class="abs" style="left:0;right:0;top:0;height:470px;background:linear-gradient(var(--bg) 70%, transparent)"></div>
   <div class="abs kick" style="left:120px;top:110px">03 · AI analysis</div>
   <div class="abs big" style="left:112px;top:146px">$4,820 <i>a year.</i></div>
   <div class="abs" style="left:120px;top:290px;font:500 28px/40px Inter;color:#8FB3A2">From one compressor. Ranked, costed and ready to approve.</div>
+</div>
+
+<!-- 3 · Macro: bills, read by AI -->
+<div class="frame" id="f3">
+  <div class="persp"><div data-t="t-bills" style="position:absolute;left:760px;top:220px;transform:rotateY(-16deg) rotateX(5deg) scale(1.0);transform-origin:0% 50%"></div></div>
+  <div class="abs kick" style="left:120px;top:640px">02 · Utility bills</div>
+  <div class="abs big" style="left:112px;top:676px">Bills, <i>read.</i></div>
+  <div class="abs" style="left:120px;top:820px;font:500 28px/40px Inter;color:#8FB3A2">Every field pulled from the PDF<br>by AI, ready to review.</div>
+</div>
+
+<!-- 5 · The report: the paragraph about AC-01, Generate Word -->
+<div class="frame" id="f5">
+  <div class="persp"><div data-t="t-report" style="position:absolute;left:780px;top:170px;transform:rotateY(-14deg) rotateX(4deg) scale(.98);transform-origin:0% 50%"></div></div>
+  <svg class="cursor" style="left:1650px;top:252px;z-index:5" viewBox="0 0 24 24"><use href="#cur"/></svg>
+  <div class="toast" style="left:1440px;top:100px;z-index:5">✓&nbsp;&nbsp;Word document downloaded</div>
+  <div class="abs kick" style="left:120px;top:640px">04 · Report</div>
+  <div class="abs big" style="left:112px;top:676px">Written <i>in.</i></div>
+  <div class="abs" style="left:120px;top:820px;font:500 28px/40px Inter;color:#8FB3A2">The ASHRAE Level 2 report, drafted.<br>Edit, then export to Word.</div>
+</div>
+
+<!-- 6 · Pull back to the bento: the audit total -->
+<div class="frame" id="f6">
+  <div class="tile" style="left:60px;top:60px;width:470px;height:960px;background:#F4F6F4;opacity:.9"><div data-t="t-phone-data" style="position:absolute;left:25px;top:40px"></div></div>
+  <div class="tile" style="left:550px;top:60px;width:1310px;height:470px;background:#0F3B2C;box-shadow:none">
+    <div style="position:absolute;left:48px;top:48px" class="kick">Bengaluru Office · one audit · 15 ECMs</div>
+    <div style="position:absolute;left:44px;top:110px;font:700 190px/200px Inter;letter-spacing:-.05em;color:#4ADE9A">$28,363</div>
+    <div style="position:absolute;left:52px;top:320px;font:600 48px Inter;letter-spacing:-.02em;color:#F2F7F3">a year in savings. 171,889 kWh.</div>
+  </div>
+  <div class="tile" style="left:550px;top:550px;width:640px;height:470px"><div data-t="t-analysis" style="position:absolute;left:-200px;top:-110px;transform:scale(.95);transform-origin:0 0"></div></div>
+  <div class="tile" style="left:1210px;top:550px;width:650px;height:470px"><div data-t="t-report" style="position:absolute;left:-230px;top:-40px;transform:scale(.9);transform-origin:0 0"></div></div>
+</div>
+
+<!-- 7 · Lockup -->
+<div class="frame" id="f7">
+  <img class="abs" src="../../product/logo.png" style="left:590px;top:390px;width:160px;padding:14px;border-radius:22px;background:#F2F7F3">
+  <div class="abs" style="left:800px;top:380px;width:6px;height:180px;border-radius:3px;background:#4ADE9A;transform:rotate(14deg)"></div>
+  <div class="abs" style="left:840px;top:392px;font:700 140px/160px Inter;letter-spacing:-.045em;color:#F2F7F3">AuditSage</div>
+  <div class="abs" style="left:0;width:1920px;top:620px;text-align:center;font:600 46px/60px Inter;letter-spacing:-.015em;color:#F2F7F3">Site visit to <span style="color:#4ADE9A">final report.</span></div>
+  <div class="abs" style="left:0;width:1920px;top:706px;text-align:center"><span style="display:inline-block;font:500 15px/34px Inter;letter-spacing:.12em;text-transform:uppercase;color:#8FB3A2;padding:0 18px;border-radius:17px;box-shadow:inset 0 0 0 1px #1F4535">by GreenSage AI</span></div>
 </div>
 <script>
 for (const host of document.querySelectorAll('[data-t]')) host.appendChild(document.getElementById(host.dataset.t).content.cloneNode(true));
