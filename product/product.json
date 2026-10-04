@@ -1,0 +1,76 @@
+{
+  "_doc": "Everything product-specific in the film. Paths are relative to the project root. Text fields accept a little inline HTML: <b> marks the white (active) part of an eyebrow, <span class=\"dim\"> is muted. See .claude/skills/studio-launch-film/references/product-config.md for every field.",
+  "output": "zexdraws-studio",
+  "brand": {
+    "name": "ZexDraws",
+    "handle": "zexdraws",
+    "logo": "product/logo.png",
+    "tagline": "Every stroke, replayable.",
+    "pill": "Replay built in",
+    "accent": "#8B5CF6",
+    "fonts": {
+      "display": { "family": "Southern Beach", "src": "product/fonts/SouthernBeach.otf" },
+      "ui": [
+        { "family": "Inter", "src": "product/fonts/Inter-Medium.ttf", "weight": 500 },
+        { "family": "Inter", "src": "product/fonts/Inter-SemiBold.ttf", "weight": 600 },
+        { "family": "Inter", "src": "product/fonts/Inter-Bold.ttf", "weight": 700 }
+      ]
+    }
+  },
+  "panels": [
+    { "image": "product/ui/panel-1.png", "name": "Brushes", "detail": "<span class=\"v\">5</span> sets  ·  pressure dynamics" },
+    { "image": "product/ui/panel-2.png", "name": "Colours", "detail": "<span class=\"v\">HSV</span>  ·  sliders  ·  swatches" },
+    { "image": "product/ui/panel-3.png", "name": "Layers", "detail": "blend modes  ·  <span class=\"v\">opacity</span>  ·  lock" }
+  ],
+  "panelEyebrow": "Studio",
+  "studio": {
+    "capture": "product/ui/studio.png",
+    "page": [858, 182, 1710, 1306],
+    "pageColor": "#FFFFFF",
+    "dock": [2512, 504],
+    "click": [2382, 74, 2438, 130],
+    "windowTitle": "Untitled<span class=\"dim\">  ·  </span>1200 × 1584"
+  },
+  "hero": {
+    "eyebrow": "Every stroke  ·  <b>saved</b>",
+    "title": "You just draw.",
+    "lines": ["No complicated setup.", "No camera pressure."]
+  },
+  "showcase": {
+    "eyebrow": "Look",
+    "tokens": "Frame",
+    "tokenName": "skin",
+    "tokenColour": "colour",
+    "looks": [
+      { "key": "pink", "name": "Neubrutalism", "hex": "#E83E77", "pad": ["#DB2A78", "#DB2A78"] },
+      { "key": "yellow", "name": "Neubrutalism", "hex": "#F0D442", "pad": ["#EDDB49", "#ECDC49"] },
+      { "key": "orange", "name": "Neubrutalism", "hex": "#E2572C", "pad": ["#D74B30", "#D74C2F"] },
+      { "key": "manga", "name": "Manga", "hex": "#FBFBF6", "pad": ["#FCFDF8", "#FCFDF8"] },
+      { "key": "fantasy", "name": "Fantasy", "hex": "#201E1A", "rule": "#D9B26A", "pad": ["#2C2B27", "#161513"] }
+    ]
+  },
+  "export": { "button": "product/ui/export-button.png" },
+  "posts": {
+    "heading": "Export once. <span class=\"dim\">Post anywhere.</span>",
+    "instagram": {
+      "look": "manga",
+      "likes": [8120, 12408],
+      "caption": "Every stroke, replayable. Exported from ZexDraws with the Manga frame",
+      "comments": 214
+    },
+    "tiktok": {
+      "look": "fantasy",
+      "likes": [31.6, 48.2],
+      "caption": "Every stroke, replayable. Fantasy frame <b>#timelapse #digitalart</b>",
+      "counts": ["1,204", "9,830", "3,112"]
+    },
+    "youtube": {
+      "look": "pink",
+      "likes": [5.1, 8.4],
+      "title": "Drawing an explosion, every stroke replayed | ZexDraws timelapse",
+      "subscribers": "128K",
+      "views": "128K views  2 days ago",
+      "description": "Every stroke replayed, exported with the Neubrutalism frame in pink."
+    }
+  }
+}

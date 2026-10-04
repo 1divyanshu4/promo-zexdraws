@@ -2,7 +2,7 @@
   "bpm": 128,
   "bars": 8,
   "beatsPerBar": 4,
-  "_doc": "The film (docs/shotlist.md). Beats are 0-based and may be fractional (16ths); each sound lands on the measured peak nearest that grid point.",
+  "_doc": "Example from the reference film: arrangement and UI sounds in beats (8 bars at 128 BPM = 15 s). Beats are 0-based and may be fractional (16ths); each sound lands on the measured peak nearest that grid point.",
   "music": {
     "_doc": "Beat spans [from, to). pulse = kick + light hats, groove = full kit; drop beats lose the drums; hold silences drums from that beat; risers [from, to, gain]; boom/crash beats. loop false = the film ends, last half second fades.",
     "pulse": [[0, 6]],

@@ -1,8 +1,9 @@
 // Renders a film in headless Chromium.
-//   node render.mjs              full film -> out/<product.output>.mp4 (60 fps, 4 subframes, H.264 CRF 16)
-//   node render.mjs --contact    one frame per beat -> out/contact-<product.output>.png (look at this first)
+//   node render.mjs              full film -> out/<--out or folder name>.mp4 (60 fps, 4 subframes, H.264 CRF 16)
+//   node render.mjs --contact    one frame per beat -> out/contact-<name>.png (look at this first)
 //   node render.mjs --still 7.5  a single frame at t=7.5 s -> out/still.png
 //   --jobs N                     parallel browsers (default: one per CPU core)
+//   --html page.html             the film page (default film.html)
 //
 // Every frame is a pure function of time, so the film is cut into chunks that a pool of
 // browsers renders in parallel; each chunk becomes a video segment, and the segments are
@@ -23,9 +24,8 @@ const FPS = 60, SUBFRAMES = 4, CHUNK = 60, JPEG_Q = 95;
 const args = process.argv.slice(2);
 const opt = (name, dflt) => (args.includes(name) ? args[args.indexOf(name) + 1] : dflt);
 const mode = args.includes('--contact') ? 'contact' : args.includes('--still') ? 'still' : 'film';
-// The product decides the output name; the engine (film.html) is the same for every product.
-const PRODUCT = JSON.parse(fs.readFileSync(path.join(ROOT, 'product/product.json'), 'utf8'));
-const FILM = { html: 'film.html', audio: 'audio/score.wav', out: PRODUCT.output || 'launch', capture: 'dom' };
+// Output name: --out NAME, else the project folder's name.
+const FILM = { html: opt('--html', 'film.html'), audio: 'audio/score.wav', out: opt('--out', path.basename(ROOT)), capture: 'dom' };
 const JOBS = Math.max(1, Number(opt('--jobs', os.cpus().length)));
 const DOM = FILM.capture === 'dom';
 
@@ -99,8 +99,7 @@ async function renderChunk(w, a, b, file) {
   await done;
 }
 
-await prep();
-await run('python3', [path.join(ROOT, 'tools/assets.py')]);
+if (fs.existsSync(path.join(ROOT, 'footage.json'))) await prep();
 if (!fs.existsSync(path.join(ROOT, FILM.audio))) await run('python3', [path.join(ROOT, 'audio/score.py')]);
 fs.mkdirSync(OUT, { recursive: true });
 const server = await serve();

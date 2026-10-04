@@ -19,3 +19,6 @@
 2. Score it 1-10 on: hook in first 2s, readability at phone size, motion quality, variety, brand accuracy, sound sync.
 3. Fix the 3 worst problems. Repeat until every score is 8+.
 4. Only then do the full render.
+
+## Playbook
+- For any new promo film, follow the `promo-film` skill (.claude/skills/promo-film): approach, rules, style guide, motion rules, and the kit.

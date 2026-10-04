@@ -1,61 +1,25 @@
-# Shot list: 15 s, 16:9 launch film, in the reference's style
+# ZexDraws studio launch film (as built)
 
-> **Product check, please confirm.** The brief names **MagicPath (magicpath.ai)** but also says
-> to use the **ZexDraws** screenshots and logo. Showing ZexDraws UI and its logo under
-> MagicPath's name would misrepresent both, so this list is written for **ZexDraws**: every
-> asset we have is ZexDraws. If you meant a MagicPath film, I'd need MagicPath's own UI and
-> logo, and none of the ZexDraws material below would be used.
+15 s, 16:9, 128 BPM, 8 bars (32 beats, 0.469 s each). Dark look, Southern Beach + Inter, accent #8B5CF6.
+One continuous camera: the white canvas page is the single object carried through every shot
+(page → drawing → replay box → reel → logo). Storyboard frames: `docs/storyboard/*.png`, `board.png`. Product values live in `product/product.json`.
+Ends on the lockup (no loop back, no infinite card floor).
 
-**Format:** 1920×1080, 60 fps, 15.0 s. Score synthesized at 128 BPM (one beat = 0.469 s,
-32 beats = 8 bars). Cuts: none. One continuous camera, as in the reference.
+| # | Beats | Time | Shot | Motion | Sound |
+|---|---|---|---|---|---|
+| 1a | 0–1.5 | 0.0–0.7 | **Brushes.** The real Brushes panel, large and turned slightly, over the blurred studio. Left: "01/03 Studio" → *Brushes* (script) → "5 sets · pressure dynamics". | Already swinging in on frame 0; the label rolls up a beat-fraction later. | Low hit at 0 |
+| 1b | 1.5–3 | 0.7–1.4 | **Colours.** The Colors panel on the left, the label on the right (mirrored layout). "02/03" → *Colours* → "HSV · sliders · swatches". | Handover, not a cut: Brushes' labels lift out, then it slides off to its side as Colours slides in from the other, landing on the beat. | Click |
+| 1c | 3–4.5 | 1.4–2.1 | **Layers.** The Layers panel on the right, the label on the left. "03/03" → *Layers* → "blend modes · opacity · lock". | Same handover, mirrored. | Click |
+| 1d | 4.5–6 | 2.1–2.8 | **Studio reveal.** The clean studio stands near-upright, turned slightly, with a blank white page. | The panel shrinks into its button on the right rail as the camera pulls back to the full studio, then pushes toward the page. | Swish |
+| 2 | 6–12 | 2.8–5.6 | **Focus on the canvas**, laid out like the skin showcase. The drawing plays inside a window, with no badge. The window has a flat title bar: the title "Untitled · 1200 × 1584" on the left, line-icon minimise, maximise and close on the right, and 6 px corners (not a Mac window). The drawing sits inset with 16 px of window-coloured padding, so it reads as a window rather than a card. The post windows in shot 6 use the same chrome. Text block and window are balanced on the frame with equal ~250 px side margins. No recording language. Left block: eyebrow "Every stroke · saved" → *You just draw.* (script) → accent underline → below the line, "No complicated setup." (white) and "No camera pressure." (grey). The studio behind is darkened and blurred. | Push-in. The script line rolls up on 6.5 and the underline draws. The two lines below roll up on 8 and 9.5. | Whoosh in, tick per line, groove starts |
+| 3 | 12–14 | 5.6–6.6 | **Replay.** Copy lifts out. Camera pans to the top-right toolbar. Cursor glides to the clapper (Replay) button and clicks: purple pressed state. | The camera leaves on beat 11.75 while the copy is still lifting out; the cursor settles on the button just before the click. | Swish, click on 13, drums drop for that beat |
+| 4 | 14–21.5 | 6.6–10.1 | **Skin showcase** (the switcher you liked). The page lifts off the studio and morphs into the replay box while the studio falls away. Left: Look 01/05, frame name, colour dots and ring. Right: skin and colour tokens. | Same as the previous film: Pink, Yellow, Orange, Manga, Fantasy, switching every 1.5 beats | Boom on 14, click per switch |
+| 5 | 21.5–23 | 10.1–10.8 | **Export.** HUD exits. The real "Export video" button (cropped from the app) pops in under the box. Cursor clicks it. | Button scales in with a tiny overshoot, then a press dip | Tick, click on 22.5 |
+| 6 | 23–27 | 10.8–12.7 | **Post templates as windows.** An Instagram post (4:5), a TikTok video (9:16, middle) and a YouTube watch page (16:9). Each sits in a window with the platform name in its title bar. Each follows its real layout: Instagram has the header, the like/comment/share/save row, likes and caption. TikTok has Following/For You, the right-hand icon column with counts, the handle, caption and sound line. YouTube has the player with progress bar and controls, the title, the channel row with Subscribe, the like pill and the description box. Each shows the **whole** replay video, never cropped: the skin frame expands to the platform shape, padded with its own edge colour (Manga white, Fantasy dark, Pink pink). They play Manga, Fantasy and Pink. Heading: "Export once. Post anywhere." | The box morphs into the TikTok video. Instagram slides in from the left and YouTube from the right, staggered. The counts tick up. | Whoosh, two swishes |
+| 7 | 27–32 | 12.7–15.0 | **Lockup** (the logo animation you liked). All three cards converge to centre, the logo tile opens out of that point and moves left, the wordmark slides in, then the slash, tagline and "Replay built in" pill. Holds to the end. | Same springs as the previous film, no exit | Crash on 27, drums out, music fades at 15 s |
 
-**Look:** near-black vignette (`#18171A` → `#08070A`), barely-there seeded grain, Southern Beach
-for names and wordmark, wide-tracked Inter for labels, one accent `#8B5CF6`. Full rules are in
-`docs/style_guide.md`.
-
-**Assets (all real):** ZexDraws UI captured from the Linux build (`ui/`), plus the New Canvas
-dialog captured in the same session. The replay exports are Pink, Yellow, Orange, Manga and
-Fantasy. Then the canvas painting clip and `assets/logo-mark.png`. No UI is redrawn.
-
-**Real numbers used on screen** (from the ZexDraws source):
-- 5 frame skins: Neutral, Neubrutalism, Fantasy, Manga, Sketchbook (`replay_skins.dart`)
-- 6 colour presets: the Frame colour dialog swatches
-- 5 playback speeds: 0.5x, 1.0x, 2.0x, 4.0x, 30s (`replay_screen.dart`)
-- 2 export lengths: Full and Short (`TimelapseLength`)
-
----
-
-| # | Beats | Time | Reference grammar | ZexDraws shot | Text in / out | Motion preset | Sound |
-|---|---|---|---|---|---|---|---|
-| 1 | 1–4 | 0.00–1.88 | Tilted close-up, live typing | Real **New Canvas** dialog, tilted about 12° X and -6° Z, very close on the Width/Height fields. The digits **1600 × 1200** appear one at a time from the real capture (masked left to right, about 70 ms per digit), with its real caret. Camera drifts right and in about 3%. | Only the captured UI's own text | camera `default`; caret `snappy` | soft key ticks per digit; pad swells in |
-| 2 | 5 | 1.88–2.34 | Morph: strip → slab → surface | The dialog collapses into a grey `#262626` slab. The slab un-tilts and stretches to portrait, then turns into the white canvas. | n/a | container `default` | low whoosh on beat 5 |
-| 3 | 6–9 | 2.34–4.22 | Build: dolly down the surface | The canvas fills with your **canvas painting clip** inside the real studio canvas frame. The camera dollies down the illustration, top to bottom, about 25% of its height. | n/a | camera `default` | brush swishes on beats 6 and 8 |
-| 4 | 10–16 | 4.22–7.50 | Carousel: same object, 5 looks | The canvas becomes the **replay card**, about 1100 px wide and tilted 6°, playing the replay continuously. One timeline, five looks, one per 1.5 beats: **Pink → Yellow → Orange → Manga → Fantasy**. Left: eyebrow `FRAME 01/05`, the look's name in Southern Beach, and an underline that takes that frame's colour, plus a dot row with an accent ring on the active dot. Right: eyebrow `COLOUR` and a token row showing the real hex (`#E83E77`, `#F0D442`, `#E2572C`); Manga/Fantasy show the skin name. | Names roll up inside a mask. The counter ticks. Token rows stagger in at 60 ms | names `heavy`; underline width `indicator()` (leading edge `snappy`, trailing `default`); card `default` | a click on every look change |
-| 5 | 17–18 | 7.50–8.44 | Flip: the other side of the same thing | Toggle above the card: **Canvas · Replay**. The card turns 180° on Y. The front is the still finished drawing; the back is the replay **with the hand overlay** drawing it. The inactive word dims to `#5B5A5E`. | The toggle words never move, only their brightness | flip `default`; dim `snappy` | whoosh at mid-flip |
-| 6 | 19–21 | 8.44–9.84 | Whip pull-back into a collection | The camera pulls back about 4× in about 0.5 s. The card lands in a **floor of about 60 real replay frames** (all five looks, different moments), tilted 55° on X and fading into the dark. | n/a | camera `default` with 4-subframe motion blur | big downbeat hit on beat 19 |
-| 7 | 22–26 | 9.84–12.19 | Stats over the drifting floor | Four numbers count up like an odometer, starting 0.1 s apart: **5** FRAME SKINS · **6** COLOURS · **5** SPEEDS · **2** LENGTHS. Under them: `Neutral · Neubrutalism · Fantasy · Manga · Sketchbook`. The floor keeps drifting. | Digits roll; labels are already placed; the caption row staggers in | digits `snappy`; numerals `heavy` | an odometer tick per digit settle, on beats 22–25 |
-| 8 | 27–28 | 12.19–13.13 | Scatter → implode | Floor cards lift, tumble and converge on the centre. Where they meet, the **real ZexDraws logo** is revealed (masked open, not rebuilt). | Stats roll up and out as the cards lift | cards `default`; logo `heavy` | riser into a hit on beat 28 |
-| 9 | 29–31 | 13.13–14.53 | Lockup, then stillness | The logo slides left; **ZexDraws** (Southern Beach, about 150 px) wipes in from behind it with an accent `/` between. Tagline below: **"Every stroke, replayable."** (Inter SemiBold 52 px). Then a small pill: `Recorder built in`. Vignette brightens behind the lockup. **Hold still.** | Wordmark wipes in; tagline rises 0.15 s later; pill last | `heavy`, 0% overshoot | crash on beat 29, then the tail rings out |
-| 10 | 32 | 14.53–15.00 | (loop) | The lockup collapses into the grey slab, which tilts back into the New Canvas dialog of frame 0. `loopT()` pins the last frame to the first. | Lockup text leaves before the collapse starts (`swapAlpha`) | `default` | reverse whoosh into the loop |
-
-**Something new every 2–4 s?** Yes. The longest stretch without a new element is the final
-hold (beats 29–31, 1.4 s), which the reference also uses on purpose.
-
-**Hook in the first 2 s:** a tilted, close, drifting UI shot with live typing, plus the morph on
-beat 5, as in the reference.
-
-**What the reference contributes:** pacing, the morph/flip/pull-back/implode transitions, the
-rolling name and odometer text grammar, the tilted camera, the dark vignette and grain.
-**What it doesn't:** its product, documents, theme names, tokens, logo, copy and corner chrome.
-
----
-
-## Open questions for you
-
-1. **MagicPath or ZexDraws?** See the note at the top.
-2. **Tagline.** "Every stroke, replayable." is a placeholder. Or use your line: "A replayable
-   drawing app for artists."
-3. **Lockup pill.** Do you have a URL or store link to show (the reference shows its domain)?
-   If not, it stays `Recorder built in`.
-4. **The loop.** The reference ends on a still hold. `loopT` and the loop rule mean the last
-   0.47 s morphs back to the opening frame. Do you want that, or a plain hold to the end?
+## Notes
+- The post windows copy each platform's real layout and use the platform name as text, never its logo
+  mark; counts, captions and channel are made up for ZexDraws.
+- Canvas_drawing is nearly finished from its first frame. A clip that starts from a sketch would sell
+  "you just draw" better; it swaps in through footage.json.
