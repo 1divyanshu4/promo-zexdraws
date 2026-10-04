@@ -1,0 +1,98 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>AuditSage storyboard</title>
+<style>
+@font-face { font-family: Inter; src: url(../../product/fonts/Inter-Medium.ttf); font-weight: 500; }
+@font-face { font-family: Inter; src: url(../../product/fonts/Inter-SemiBold.ttf); font-weight: 600; }
+@font-face { font-family: Inter; src: url(../../product/fonts/Inter-Bold.ttf); font-weight: 700; }
+:root { --bg:#F4F6F3; --ink:#0F1A14; --muted:#6B7570; --hair:#DFE4E0; --win:#FFFFFF; --accent:#047857; }
+html,body { margin:0; background:var(--bg); }
+.frame { position:relative; width:1920px; height:1080px; overflow:hidden; display:none; font-family:Inter; color:var(--ink);
+  background: radial-gradient(ellipse 60% 70% at 62% 50%, #FFFFFF 0%, var(--bg) 70%); }
+.frame.on { display:block; }
+.abs { position:absolute; }
+.eyebrow { font:500 17px Inter; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); white-space:nowrap; }
+.eyebrow b { color:var(--accent); font-weight:600; }
+.stmt { font:700 84px/96px Inter; letter-spacing:-.035em; white-space:nowrap; }
+.rule { height:3px; border-radius:2px; background:var(--accent); }
+.sup { font:500 30px/44px Inter; color:var(--muted); letter-spacing:-.01em; }
+.sup b { color:var(--ink); font-weight:600; }
+/* Light window: flat bar, title left, line controls right, 6px corners, 16px padding. */
+.win { position:absolute; border-radius:6px; overflow:hidden; background:var(--win); box-shadow:0 30px 80px rgba(15,26,20,.16), 0 0 0 1px var(--hair); }
+.tb { position:absolute; left:0; right:0; top:0; height:40px; box-shadow:inset 0 -1px 0 var(--hair); }
+.tb span { position:absolute; left:16px; font:600 14px/40px Inter; color:var(--muted); }
+.tb svg { position:absolute; right:16px; top:14px; }
+.in { position:absolute; left:16px; top:56px; right:16px; bottom:16px; overflow:hidden; box-shadow:0 0 0 1px var(--hair); }
+.in img { position:absolute; display:block; }
+.phone { position:absolute; width:390px; height:820px; border-radius:56px; background:#101512; box-shadow:0 40px 90px rgba(15,26,20,.25); }
+.phone .scr { position:absolute; left:12px; top:12px; right:12px; bottom:12px; border-radius:44px; overflow:hidden; background:#F4F6F3; }
+.phone .scr img { width:100%; display:block; }
+.cursor { position:absolute; width:44px; filter:drop-shadow(0 4px 8px rgba(0,0,0,.25)); }
+</style></head><body>
+<svg width="0" height="0" style="position:absolute"><defs><g id="ctl" fill="none" stroke="#6B7570" stroke-width="1.3"><path d="M2 6h10"/><rect x="42.5" y=".5" width="11" height="11"/><path d="M84 .5l11 11M95 .5l-11 11"/></g></defs></svg>
+
+<!-- 1 · On site: the phone, screens switching on the beat -->
+<div class="frame" id="f1">
+  <div class="abs eyebrow" style="left:200px;top:372px"><b>AuditSage</b>&nbsp;&nbsp;·&nbsp;&nbsp;On site</div>
+  <div class="abs stmt" style="left:194px;top:404px">Capture it once.</div>
+  <div class="abs rule" style="left:200px;top:528px;width:560px"></div>
+  <div class="abs sup" style="left:200px;top:556px"><b>Equipment data,</b> GPS-stamped photos,<br>notes. Works offline.</div>
+  <div class="phone" style="left:1180px;top:130px;transform:rotate(-4deg)"><div class="scr"><img src="../../product/ui/m-data.png"></div></div>
+  <div class="abs eyebrow" style="left:1612px;top:470px;line-height:40px">Data<br><span style="color:var(--ink)">Photos</span><br>Notes</div>
+</div>
+
+<!-- 2 · Sync: the phone hands the audit to the platform -->
+<div class="frame" id="f2">
+  <div class="abs eyebrow" style="left:200px;top:400px"><b>Sync</b>&nbsp;&nbsp;·&nbsp;&nbsp;Platform</div>
+  <div class="abs stmt" style="left:194px;top:432px">No re-typing.</div>
+  <div class="abs rule" style="left:200px;top:556px;width:520px"></div>
+  <div class="win" style="left:820px;top:200px;width:1000px;height:680px;opacity:.55;transform:scale(.9);transform-origin:70% 50%"><div class="tb"><span>GreenSage AI</span><svg width="96" height="12"><use href="#ctl"/></svg></div>
+    <div class="in"><img src="../../product/ui/w-bills-extracting.png" style="width:968px;left:0;top:0"></div></div>
+  <div class="phone" style="left:980px;top:170px;transform:rotate(-2deg) scale(.86);transform-origin:50% 50%"><div class="scr"><img src="../../product/ui/m-dashboard.png"></div></div>
+</div>
+
+<!-- 3 · AI reads the bills -->
+<div class="frame" id="f3">
+  <div class="abs eyebrow" style="left:200px;top:372px"><b>02</b>&nbsp;&nbsp;·&nbsp;&nbsp;Utility bills</div>
+  <div class="abs stmt" style="left:194px;top:404px">AI reads the bills.</div>
+  <div class="abs rule" style="left:200px;top:528px;width:520px"></div>
+  <div class="abs sup" style="left:200px;top:556px">Every field extracted,<br><b>reviewed in one table.</b></div>
+  <div class="win" style="left:930px;top:250px;width:900px;height:620px"><div class="tb"><span>Extracted Data&nbsp;&nbsp;·&nbsp;&nbsp;MAL October 2023.pdf</span><svg width="96" height="12"><use href="#ctl"/></svg></div>
+    <div class="in" style="background:#fff"><img src="../../product/ui/w-bills-extracted.png" style="width:1210px;left:-72px;top:-118px"></div></div>
+</div>
+
+<!-- 4 · AI finds the savings -->
+<div class="frame" id="f4">
+  <div class="abs eyebrow" style="left:140px;top:340px"><b>03</b>&nbsp;&nbsp;·&nbsp;&nbsp;ASHRAE analysis</div>
+  <div class="abs stmt" style="left:134px;top:372px">AI finds<br>the savings.</div>
+  <div class="abs rule" style="left:140px;top:600px;width:440px"></div>
+  <div class="abs sup" style="left:140px;top:628px"><b>$28,363</b> a year<br><b>171,889 kWh</b> saved<br>ECMs ranked by payback</div>
+  <div class="win" style="left:700px;top:180px;width:1100px;height:720px"><div class="tb"><span>ASHRAE Analysis&nbsp;&nbsp;·&nbsp;&nbsp;Review pipeline</span><svg width="96" height="12"><use href="#ctl"/></svg></div>
+    <div class="in"><img src="../../product/ui/w-analysis.png" style="width:1210px;left:-71px;top:-40px"></div></div>
+</div>
+
+<!-- 5 · The report, drafted -->
+<div class="frame" id="f5">
+  <div class="abs eyebrow" style="left:140px;top:372px"><b>04</b>&nbsp;&nbsp;·&nbsp;&nbsp;Report</div>
+  <div class="abs stmt" style="left:134px;top:404px">Report, drafted.</div>
+  <div class="abs rule" style="left:140px;top:528px;width:520px"></div>
+  <div class="abs sup" style="left:140px;top:556px">Edit any section.<br><b>Export to Word.</b></div>
+  <div class="win" style="left:780px;top:170px;width:1040px;height:740px"><div class="tb"><span>Report Editor&nbsp;&nbsp;·&nbsp;&nbsp;ASHRAE Level 2</span><svg width="96" height="12"><use href="#ctl"/></svg></div>
+    <div class="in"><img src="../../product/ui/w-report.png" style="width:1210px;left:-141px;top:-4px"></div></div>
+  <svg class="cursor" style="left:1508px;top:236px" viewBox="0 0 24 24"><path d="M4 2l15 11-7 1 4 8-3 1-4-8-5 5z" fill="#fff" stroke="#000" stroke-width="1.2" stroke-linejoin="round"/></svg>
+</div>
+
+<!-- 6 · Lockup -->
+<div class="frame" id="f6">
+  <img class="abs" src="../../product/logo.png" style="left:600px;top:380px;width:170px">
+  <div class="abs" style="left:796px;top:378px;width:6px;height:170px;border-radius:3px;background:var(--accent);transform:rotate(14deg)"></div>
+  <div class="abs" style="left:836px;top:392px;font:700 132px/150px Inter;letter-spacing:-.04em">AuditSage</div>
+  <div class="abs" style="left:0;width:1920px;top:604px;text-align:center;font:600 46px/60px Inter;letter-spacing:-.015em">Site visit to final report.</div>
+  <div class="abs" style="left:0;width:1920px;top:690px;text-align:center"><span style="display:inline-block;font:500 15px/34px Inter;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:0 18px;border-radius:17px;background:#fff;box-shadow:inset 0 0 0 1px var(--hair)">by GreenSage AI</span></div>
+</div>
+
+<script>
+const f = new URLSearchParams(location.search).get('f') || '1';
+document.getElementById('f' + f).classList.add('on');
+document.fonts.ready.then(() => Promise.all([...document.images].map((i) => i.decode().catch(() => {})))).then(() => { window.ready = true; });
+</script>
+</body></html>
