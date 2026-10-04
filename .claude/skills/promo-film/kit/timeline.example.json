@@ -5,22 +5,168 @@
   "_doc": "Example from the reference film: arrangement and UI sounds in beats (8 bars at 128 BPM = 15 s). Beats are 0-based and may be fractional (16ths); each sound lands on the measured peak nearest that grid point.",
   "music": {
     "_doc": "Beat spans [from, to). pulse = kick + light hats, groove = full kit; drop beats lose the drums; hold silences drums from that beat; risers [from, to, gain]; boom/crash beats. loop false = the film ends, last half second fades.",
-    "pulse": [[0, 6]],
-    "groove": [[6, 13], [14, 27]],
-    "drop": [13],
+    "pulse": [
+      [
+        0,
+        6
+      ]
+    ],
+    "groove": [
+      [
+        6,
+        13
+      ],
+      [
+        14,
+        27
+      ]
+    ],
+    "drop": [
+      13
+    ],
     "holdFrom": 27,
-    "risers": [[10, 14, 0.07], [24, 27, 0.08]],
-    "boom": [14],
-    "crash": [27],
-    "loop": false
+    "risers": [
+      [
+        10,
+        14,
+        0.07
+      ],
+      [
+        24,
+        27,
+        0.08
+      ]
+    ],
+    "boom": [
+      14
+    ],
+    "crash": [
+      27
+    ],
+    "loop": false,
+    "sound": {
+      "_doc": "This film's own sound. Every key is optional; replace all of them for a new film (references/pipeline.md). These are the reference film's values.",
+      "seed": 23,
+      "lead": {
+        "voice": "bell",
+        "pattern": [
+          0,
+          0.75,
+          1.5,
+          2.5,
+          3.25
+        ]
+      },
+      "pad": {
+        "voice": "dark"
+      },
+      "drums": {
+        "kick": "punchy",
+        "snare": "clap",
+        "hats": "16ths",
+        "swing": 0
+      },
+      "ui": {
+        "tone": "digital"
+      }
+    }
   },
   "events": [
-    [0, "hit"], [1.5, "click"], [3, "click"], [4.5, "swish"],
-    [6, "whoosh"], [6.5, "tick"], [8, "tick"], [9.5, "tick"],
-    [12, "swish"], [12.75, "tick"], [13, "click"],
-    [14, "whoosh"], [15.5, "click"], [17, "click"], [18.5, "click"], [20, "click"],
-    [21.75, "tick"], [22.5, "click"],
-    [23, "whoosh"], [23.25, "swish"], [23.5, "swish"],
-    [26.5, "whoosh"], [27, "crash"], [28, "tick"]
+    [
+      0,
+      "hit"
+    ],
+    [
+      1.5,
+      "click"
+    ],
+    [
+      3,
+      "click"
+    ],
+    [
+      4.5,
+      "swish"
+    ],
+    [
+      6,
+      "whoosh"
+    ],
+    [
+      6.5,
+      "tick"
+    ],
+    [
+      8,
+      "tick"
+    ],
+    [
+      9.5,
+      "tick"
+    ],
+    [
+      12,
+      "swish"
+    ],
+    [
+      12.75,
+      "tick"
+    ],
+    [
+      13,
+      "click"
+    ],
+    [
+      14,
+      "whoosh"
+    ],
+    [
+      15.5,
+      "click"
+    ],
+    [
+      17,
+      "click"
+    ],
+    [
+      18.5,
+      "click"
+    ],
+    [
+      20,
+      "click"
+    ],
+    [
+      21.75,
+      "tick"
+    ],
+    [
+      22.5,
+      "click"
+    ],
+    [
+      23,
+      "whoosh"
+    ],
+    [
+      23.25,
+      "swish"
+    ],
+    [
+      23.5,
+      "swish"
+    ],
+    [
+      26.5,
+      "whoosh"
+    ],
+    [
+      27,
+      "crash"
+    ],
+    [
+      28,
+      "tick"
+    ]
   ]
 }

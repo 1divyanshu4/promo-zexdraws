@@ -7,6 +7,11 @@
 **Names.** GreenSage AI is the company. **AuditSage** is the mobile app for data collection on site; the
 **GreenSage platform** (web) is where the audit is managed. Window titles read "GreenSage · …".
 
+**Sound.** Its own palette (timeline.json `music.sound`): D major, marimba lead, warm pad, deep kick, rim,
+swung 8th hats, wooden UI ticks.
+
+**Phone.** Real hardware: camera cutout, status bar, side buttons; framed with its top in shot.
+
 **Copy.** "Streamline your audit workflow." The six steps are named plainly: the statement is the step
 name, and one short line says how it works. No results quoted; the screens carry sample data only.
 
@@ -20,7 +25,7 @@ name, and one short line says how it works. No results quoted; the screens carry
 | 5 | 24.75–32.25 | 05 ECM generation. | Measures ranked by cost and payback. | Analysis rises on the boom (26); rows land, bars rise, ECM 3 lights; camera lifts; Approve click (32). | Boom 26, click 32 |
 | 6 | 32.25–36.5 | 06 Report generation. | ASHRAE Level 2, exported to Word. | Report drafts in; Generate Word click (35); toast. | Click 35 |
 | 7 | 36.5–40 | (bento) Streamline your audit workflow. | Data · Evidence · Bills · Analysis · ECMs · Report | Pull back to the bento; six chips light in order; tiles collapse into the centre. | Ticks, riser |
-| 8 | 40–44 | Lockup: GreenSage AI | Streamline your audit workflow. · AuditSage app · GreenSage platform | Mark lands, wordmark slides, tagline rolls. | Crash 40, fade |
+| 8 | 40–44 | Lockup: GreenSage AI | Streamline your audit workflow. · AuditSage app · GreenSage platform | The tiles collapse into a seed that opens as a white circle with one ripple ring, the leaf turns upright; the mark steps left and the wordmark rises letter by letter; tagline and pill left-aligned beneath. No slash. | Crash 40, fade |
 
 ## Build
 

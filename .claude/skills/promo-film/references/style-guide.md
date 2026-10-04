@@ -14,7 +14,7 @@ tokens (accent, faces, logo) for the product's; keep the structure.
 | `--muted` | `#9F9EA1` | Eyebrows, labels, second line of a pair. |
 | `--faint` | `#5B5A5E` | Separators, inactive. |
 | `--hair` | `#2A292D` | 1 px rules, window outlines, inner borders. |
-| `--accent` | brand colour | One accent only: the headline rule, the selection ring, the click highlight, the lockup slash. |
+| `--accent` | brand colour | One accent only: the headline rule, the selection ring, the click highlight, the lockup accent. |
 
 Light the stage, don't fade it: a radial light behind everything, a darker scrim or a brighter
 spot as lighting changes. Seeded grain on top (8 pre-rendered 256 px tiles, value 0–6, screen
@@ -71,6 +71,14 @@ Every framed piece of product output is a window, not a card:
 - Shadow `0 34px 90px rgba(0,0,0,.65)` plus a 1 px hair outline.
 - No traffic lights, no large radii, no glass.
 
+## Phones
+
+A phone mockup must read as real hardware: a camera cutout over the screen, a status bar
+(time, signal, battery), side buttons on the frame, a lit bezel (shine on the hardware, never on
+the screen), 30 px outer and 20 px screen corners. Frame it so the **top of the phone is in shot**
+(the cutout is what sells it); cropping the bottom is fine. In 3D, the transform origin is 50% 30%,
+so solve the pose's y for a visible top edge rather than eyeballing it.
+
 ## Formats (post templates)
 
 - Each destination gets its real layout inside a window: Instagram post 4:5 (header, media,
@@ -84,6 +92,19 @@ Every framed piece of product output is a window, not a card:
 
 ## Lockup
 
-Logo tile (rounded 23%, opens as a growing circle from the point where everything converged),
-then it moves left, an accent slash grows, the wordmark slides out from behind a mask; tagline
-and pill roll up below. The group is centred on its **measured** width. It holds to the end.
+**Every film designs its own lockup and its own logo animation.** Do not reuse a previous film's
+layout or move. Derive both from the brand: the mark's shape, what the product does, and the
+film's carrying object. Shared constraints: the mark appears from the point where the last shot
+converged; name, tagline and at most one pill; the group is centred on its **measured** width;
+it holds to the end, with a slow drift so the hold is not frozen.
+
+Two we have built, as range, not templates:
+- ZexDraws (a drawing app): a rounded logo tile opens as a growing circle, moves left, an accent
+  slash grows, the wordmark slides out from behind a mask; tagline and pill below, centred.
+- GreenSage AI (energy audits, leaf mark): the tiles collapse into a seed that opens as a white
+  circle with one ripple ring while the leaf turns upright; the mark steps left and the wordmark
+  rises letter by letter beside it; tagline and pill left-aligned under the wordmark. No slash.
+  (The user rejected the slash for this brand: "no need to add the /, try a different layout".)
+
+Logo files often carry their own background (GreenSage's leaf sits on a white rounded square):
+match the container colour to it, or the square shows.

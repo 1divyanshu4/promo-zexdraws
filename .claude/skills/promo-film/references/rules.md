@@ -59,6 +59,11 @@ Hard rules. Each one exists because breaking it cost us a revision on the refere
 
 ## Sound
 - Score and sound effects are synthesized in code unless a track is supplied.
+- **Every project gets its own sound.** Pick the BPM for the edit, then give the film its own
+  key, progression, lead and pad voices, drum kit, swing and UI-sound tone in `timeline.json`
+  (`music.sound`, see the pipeline). Never ship the kit's default sound twice: the defaults are
+  the reference film's identity. Choose from the brand (GreenSage: D major, marimba, warm pad,
+  rim and swung hats, wooden UI ticks; ZexDraws: F minor, FM bells, dark pad, clap, digital ticks).
 - Every hit lands on the **measured** beat grid (`beats.json`, 16th-note resolution), not on
   arithmetic beat times.
 - Loudness -14 LUFS integrated, true peak ≤ -1 dBTP (two-pass loudnorm + limiter at 0.8).

@@ -51,7 +51,17 @@ def add(buf, sig, at):
 
 # ---------------------------------------------------------------- instruments
 
-def kick():
+def kick(voice="punchy"):
+    if voice == "soft":
+        n = int(0.32 * SR)
+        t = np.arange(n) / SR
+        ph = 2 * np.pi * np.cumsum(52 + 70 * np.exp(-t / 0.03)) / SR
+        return np.sin(ph) * env_exp(n, 0.11) * 0.85
+    if voice == "deep":
+        n = int(0.6 * SR)
+        t = np.arange(n) / SR
+        ph = 2 * np.pi * np.cumsum(40 + 95 * np.exp(-t / 0.05)) / SR
+        return np.tanh(1.6 * np.sin(ph)) * env_exp(n, 0.24) * 0.8
     n = int(0.42 * SR)
     t = np.arange(n) / SR
     f = 45 + 110 * np.exp(-t / 0.035)
@@ -61,7 +71,17 @@ def kick():
     return (body + click) * 0.95
 
 
-def clap():
+def clap(voice="clap"):
+    if voice == "rim":
+        n = int(0.12 * SR)
+        t = np.arange(n) / SR
+        body = np.sin(2 * np.pi * 1750 * t) * env_exp(n, 0.012) * 0.35
+        return (body + bp(rng.standard_normal(n), 1500, 6000) * env_exp(n, 0.005) * 0.5) * 0.8
+    if voice == "snap":
+        n = int(0.2 * SR)
+        t = np.arange(n) / SR
+        body = np.sin(2 * np.pi * 210 * t) * env_exp(n, 0.03) * 0.25
+        return body + bp(rng.standard_normal(n), 2000, 7500) * env_exp(n, 0.02) * 0.45
     n = int(0.3 * SR)
     noise = bp(rng.standard_normal(n), 900, 2600)
     e = np.zeros(n)
@@ -79,7 +99,22 @@ def hat(open_=False):
 
 # ---------------------------------------------------------------- UI sounds
 
-def ui(kind):
+def ui(kind, tone="digital", pitch=1.0):
+    # tone picks the project's UI palette; "digital" is the reference film's.
+    if tone == "wood" and kind in ("click", "tick"):
+        n = int((0.09 if kind == "click" else 0.05) * SR)
+        t = np.arange(n) / SR
+        f = (820 if kind == "click" else 1550) * pitch
+        x = np.sin(2 * np.pi * f * t) * env_exp(n, 0.018) + 0.35 * np.sin(2 * np.pi * f * 3.93 * t) * env_exp(n, 0.005)
+        if kind == "click":
+            x += bp(rng.standard_normal(n), 1200, 4000) * env_exp(n, 0.002) * 0.5
+        return x * (0.42 if kind == "click" else 0.2)
+    if tone == "glass" and kind in ("click", "tick"):
+        n = int(0.12 * SR)
+        t = np.arange(n) / SR
+        f = (2600 if kind == "click" else 4200) * pitch
+        x = np.sin(2 * np.pi * f * t) + 0.5 * np.sin(2 * np.pi * f * 2.76 * t) * env_exp(n, 0.01)
+        return x * env_exp(n, 0.03 if kind == "click" else 0.015) * (0.25 if kind == "click" else 0.13)
     if kind == "click":
         n = int(0.06 * SR)
         t = np.arange(n) / SR

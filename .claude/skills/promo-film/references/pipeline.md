@@ -25,8 +25,23 @@ Tooling that works, with the traps we already hit.
 
 ## Score and timing
 
-- `kit/audio/score.py` + `synth.py`: seeded drums, sub, FM bells, pad, risers, impacts.
+- `kit/audio/score.py` + `synth.py`: seeded drums, sub, lead, pad, risers, impacts.
   The arrangement and the UI sound events come from `timeline.json` (beats, 16ths allowed).
+  Any number of bars; the progression repeats every 8 and the last bar takes the turnaround chord.
+- The film's own sound lives in `music.sound` (all keys optional; omitted keys fall back to the
+  reference film's sound, which renders byte-identical):
+
+  | Key | Values |
+  |---|---|
+  | `seed` | integer: noise and variation |
+  | `progression` | 8 × `[bass root MIDI, [voicing MIDI notes]]` |
+  | `lead` | `voice`: `bell` (FM), `marimba` (modal), `keys` (electric piano); `pattern`: beat positions in the bar; `octave`; `gain` |
+  | `pad` | `voice`: `dark` (filtered saws), `warm` (sines, slow tremolo), `glass` (high detuned sines); `cutoff`; `gain` |
+  | `drums` | `kick`: `punchy`, `soft`, `deep`; `snare`: `clap`, `rim`, `snap`; `hats`: `16ths`, `8ths`, `offbeat`; `swing` 0–0.2 |
+  | `ui` | `tone`: `digital`, `wood`, `glass` (clicks and ticks); `pitch` multiplier |
+
+  Swing moves odd 16ths, so expect `maxGridErrorMs` near the 30 ms snap window; hits on beats and
+  8ths are unaffected.
 - The script measures onsets with librosa and snaps each 16th to the nearest measured peak
   (within 30 ms) into `beats.json`. The film converts beats to seconds only through that grid.
 - Mastering: two-pass `loudnorm` to -14 LUFS then `alimiter` at 0.8 (a plain limit of 1.0 let

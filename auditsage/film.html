@@ -57,7 +57,10 @@
     <!-- AuditSage app -->
     <div id="phone" class="phone ui" style="transform-origin:50% 30%">
       <div class="glint"><div id="glint"></div></div>
+      <i class="hw" style="right:-3px;top:190px;height:86px"></i><i class="hw" style="left:-3px;top:160px;height:56px"></i><i class="hw" style="left:-3px;top:230px;height:56px"></i>
+      <div class="cutout"></div>
       <div class="scr">
+        <div class="sbar"><span>9:41</span><span>▂▄▆ ● ▬</span></div>
         <div class="m-head"><div class="back"></div><div><h3>Air Compressor</h3><p>Sample Office · Energy Audit</p></div></div>
         <div class="m-tabs"><div class="on">DATA</div><div>NOTES</div><div>PHOTOS</div></div>
         <div class="m-lbl">EQUIPMENT</div><div class="m-in" data-v="AC-01 · Compressor Room B" data-p="Equipment tag and location"></div>
@@ -70,6 +73,7 @@
       </div>
       <!-- AuditSage camera: wipes up over the data screen for evidence collection -->
       <div class="scr cam" id="camScr">
+        <div class="sbar" style="color:#fff"><span>9:41</span><span>▂▄▆ ● ▬</span></div>
         <div class="bar"><span>✕</span><span>Capture photo</span><span>✓</span></div>
         <div class="loc">Air Compressor · Compressor Room B (AC-01)</div>
         <div class="vf"><div class="g" style="left:132px;top:0;bottom:0;width:1px"></div><div class="g" style="left:264px;top:0;bottom:0;width:1px"></div><div class="g" style="top:173px;left:0;right:0;height:1px"></div><div class="g" style="top:346px;left:0;right:0;height:1px"></div>
@@ -123,7 +127,7 @@
       </div></div></div>
   </div>
 
-  <div id="topfade" class="abs" style="width:1920px;height:560px;background:linear-gradient(var(--bg) 74%, rgba(13,42,32,0))"></div>
+  <div id="topfade" class="abs" style="width:1920px;height:450px;background:linear-gradient(var(--bg) 72%, rgba(13,42,32,0))"></div>
 
   <!-- 4 · Combined analysis: the inputs meet in one analysis -->
   <div id="conv" class="abs">
@@ -141,7 +145,7 @@
     <div id="cEv"><div class="mask kick" style="left:120px;top:560px;height:28px">02 · AuditSage app</div><div class="mask stmt4" style="left:112px;top:594px;height:232px"><div>Evidence<br><i>collection.</i></div></div><div class="mask sub" style="left:120px;top:838px;height:42px"><div>Geotagged photos, linked to each entry.</div></div></div>
     <div id="c3"><div class="mask kick" style="left:120px;top:560px;height:28px">03 · GreenSage platform</div><div class="mask stmt4" style="left:112px;top:594px;height:232px"><div>Utility<br><i>uploads.</i></div></div><div class="mask sub" style="left:120px;top:838px;height:42px"><div>Bill PDFs, read field by field by AI.</div></div></div>
     <div id="cCo"><div class="mask kick" style="left:120px;top:560px;height:28px">04 · GreenSage platform</div><div class="mask stmt4" style="left:112px;top:594px;height:232px"><div>Combined<br><i>analysis.</i></div></div><div class="mask sub" style="left:120px;top:838px;height:42px"><div>Field data, evidence and bills, together.</div></div></div>
-    <div id="c4"><div class="mask kick" style="left:120px;top:96px;height:28px">05 · GreenSage platform</div><div class="mask stmt4" style="left:112px;top:130px;height:232px"><div>ECM<br><i>generation.</i></div></div><div class="mask sub" style="left:120px;top:374px;height:42px"><div>Measures ranked by cost and payback.</div></div></div>
+    <div id="c4"><div class="mask kick" style="left:120px;top:96px;height:28px">05 · GreenSage platform</div><div class="mask stmt4" style="left:112px;top:130px;height:122px"><div>ECM <i>generation.</i></div></div><div class="mask sub" style="left:120px;top:262px;height:42px"><div>Measures ranked by cost and payback.</div></div></div>
     <div id="c5"><div class="mask kick" style="left:120px;top:560px;height:28px">06 · GreenSage platform</div><div class="mask stmt4" style="left:112px;top:594px;height:232px"><div>Report<br><i>generation.</i></div></div><div class="mask sub" style="left:120px;top:838px;height:42px"><div>ASHRAE Level 2, exported to Word.</div></div></div>
   </div>
 
@@ -149,11 +153,13 @@
 
   <!-- 7 · Lockup -->
   <div id="lockup" class="abs">
-    <div id="lkLogo" class="abs" style="width:188px;height:188px;border-radius:22px;background:#F2F7F3"><img src="product/logo.png" style="position:absolute;left:14px;top:14px;width:160px" alt=""></div>
-    <div id="lkSlash" class="abs" style="width:6px;height:180px;border-radius:3px;background:var(--accent)"></div>
-    <div id="lkWordMask" class="mask" style="height:180px"><div id="lkWord" style="font:700 140px/180px Inter;letter-spacing:-.045em;white-space:nowrap">GreenSage AI</div></div>
-    <div class="mask" style="left:0;width:1920px;top:620px;height:66px"><div id="lkTag" style="text-align:center;font:600 46px/62px Inter;letter-spacing:-.015em">Streamline your <span style="color:var(--accent)">audit workflow.</span></div></div>
-    <div id="lkPill" class="abs" style="left:0;width:1920px;top:712px;text-align:center"><span style="display:inline-block;font:500 15px/34px Inter;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:0 18px;border-radius:17px;box-shadow:inset 0 0 0 1px var(--hair)">AuditSage app&nbsp;&nbsp;·&nbsp;&nbsp;GreenSage platform</span></div>
+    <!-- The mark seeds at the centre (where the tiles collapse), opens as a circle, then steps left
+         and the wordmark rises beside it. Text block left-aligned to the wordmark. -->
+    <div id="lkRing" class="abs" style="width:200px;height:200px;border-radius:50%;box-shadow:inset 0 0 0 2px var(--accent)"></div>
+    <div id="lkMark" class="abs" style="width:200px;height:200px;border-radius:50%;background:#FFFFFF;overflow:hidden"><img id="lkLeaf" src="product/logo.png" style="position:absolute;left:30px;top:30px;width:140px" alt=""></div>
+    <div id="lkWordMask" class="mask" style="height:156px"><div id="lkWord" style="font:700 140px/156px Inter;letter-spacing:-.045em;white-space:nowrap">GreenSage AI</div></div>
+    <div id="lkTagMask" class="mask" style="height:60px"><div id="lkTag" style="font:600 44px/58px Inter;letter-spacing:-.015em;white-space:nowrap">Streamline your <span style="color:var(--accent)">audit workflow.</span></div></div>
+    <div id="lkPill" class="abs" style="white-space:nowrap"><span style="display:inline-block;font:500 15px/34px Inter;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:0 18px;border-radius:17px;box-shadow:inset 0 0 0 1px var(--hair)">AuditSage app&nbsp;&nbsp;·&nbsp;&nbsp;GreenSage platform</span></div>
   </div>
 
   <svg id="cursor" viewBox="0 0 24 24"><path d="M4 2l15 11-7 1 4 8-3 1-4-8-5 5z" fill="#fff" stroke="#000" stroke-width="1.2" stroke-linejoin="round"/></svg>

@@ -87,7 +87,7 @@
   // ------------------------------------------------------------------ shots
   const PH = {
     hid: { x: 85, y: 160, s: 0.94, o: 0 }, bento: { x: 85, y: 100 },
-    macro: { x: 1080, y: 40, ry: -24, rx: 10, rz: 4, s: 1.45 }, cam: { x: 1120, y: 20, ry: -15, rx: 8, rz: 2, s: 1.45 }, out: { x: -1150, y: 40, ry: -12, rx: 10, rz: 4, s: 1.3 },
+    macro: { x: 1080, y: 175, ry: -24, rx: 10, rz: 4, s: 1.42 }, cam: { x: 1120, y: 165, ry: -15, rx: 8, rz: 2, s: 1.42 }, out: { x: -1150, y: 175, ry: -12, rx: 10, rz: 4, s: 1.3 },
     gone: { x: 485, y: 100, s: 0.5, o: 0 },
   };
   const BI = { r: { x: 2500, y: 220, ry: -16, rx: 5 }, m: { x: 740, y: 210, ry: -16, rx: 5, s: 0.97 }, up: { x: 760, y: -1050, ry: -16, rx: 22, s: 0.95 } };
@@ -114,8 +114,8 @@
     const ts = B(5.75 + 0.375 * i), te = B(5.75 + 0.375 * i + 0.25);
     const v = el.dataset.v;
     const n = Math.floor(clamp((t - ts) / (te - ts)) * v.length + 1e-6);
-    const focus = t >= ts - 0.12 && t < te + 0.18;
-    const f = clamp(spring(t - ts + 0.12, 'snappy')) * (1 - clamp(spring(t - te - 0.18, 'snappy')));
+    const focus = t >= ts - 0.05 && t < te + 0.05;
+    const f = clamp(spring(t - ts + 0.05, "snappy")) * (1 - clamp(spring(t - te - 0.05, "snappy")));
     el.style.boxShadow = `0 0 0 ${(1 + f).toFixed(2)}px ${mixHex('D2DAD5', '047857', f)}`;
     const caret = focus && (t < te || Math.floor((t - te) * 4) % 2 === 0) ? '<span class="caret"></span>' : '';
     el.innerHTML = n ? v.slice(0, n) + caret : caret + `<span class="ph">${el.dataset.p}</span>`;
@@ -271,26 +271,37 @@
     const L0 = 40;
     const lk = $('lockup');
     show(lk, t >= B(L0 - 0.1));
-    const drift = 1 + 0.006 * Math.max(0, t - B(L0));
-    lk.style.transform = `scale(${drift.toFixed(5)})`;
-    const lg = clamp(s(t, L0, 'heavy'), 0, 1.02);
-    $('lkLogo').style.transform = `translate(${LK.logo}px,386px) scale(${(0.6 + 0.4 * lg).toFixed(4)})`;
-    $('lkLogo').style.opacity = clamp(s(t, L0, 'snappy') * 1.6).toFixed(3);
-    $('lkSlash').style.transform = `translate(${LK.slash}px,390px) rotate(14deg) scaleY(${clamp(s(t, L0 + 0.125, 'snappy')).toFixed(4)})`;
-    $('lkWordMask').style.transform = `translate(${LK.word}px,386px)`;
-    $('lkWord').style.transform = `translateX(${((1 - clamp(s(t, L0 + 0.25, 'heavy'), 0, 1.01)) * -105).toFixed(2)}%)`;
-    $('lkTag').style.transform = `translateY(${((1 - s(t, L0 + 0.75, 'heavy')) * 112).toFixed(2)}%)`;
-    const pl = clamp(s(t, L0 + 1.25));
+    lk.style.transform = `scale(${(1 + 0.006 * Math.max(0, t - B(L0))).toFixed(5)})`;
+    // The seed opens into the mark, a ring ripples out, the leaf turns upright.
+    const open = clamp(s(t, L0, 'heavy'), 0, 1);
+    const step = s(t, L0 + 0.375, 'heavy');
+    const mx = lerp(LK.seed, LK.mark, step);
+    $('lkMark').style.transform = `translate(${mx.toFixed(2)}px,${LK.y}px)`;
+    $('lkMark').style.clipPath = `circle(${(open * 71).toFixed(2)}% at 50% 50%)`;
+    $('lkLeaf').style.transform = `rotate(${((1 - s(t, L0 + 0.125, 'heavy')) * -24).toFixed(2)}deg) scale(${(0.7 + 0.3 * clamp(s(t, L0 + 0.125, 'heavy'), 0, 1.02)).toFixed(4)})`;
+    const rp = clamp(s(t, L0 + 0.0625, 'heavy'));
+    $('lkRing').style.transform = `translate(${mx.toFixed(2)}px,${LK.y}px) scale(${(1 + 0.7 * rp).toFixed(4)})`;
+    $('lkRing').style.opacity = (t >= B(L0) ? 0.9 * (1 - rp) : 0).toFixed(3);
+    // The wordmark rises letter by letter beside the mark; tagline and pill follow, left-aligned.
+    $('lkWordMask').style.transform = `translate(${LK.text}px,${LK.y - 6}px)`;
+    WORD.forEach((c, i) => { c.style.transform = `translateY(${((1 - clamp(spring(t - B(L0 + 0.875) - i * 0.03, 'heavy'), 0, 1.01)) * 105).toFixed(2)}%)`; });
+    $('lkTagMask').style.transform = `translate(${LK.text + 4}px,${LK.y + 160}px)`;
+    $('lkTag').style.transform = `translateY(${((1 - s(t, L0 + 1.25, 'heavy')) * 110).toFixed(2)}%)`;
+    const pl = clamp(s(t, L0 + 1.75));
     $('lkPill').style.opacity = clamp(pl * 1.6).toFixed(3);
-    $('lkPill').style.transform = `translateY(${((1 - pl) * 18).toFixed(2)}px)`;
+    $('lkPill').style.transform = `translate(${LK.text + 4}px,${(LK.y + 236 + (1 - pl) * 18).toFixed(2)}px)`;
   }
 
   // ------------------------------------------------------------------ measured once at load
-  const W = $('lkWord').getBoundingClientRect().width;
-  const total = 188 + 52 + W;
-  const LK = { logo: Math.round((1920 - total) / 2) };
-  LK.slash = LK.logo + 188 + 24; LK.word = LK.logo + 188 + 52;
-  $('lkWordMask').style.width = Math.ceil(W + 20) + 'px';
+  // Lockup: wordmark split into letters; the group (mark + text) is centred on the frame.
+  const word = $('lkWord');
+  word.innerHTML = [...word.textContent].map((c) => `<span style="display:inline-block">${c === ' ' ? '&nbsp;' : c}</span>`).join('');
+  const WORD = [...word.children];
+  const W = word.getBoundingClientRect().width;
+  $('lkWordMask').style.width = Math.ceil(W + 24) + 'px';
+  $('lkTagMask').style.width = '1200px';
+  const LK = { mark: Math.round((1920 - (200 + 52 + W)) / 2), seed: 860, y: 430 };
+  LK.text = LK.mark + 252;
   // Click targets: where each button sits at the moment it is clicked.
   const CUR = {};
   const centre = (el) => { const r = el.getBoundingClientRect(); return [r.left + r.width * 0.5, r.top + r.height * 0.55]; };

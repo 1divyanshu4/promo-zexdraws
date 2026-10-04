@@ -34,7 +34,7 @@ Fit the story to 8 bars at 128 BPM (32 beats, 15 s; one beat = 0.469 s). The arc
 | 14–21.5 | **The hero feature, shown as variety.** One preview, cycling variants on the beat, with a labelled HUD. | Five frame skins |
 | 21.5–23 | **The outcome action.** The real export/share control appears and is clicked. | Export video |
 | 23–27 | **Where it goes.** The output in real destination contexts. | Instagram / TikTok / YouTube windows |
-| 27–32 | **Lockup.** Everything folds into the logo; name, tagline, one pill; hold to the end. | Logo, wordmark, tagline |
+| 27–32 | **Lockup.** Everything folds into the logo; name, tagline, one pill; hold to the end. Design a new lockup and logo move for each film (style guide, Lockup). | Logo, wordmark, tagline |
 
 Adapt the jobs to the product; keep the rhythm: a change every 1.5–6 beats, one hero beat with a
 sound accent where the music drops (beat 13 → boom on 14), the lockup with the crash.

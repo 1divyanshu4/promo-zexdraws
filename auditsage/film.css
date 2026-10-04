@@ -190,3 +190,10 @@ html, body { margin:0; background:var(--bg); overflow:hidden; }
 .conf { display:inline-block; padding:3px 8px; border-radius:4px; background:#E6F4EE; color:#047857; font:700 11px Inter; }
 .reason { position:absolute; width:300px; padding:12px 14px; border-radius:6px; background:#0F1A14; color:#E8EEEA; font:500 12px/17px Inter; box-shadow:0 12px 30px rgba(0,0,0,.25); }
 .reason small { display:block; font:700 10px Inter; letter-spacing:.12em; color:#4ADE9A; margin-bottom:4px; }
+
+/* Phone hardware: camera cutout over the screen, status bar, side buttons on the frame. */
+.phone .cutout { position:absolute; left:50%; top:24px; width:92px; height:26px; margin-left:-46px; border-radius:13px; background:#050706; z-index:3; box-shadow:inset 0 0 0 1px rgba(255,255,255,.06); }
+.phone .cutout::after { content:''; position:absolute; right:12px; top:7px; width:12px; height:12px; border-radius:6px; background:radial-gradient(circle at 40% 35%, #2A3B4A, #0B1218 60%); }
+.phone .sbar { position:absolute; left:0; right:0; top:0; height:40px; padding:0 26px; display:flex; justify-content:space-between; align-items:center; font:600 13px Inter; color:#0F1A14; letter-spacing:.02em; }
+.phone .sbar span:last-child { font-size:10px; letter-spacing:.06em; }
+.phone .hw { position:absolute; width:3px; border-radius:2px; background:linear-gradient(90deg,#2C3631,#6B7A72,#2C3631); }

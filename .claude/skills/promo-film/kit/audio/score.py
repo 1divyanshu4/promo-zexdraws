@@ -35,7 +35,8 @@ BEAT = 60.0 / BPM
 NBEATS = TL["bars"] * TL["beatsPerBar"]
 LOOP = NBEATS * BEAT
 N = int(round(LOOP * SR))
-rng = np.random.default_rng(23)
+SOUND = MUSIC.get("sound", {})
+rng = np.random.default_rng(SOUND.get("seed", 23))
 
 
 def sub(note, dur):
@@ -57,6 +58,51 @@ def bell(note, dur=0.9):
     return np.sin(2 * np.pi * f * t + mod) * env_exp(n, 0.28) * 0.07
 
 
+def marimba(note, dur=0.8):
+    n = int(dur * SR)
+    t = np.arange(n) / SR
+    f = midi(note)
+    x = np.zeros(n)
+    for ratio, amp, tau in ((1, 1.0, 0.32), (3.93, 0.35, 0.07), (9.24, 0.12, 0.025)):
+        x += amp * np.sin(2 * np.pi * f * ratio * t) * env_exp(n, tau)
+    return x * np.minimum(1, np.arange(n) / (0.002 * SR)) * 0.06
+
+
+def keys(note, dur=1.0):
+    n = int(dur * SR)
+    t = np.arange(n) / SR
+    f = midi(note)
+    mod = np.sin(2 * np.pi * f * t) * 1.2 * env_exp(n, 0.25)
+    tine = np.sin(2 * np.pi * f * 14 * t) * env_exp(n, 0.012) * 0.15
+    return (np.sin(2 * np.pi * f * t + mod) + tine) * env_exp(n, 0.5) * 0.06
+
+
+def warm_pad(notes, dur, cutoff=1400):
+    n = int(dur * SR)
+    t = np.arange(n) / SR
+    x = np.zeros(n)
+    for note in notes:
+        f = midi(note)
+        for det in (-0.003, 0.004):
+            x += np.sin(2 * np.pi * f * (1 + det) * t) + 0.3 * np.sin(4 * np.pi * f * (1 + det) * t)
+    x = lp(x, cutoff) * (1 + 0.15 * np.sin(2 * np.pi * 0.5 * t))
+    a = np.minimum(1, np.arange(n) / (0.5 * SR))
+    r = np.minimum(1, (n - np.arange(n)) / (0.4 * SR))
+    return x * a * r * 0.018
+
+
+def glass_pad(notes, dur):
+    n = int(dur * SR)
+    t = np.arange(n) / SR
+    x = np.zeros(n)
+    for note in notes:
+        for det in (-0.004, 0.0, 0.005):
+            x += np.sin(2 * np.pi * midi(note + 12) * (1 + det) * t)
+    a = np.minimum(1, np.arange(n) / (0.3 * SR))
+    r = np.minimum(1, (n - np.arange(n)) / (0.4 * SR))
+    return x * a * r * 0.008
+
+
 def dark_pad(notes, dur):
     n = int(dur * SR)
     x = np.zeros(n)
@@ -70,11 +116,33 @@ def dark_pad(notes, dur):
 
 
 # Fm | Db | Bbm | C | Fm | Db | Bbm | C(sus -> resolves into the loop)
-CHORDS = [
+DEFAULT_CHORDS = [
     (41, [56, 60, 63, 67]), (37, [56, 60, 65, 68]), (46, [58, 61, 65, 68]), (36, [55, 60, 64, 67]),
     (41, [56, 60, 63, 67]), (37, [56, 60, 65, 68]), (46, [58, 61, 65, 68]), (36, [55, 60, 65, 67]),
 ]
 BELL_POS = [0, 0.75, 1.5, 2.5, 3.25]
+
+# A project's own sound (timeline.json music.sound). Every key is optional; the defaults are the
+# reference film's sound, so give each new film its own key, progression, voices and UI tone.
+CHORDS = SOUND.get("progression", DEFAULT_CHORDS)
+LEAD = {"voice": "bell", "pattern": BELL_POS, "octave": 12, "gain": 1.0, **SOUND.get("lead", {})}
+PAD = {"voice": "dark", "cutoff": 1400, "gain": 1.0, **SOUND.get("pad", {})}
+DRUMS = {"kick": "punchy", "snare": "clap", "hats": "16ths", "swing": 0.0, **SOUND.get("drums", {})}
+UI = {"tone": "digital", "pitch": 1.0, **SOUND.get("ui", {})}
+
+
+def lead(note):
+    v = LEAD["voice"]
+    return {"bell": bell, "marimba": marimba, "keys": keys}[v](note) * LEAD["gain"]
+
+
+def pad(notes, dur):
+    v = PAD["voice"]
+    if v == "warm":
+        return warm_pad(notes, dur, PAD["cutoff"]) * PAD["gain"]
+    if v == "glass":
+        return glass_pad(notes, dur) * PAD["gain"]
+    return dark_pad(notes, dur) * PAD["gain"]
 
 
 def render_music():
@@ -84,7 +152,9 @@ def render_music():
     music = np.zeros(total)
     send = np.zeros(total)
     side = np.ones(total)
-    K, C, HC = kick() * 1.1, clap() * 0.8, hat() * 0.8
+    K, C, HC = kick(DRUMS["kick"]) * 1.1, clap(DRUMS["snare"]) * 0.8, hat() * 0.8
+    HATS = {"16ths": (0, 1, 2, 3), "8ths": (0, 2), "offbeat": (2,)}[DRUMS["hats"]]
+    swing = DRUMS["swing"] * BEAT / 4
 
     def duck(t, depth=0.6):
         i = int(t * SR)
@@ -106,8 +176,8 @@ def render_music():
                 add(drums, C, t)
                 add(send, C * 0.4, t)
             if groove:
-                for s in range(4):
-                    add(drums, HC * (0.9 if s == 2 else 0.45), t + s * BEAT / 4)
+                for s in HATS:
+                    add(drums, HC * (0.9 if s == 2 else 0.45), t + s * BEAT / 4 + (swing if s % 2 else 0))
             elif b < 4 or pulse:
                 add(drums, HC * 0.35, t + BEAT / 2)
         for bar in range(TL["bars"]):
@@ -118,14 +188,14 @@ def render_music():
             # Sub: half-bar notes, an octave hop on the 'and' of 2 when the groove runs.
             add(music, sub(root, 2 * BEAT - 0.02), b0)
             add(music, sub(root + (12 if 2 <= bar <= 6 else 0), 2 * BEAT - 0.02), b0 + 2 * BEAT)
-            for k, pos in enumerate(BELL_POS):
+            for k, pos in enumerate(LEAD["pattern"]):
                 if held and pos > 1.5:
                     continue
-                note = ch[(k + bar) % len(ch)] + 12
-                sig = bell(note) * (0.6 if bar == 0 else 1.0)
+                note = ch[(k + bar) % len(ch)] + LEAD["octave"]
+                sig = lead(note) * (0.6 if bar == 0 else 1.0)
                 add(music, sig, b0 + pos * BEAT)
                 add(send, sig * 0.9, b0 + pos * BEAT)
-            add(music, dark_pad(ch, 4 * BEAT + 0.4), b0)
+            add(music, pad(ch, 4 * BEAT + 0.4), b0)
         # Risers into the pull-back (beat 18) and the lockup (beat 28).
         for start, end, amt in MUSIC["risers"]:
             n = int((end - start) * BEAT * SR)
@@ -171,10 +241,10 @@ def sfx(kind):
     if kind == "hit":
         return ui("whoosh") * 0.6
     if kind == "crash":
-        return ui("tick") * 0.5
+        return ui("tick", UI["tone"], UI["pitch"]) * 0.5
     if kind == "rewind":
         return ui("whoosh")[::-1] * 0.9
-    return ui(kind)
+    return ui(kind, UI["tone"], UI["pitch"])
 
 
 def measure(y):
