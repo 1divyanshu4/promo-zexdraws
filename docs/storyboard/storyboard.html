@@ -1,0 +1,136 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Studio film storyboard</title>
+<style>
+@font-face { font-family: 'Southern Beach'; src: url(../../assets/fonts/SouthernBeach.otf); }
+@font-face { font-family: Inter; src: url(../../assets/fonts/Inter-Medium.ttf); font-weight: 500; }
+@font-face { font-family: Inter; src: url(../../assets/fonts/Inter-SemiBold.ttf); font-weight: 600; }
+@font-face { font-family: Inter; src: url(../../assets/fonts/Inter-Bold.ttf); font-weight: 700; }
+:root { --bg:#08070A; --text:#fff; --muted:#9F9EA1; --faint:#5B5A5E; --hair:#2A292D; --accent:#8B5CF6; }
+html,body { margin:0; background:var(--bg); }
+.frame { position:relative; width:1920px; height:1080px; overflow:hidden; background:radial-gradient(ellipse 62% 70% at 50% 50%, #18171A 0%, #08070A 100%); font-family:Inter; color:#fff; display:none; }
+.frame.on { display:block; }
+.abs { position:absolute; }
+.cam { position:absolute; inset:0; perspective:1800px; perspective-origin:960px 540px; }
+.rig { position:absolute; left:960px; top:540px; transform-style:preserve-3d; }
+.L { position:absolute; display:block; box-shadow:0 30px 70px rgba(0,0,0,.55); }
+.eyebrow { font:500 17px Inter; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); }
+.eyebrow b { color:#fff; font-weight:500; }
+.row { font:500 21px Inter; color:var(--muted); }
+.row .v { color:#fff; }
+.cursor { position:absolute; width:34px; filter:drop-shadow(0 4px 8px rgba(0,0,0,.5)); }
+.card { position:absolute; background:#141316; border-radius:22px; overflow:hidden; box-shadow:0 30px 80px rgba(0,0,0,.6), inset 0 0 0 1px var(--hair); }
+.media { position:absolute; overflow:hidden; background-size:cover; background-position:center; }
+.handle { font:600 17px Inter; color:#fff; }
+.sub { font:500 15px Inter; color:var(--muted); }
+.av { display:inline-block; width:34px; height:34px; border-radius:17px; background:url(../../assets/logo.png) center/cover; vertical-align:middle; margin-right:10px; }
+.bar { height:12px; border-radius:6px; background:#2a292d; }
+.fmt { font:500 17px Inter; letter-spacing:.2em; color:var(--muted); text-align:center; }
+.fmt b { color:#fff; font-weight:600; }
+</style></head><body>
+
+<!-- 1 · Exploded studio -->
+<div class="frame" id="f1"><div class="cam"><div class="rig" style="transform:scale(.66) translateY(60px) rotateX(50deg) rotateZ(-30deg)">
+  <img class="L" src="../../ui/studio/base.png" style="width:1920px;height:1080px;left:-960px;top:-540px;border-radius:14px">
+  <div class="L" style="background:#fff;left:-316px;top:-404px;width:639px;height:843px;transform:translateZ(90px)"></div>
+  <img class="L" src="../../ui/studio/bottom.png" style="left:-882px;top:462px;width:1770px;height:78px;transform:translateZ(170px)">
+  <img class="L" src="../../ui/studio/rail.png" style="left:888px;top:-426px;width:72px;height:966px;transform:translateZ(240px)">
+  <img class="L" src="../../ui/studio/tools.png" style="left:-960px;top:-426px;width:78px;height:966px;transform:translateZ(300px)">
+  <img class="L" src="../../ui/studio/toolbar.png" style="left:-960px;top:-498px;width:1920px;height:72px;transform:translateZ(360px)">
+  <img class="L" src="../../ui/studio/title.png" style="left:-960px;top:-540px;width:1920px;height:42px;transform:translateZ(430px)">
+</div></div></div>
+
+<!-- 2 · Focus on the canvas, the drawing plays, copy on the left -->
+<div class="frame" id="f2">
+  <div class="cam"><div class="rig" style="transform:scale(1.18) translate(285px,-18px)">
+    <img class="L" src="../../ui/studio/base.png" style="width:1920px;height:1080px;left:-960px;top:-540px">
+    <img class="L" src="../../ui/studio.png" style="width:1920px;height:1080px;left:-960px;top:-540px;clip-path:inset(0 0 0 0)">
+    <div class="L" style="background:rgba(8,7,10,.84);left:-960px;top:-540px;width:1920px;height:1080px;box-shadow:none"></div>
+    <img class="L" src="../../build/frames/canvas/70.jpg" style="left:-316px;top:-404px;width:639px;height:843px">
+  </div></div>
+  <div class="abs" style="left:130px;top:330px;font:600 60px/84px Inter;letter-spacing:-.01em">No complicated setup.</div>
+  <div class="abs" style="left:130px;top:414px;font:600 60px/84px Inter;letter-spacing:-.01em">No camera pressure.</div>
+  <div class="abs" style="left:126px;top:520px;font:132px/150px 'Southern Beach'">You just draw.</div>
+</div>
+
+<!-- 3 · Focus on Replay: camera pans to the toolbar, cursor clicks the clapper -->
+<div class="frame" id="f3">
+  <div class="cam"><div class="rig" style="transform:scale(1.9) translate(-640px,330px)">
+    <img class="L" src="../../ui/studio.png" style="width:1920px;height:1080px;left:-960px;top:-540px">
+    <img class="L" src="../../build/frames/canvas/96.jpg" style="left:-316px;top:-404px;width:639px;height:843px;box-shadow:none">
+    <div class="L" style="left:820px;top:-490px;width:56px;height:54px;border-radius:12px;background:rgba(139,92,246,.28);box-shadow:inset 0 0 0 2px #8B5CF6"></div>
+  </div></div>
+  <svg class="cursor" style="left:1348px;top:288px;width:46px" viewBox="0 0 24 24"><path d="M4 2l15 11-7 1 4 8-3 1-4-8-5 5z" fill="#fff" stroke="#000" stroke-width="1.2" stroke-linejoin="round"/></svg>
+</div>
+
+<!-- 4 · Skin showcase (the switcher you liked) -->
+<div class="frame" id="f4">
+  <div class="abs" style="left:1000px;top:540px;width:902px;height:638px;transform:translate(-451px,-319px);border-radius:15px;overflow:hidden;box-shadow:0 40px 90px rgba(0,0,0,.55)"><img src="../../build/frames/pink/600.jpg" style="width:100%;height:100%"></div>
+  <div class="abs eyebrow" style="left:98px;top:430px">Look&nbsp;&nbsp;&nbsp;&nbsp;<b>01</b>/05</div>
+  <div class="abs" style="left:92px;top:462px;font:100px/120px 'Southern Beach'">Neubrutalism</div>
+  <div class="abs" style="left:98px;top:596px;width:470px;height:3px;border-radius:2px;background:#E83E77"></div>
+  <div class="abs" style="left:93px;top:627px;width:26px;height:26px;border:2px solid #8B5CF6;border-radius:13px;box-sizing:border-box"></div>
+  <div class="abs" style="left:99px;top:633px;width:14px;height:14px;border-radius:7px;background:#E83E77"></div>
+  <div class="abs" style="left:137px;top:633px;width:14px;height:14px;border-radius:7px;background:#F0D442"></div>
+  <div class="abs" style="left:175px;top:633px;width:14px;height:14px;border-radius:7px;background:#E2572C"></div>
+  <div class="abs" style="left:213px;top:633px;width:14px;height:14px;border-radius:7px;background:#FBFBF6"></div>
+  <div class="abs" style="left:251px;top:633px;width:14px;height:14px;border-radius:7px;background:#201E1A;box-shadow:inset 0 0 0 1px rgba(255,255,255,.25)"></div>
+  <div class="abs eyebrow" style="left:1496px;top:470px">Frame</div>
+  <div class="abs row" style="left:1496px;top:508px">skin&nbsp;&nbsp;<span class="v">Neubrutalism</span></div>
+  <div class="abs row" style="left:1496px;top:550px"><span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:#E83E77;vertical-align:-2px"></span>&nbsp;&nbsp;colour&nbsp;&nbsp;<span class="v">#E83E77</span></div>
+</div>
+
+<!-- 5 · Export button appears under the box, cursor clicks it -->
+<div class="frame" id="f5">
+  <div class="abs" style="left:960px;top:470px;width:834px;height:590px;transform:translate(-417px,-295px);border-radius:15px;overflow:hidden;box-shadow:0 40px 90px rgba(0,0,0,.55)"><img src="../../build/frames/fantasy/690.jpg" style="width:100%;height:100%"></div>
+  <img class="abs" src="../../ui/panel_pink.png" style="left:0;top:0;width:0">
+  <div class="abs" style="left:960px;top:850px;transform:translate(-50%,0) scale(1.2);transform-origin:50% 0;width:270px;height:57px;border-radius:10px;overflow:hidden;background:url(../../ui/panel_pink.png) -1615px -253px / 2560px 1440px"></div>
+  <svg class="cursor" style="left:1060px;top:892px;width:46px" viewBox="0 0 24 24"><path d="M4 2l15 11-7 1 4 8-3 1-4-8-5 5z" fill="#fff" stroke="#000" stroke-width="1.2" stroke-linejoin="round"/></svg>
+</div>
+
+<!-- 6 · One export, every format: feed post · reel · video (generic templates, no platform logos) -->
+<div class="frame" id="f6">
+  <div class="abs" style="left:0;width:1920px;top:64px;text-align:center;font:600 46px Inter;letter-spacing:-.01em">Export once. <span style="color:var(--muted)">Post anywhere.</span></div>
+  <!-- 1:1 feed post -->
+  <div class="card" style="left:150px;top:228px;width:480px;height:624px">
+    <div class="abs" style="left:18px;top:14px"><span class="av"></span><span class="handle">zexdraws</span></div>
+    <div class="media" style="left:0;top:62px;width:480px;height:480px;background-image:url(../../build/frames/manga/690.jpg)"></div>
+    <svg class="abs" style="left:18px;top:556px" width="150" height="28" viewBox="0 0 150 28" fill="none" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"><path d="M14 24S2 16 2 9a6 6 0 0 1 12-2 6 6 0 0 1 12 2c0 7-12 15-12 15z"/><path d="M46 5h20a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H54l-6 4v-4h-2a4 4 0 0 1-4-4V9a4 4 0 0 1 4-4z"/><path d="M96 14l8-9v5c9 0 13 5 13 14-3-5-6-6-13-6v5z"/></svg>
+    <div class="abs bar" style="left:18px;top:596px;width:300px"></div>
+  </div>
+  <!-- 9:16 reel: this is the box from the showcase -->
+  <div class="card" style="left:700px;top:185px;width:400px;height:711px">
+    <div class="media" style="inset:0;background-image:url(../../build/frames/fantasy/690.jpg)"></div>
+    <div class="abs" style="left:0;right:0;bottom:0;height:200px;background:linear-gradient(transparent,rgba(0,0,0,.6))"></div>
+    <div class="abs" style="left:18px;bottom:52px"><span class="av"></span><span class="handle">zexdraws</span></div>
+    <div class="abs" style="left:18px;bottom:24px;width:220px;height:10px;border-radius:5px;background:rgba(255,255,255,.35)"></div>
+    <svg class="abs" style="right:16px;bottom:120px" width="30" height="150" viewBox="0 0 30 150" fill="none" stroke="#fff" stroke-width="2.4" stroke-linejoin="round"><path d="M15 26S3 18 3 11a6 6 0 0 1 12-2 6 6 0 0 1 12 2c0 7-12 15-12 15z"/><path d="M5 60h20a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H13l-6 4v-4H5a3 3 0 0 1-3-3V63a3 3 0 0 1 3-3z"/><path d="M5 128l9-9v5c9 0 13 5 13 14-3-5-6-6-13-6v5z"/></svg>
+    <div class="abs" style="left:0;bottom:0;width:150px;height:4px;background:#fff"></div>
+  </div>
+  <!-- 16:9 video -->
+  <div class="card" style="left:1170px;top:330px;width:600px;height:450px">
+    <div class="media" style="left:0;top:0;width:600px;height:338px;background-image:url(../../build/frames/pink/690.jpg)"></div>
+    <div class="abs" style="left:0;top:334px;width:600px;height:4px;background:rgba(255,255,255,.2)"><div style="width:42%;height:4px;background:#fff"></div></div>
+    <div class="abs" style="left:18px;top:358px"><span class="av"></span></div>
+    <div class="abs bar" style="left:66px;top:362px;width:380px;height:14px;background:#3a393d"></div>
+    <div class="abs bar" style="left:66px;top:390px;width:220px"></div>
+  </div>
+  <div class="abs fmt" style="left:150px;width:480px;top:880px"><b>1:1</b>&nbsp;&nbsp;Post</div>
+  <div class="abs fmt" style="left:700px;width:400px;top:920px"><b>9:16</b>&nbsp;&nbsp;Reel</div>
+  <div class="abs fmt" style="left:1170px;width:600px;top:808px"><b>16:9</b>&nbsp;&nbsp;Video</div>
+</div>
+
+<!-- 7 · Lockup (the logo animation you liked, held to the end) -->
+<div class="frame" id="f7" style="background:radial-gradient(ellipse 95% 110% at 50% 48%, #1e1d21 0%, #08070A 100%)">
+  <img class="abs" src="../../assets/logo.png" style="left:580px;top:382px;width:168px;border-radius:23%">
+  <div class="abs" style="left:771px;top:388px;width:10px;height:150px;background:#8B5CF6;border-radius:5px;transform:rotate(18deg);transform-origin:50% 100%"></div>
+  <div class="abs" style="left:822px;top:360px;font:150px/210px 'Southern Beach'">ZexDraws</div>
+  <div class="abs" style="left:460px;top:600px;width:1000px;text-align:center;font:600 52px/70px Inter">Every stroke, replayable.</div>
+  <div class="abs" style="left:810px;top:694px;width:300px;text-align:center"><span style="display:inline-block;font:500 15px/34px Inter;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:0 18px;border-radius:17px;background:#141316;box-shadow:inset 0 0 0 1px var(--hair)">Recorder built in</span></div>
+</div>
+
+<script>
+const f = new URLSearchParams(location.search).get('f') || '1';
+document.getElementById('f' + f).classList.add('on');
+document.fonts.ready.then(() => Promise.all([...document.images].map((i) => i.decode().catch(() => {})))).then(() => { window.ready = true; });
+</script>
+</body></html>
