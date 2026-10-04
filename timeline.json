@@ -1,0 +1,10 @@
+{
+  "bpm": 128,
+  "bars": 8,
+  "beatsPerBar": 4,
+  "fps": 60,
+  "width": 1920,
+  "height": 1080,
+  "_sfx": "UI sound per beat index (0-31), placed on the measured peak of that beat. click = cursor press, tick = small UI change, swish = paint stroke, whoosh = container morph, none = music only.",
+  "sfx": ["none", "whoosh", "tick", "tick", "whoosh", "swish", "swish", "click", "whoosh", "tick", "tick", "click", "click", "click", "click", "click", "click", "click", "tick", "click", "click", "tick", "tick", "click", "whoosh", "click", "click", "tick", "whoosh", "click", "whoosh", "whoosh"]
+}

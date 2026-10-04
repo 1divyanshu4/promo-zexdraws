@@ -1,0 +1,33 @@
+{
+  "_doc": [
+    "Every piece of product footage the film uses. To swap in a better drawing: export new clips",
+    "from ZexDraws, drop them over these files (or point the paths at new ones), adjust the",
+    "replay range below if needed, and run `node render.mjs`. Durations, aspect ratios, frame",
+    "rates and the cursor path over the canvas clip are all measured from the files themselves.",
+    "",
+    "replay.skins: one export of the SAME drawing per look, all at the same length (the film",
+    "  switches between them mid-playback, so their timelines must line up). Keys are fixed:",
+    "  pink / yellow / orange are the Neubrutalism frame in those preset colours; manga and",
+    "  fantasy are those frame skins.",
+    "replay.useFrom / useTo: the stretch of the replay (seconds) the film plays through. Pick",
+    "  useTo at or just before the moment the drawing is finished.",
+    "replay.skip: optional [from, to] seconds to jump over (e.g. a moment a layer covers the art).",
+    "canvas.file: a short clip of the bare canvas while painting (shown inside the studio UI).",
+    "  Its aspect ratio should match the studio capture's canvas, 1200 x 1584."
+  ],
+  "replay": {
+    "skins": {
+      "pink": "footage/Pink.mp4",
+      "yellow": "footage/Yellow.mp4",
+      "orange": "footage/Orange.mp4",
+      "manga": "footage/Manga.mp4",
+      "fantasy": "footage/Fantasy.mp4"
+    },
+    "useFrom": 0,
+    "useTo": 30.4,
+    "skip": [26.8, 29.6]
+  },
+  "canvas": {
+    "file": "footage/Canvas.mp4"
+  }
+}

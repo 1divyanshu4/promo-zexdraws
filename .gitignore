@@ -6,3 +6,5 @@ frames/
 !assets/**/*.wav
 .DS_Store
 __pycache__/
+footage/
+build/
