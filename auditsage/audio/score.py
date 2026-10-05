@@ -324,7 +324,7 @@ def main():
         ["ffmpeg", "-hide_banner", "-i", str(tmp), "-af", "loudnorm=I=-14:TP=-1:LRA=11:print_format=json", "-f", "null", "-"],
         capture_output=True, text=True,
     ).stderr
-    m = json.loads(probe[probe.rindex("{") :])
+    m = json.loads(probe[probe.rindex("{") : probe.rindex("}") + 1])
     af = (
         f"loudnorm=I=-14:TP=-1:LRA=11:measured_I={m['input_i']}:measured_TP={m['input_tp']}:"
         f"measured_LRA={m['input_lra']}:measured_thresh={m['input_thresh']}:offset={m['target_offset']}:linear=true,"

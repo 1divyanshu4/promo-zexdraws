@@ -54,7 +54,7 @@ const subTimes = (f) => Array.from({ length: SUBFRAMES }, (_, k) => (f + ((k + 0
 
 // One browser + page. Separate browser instances so each gets its own renderer process.
 async function openWorker(base) {
-  const browser = await chromium.launch({ args: ['--disable-gpu-vsync', '--force-color-profile=srgb'] });
+  const browser = await chromium.launch({ args: ['--disable-gpu-vsync', '--force-color-profile=srgb', '--disable-dev-shm-usage'] });
   const page = await browser.newPage({ viewport: { width: 1920, height: 1080 }, deviceScaleFactor: 1 });
   page.on('pageerror', (e) => { console.error('page error:', e.message); process.exitCode = 1; });
   page.on('console', (m) => { if (m.type() === 'error') console.error('console:', m.text()); });
@@ -65,8 +65,12 @@ async function openWorker(base) {
   // DOM films: one JPEG per subframe (ffmpeg blends them). Canvas films blend in-page.
   w.shoot = async (t, format = 'jpeg') => {
     await page.evaluate(async (t) => { await window.prepare([t]); window.seek(t); }, t);
-    const { data } = await cdp.send('Page.captureScreenshot', format === 'png' ? { format: 'png' } : { format: 'jpeg', quality: JPEG_Q, optimizeForSpeed: true });
-    return Buffer.from(data, 'base64');
+    try {
+      const { data } = await cdp.send('Page.captureScreenshot', format === 'png' ? { format: 'png' } : { format: 'jpeg', quality: JPEG_Q, optimizeForSpeed: true });
+      return Buffer.from(data, 'base64');
+    } catch {
+      return await page.screenshot({ type: format === 'png' ? 'png' : 'jpeg', quality: format === 'png' ? undefined : JPEG_Q });
+    }
   };
   w.frame = async (f, format = 'jpeg') => {
     const u = await page.evaluate(async ([f, fps, n, fmt, q]) => {
@@ -128,11 +132,11 @@ if (mode === 'still' || mode === 'contact') {
   }
   await w.browser.close();
 } else {
-  const workers = await Promise.all(Array.from({ length: JOBS }, () => openWorker(base)));
-  const LOOP = await workers[0].page.evaluate(() => window.LOOP);
+  const probeWorker = await openWorker(base);
+  const LOOP = await probeWorker.page.evaluate(() => window.LOOP);
+  await probeWorker.browser.close();
   const frames = Math.round(LOOP * FPS);
   const segDir = path.join(ROOT, 'build', 'segments', FILM.out);
-  fs.rmSync(segDir, { recursive: true, force: true });
   fs.mkdirSync(segDir, { recursive: true });
   const chunks = [];
   for (let a = 0; a < frames; a += CHUNK) chunks.push([a, Math.min(frames, a + CHUNK), path.join(segDir, `${String(a).padStart(5, '0')}.mp4`)]);
@@ -143,16 +147,25 @@ if (mode === 'still' || mode === 'contact') {
     const eta = done ? (s / done) * (chunks.length - done) : 0;
     console.log(`chunks ${done}/${chunks.length}  ${s.toFixed(0)}s elapsed${done ? `  ~${eta.toFixed(0)}s left` : ''}`);
   };
-  console.log(`rendering ${frames} frames (${DOM ? SUBFRAMES + ' subframes each' : 'in-page blur'}) on ${JOBS} browsers`);
-  await Promise.all(workers.map(async (w) => {
+  console.log(`rendering ${frames} frames (${DOM ? SUBFRAMES + ' subframes each' : 'in-page blur'}) with ${JOBS} worker slots`);
+  await Promise.all(Array.from({ length: JOBS }, async () => {
     while (next < chunks.length) {
       const [a, b, file] = chunks[next++];
-      await renderChunk(w, a, b, file);
+      if (fs.existsSync(file) && fs.statSync(file).size > 10000) {
+        done++;
+        log();
+        continue;
+      }
+      const w = await openWorker(base);
+      try {
+        await renderChunk(w, a, b, file);
+      } finally {
+        await w.browser.close().catch(() => {});
+      }
       done++;
       log();
     }
   }));
-  await Promise.all(workers.map((w) => w.browser.close()));
 
   // Join segments (stream copy) and mux the score; write to a temp name, rename when done.
   const list = path.join(segDir, 'list.txt');

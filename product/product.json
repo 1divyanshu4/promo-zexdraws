@@ -6,7 +6,6 @@
     "handle": "zexdraws",
     "logo": "product/logo.png",
     "tagline": "Every stroke, replayable.",
-    "pill": "Replay built in",
     "accent": "#8B5CF6",
     "fonts": {
       "display": { "family": "Southern Beach", "src": "product/fonts/SouthernBeach.otf" },

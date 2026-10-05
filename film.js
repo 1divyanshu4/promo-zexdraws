@@ -223,11 +223,11 @@
     p.eyebrow = strip(p.hud, p.lx, 380, 400, 24, [`<span class="eyebrow"><b>0${i + 1}</b>/03&nbsp;&nbsp;&nbsp;&nbsp;${h(P.panelEyebrow)}</span>`], '');
     p.title = strip(p.hud, p.lx - 6, 408, 640, 150, [p.name], 'name');
     p.subl = strip(p.hud, p.lx, 566, 640, 32, [`<span class="row">${p.sub}</span>`], '');
-    // Labels lead the handover: they are out of the way before the next panel crosses them.
-    const tin = Math.max(0, p.t0), out = (i < 2 ? p.tOut : B(p.b1) - 0.08) - 0.2 + settle('snappy') + 0.01;
-    p.ePos = stripTrack(tin + 0.03, [], out, 'snappy', 'snappy');
-    p.tPos = stripTrack(tin + 0.07, [], out + 0.02, 'heavy', 'snappy');
-    p.sPos = stripTrack(tin + 0.13, [], out + 0.04, 'heavy', 'snappy');
+    // Labels stay on screen longer and lift out cleanly with the handover at p.tOut.
+    const tin = Math.max(0, p.t0), out = (i < 2 ? p.tOut : B(p.b1) - 0.08) - 0.03 + settle('snappy') + 0.01;
+    p.ePos = stripTrack(tin + 0.02, [], out, 'snappy', 'snappy');
+    p.tPos = stripTrack(tin + 0.04, [], out + 0.02, 'snappy', 'snappy');
+    p.sPos = stripTrack(tin + 0.08, [], out + 0.04, 'snappy', 'snappy');
   });
   const RAIL_T = B(4.5);
 
@@ -384,14 +384,14 @@
   const wmText = el('div', '', { position: 'absolute', left: 0, top: 0, font: `150px/210px ${DISPLAY}`, whiteSpace: 'nowrap' }, nm, WM);
   const slash = el('div', '', { position: 'absolute', left: `${L0 + 191}px`, top: '388px', width: '10px', height: '150px', background: 'var(--accent)', borderRadius: '5px', transformOrigin: '50% 100%' });
   const tagline = strip(hud, 260, 600, 1400, 70, [`<div style="font:600 52px/70px ${UI};letter-spacing:-0.01em;text-align:center;width:1400px">${h(BR.tagline)}</div>`], '');
-  const pill = strip(hud, 660, 694, 600, 44, BR.pill ? [`<div style="width:600px;text-align:center"><span style="display:inline-block;font:500 15px/34px ${UI};letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);padding:0 18px;border-radius:17px;background:#141316;box-shadow:inset 0 0 0 1px var(--hair)">${h(BR.pill)}</span></div>`] : [''], '');
+  const pill = BR.pill ? strip(hud, 660, 694, 600, 44, [`<div style="width:600px;text-align:center"><span style="display:inline-block;font:500 15px/34px ${UI};letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);padding:0 18px;border-radius:17px;background:#141316;box-shadow:inset 0 0 0 1px var(--hair)">${h(BR.pill)}</span></div>`], '') : null;
   const L_IN = B(27) + 0.12;
   const logoReveal = (t) => tr(t, [[0, 0], [L_IN, 1]], 'heavy');
   const logoMove = (t) => tr(t, [[0, 0], [B(28), 1]], 'heavy');
   const wmK = (t) => tr(t, [[0, 0], [B(28) + 0.06, 1]], 'heavy');
   const slashK = (t) => tr(t, [[0, 0], [B(28), 1]], 'snappy');
   const taglinePos = stripTrack(B(28) + 0.2, []);
-  const pillPos = stripTrack(B(28) + 0.36, []);
+  const pillPos = BR.pill ? stripTrack(B(28) + 0.36, []) : null;
   const spotK = (t) => tr(t, [[0, 0], [B(27), 1]], 'heavy');
 
   // ------------------------------------------------------------------ grain (seeded, per frame)
@@ -549,7 +549,7 @@
     show(logo, rv > 0.002);
     wmText.style.transform = `translateX(${(-(1 - clamp(wmK(t), 0, 1)) * (wmW + 200)).toFixed(1)}px)`;
     slash.style.transform = `rotate(18deg) scaleY(${clamp(slashK(t), 0, 1).toFixed(3)})`;
-    tagline(taglinePos(t)); pill(pillPos(t));
+    tagline(taglinePos(t)); if (pill) pill(pillPos(t));
     $('spot').style.opacity = clamp(spotK(t), 0, 1).toFixed(3);
 
     // Grain: tile chosen by frame number (seeded), drawn unscaled.

@@ -136,7 +136,9 @@
 
     // The phone: from the bento tile to the macro, a turn for the camera, out left, and home again.
     const ph = poses(t, [[0, PH.hid], [0.5, PH.bento], [4.25, PH.macro, 'heavy'], [9.75, PH.cam], [14.5, PH.out], [36.375, PH.bento], [39, PH.gone]]);
-    place($('phone'), ph, 0, glide(t, [[B(5), -9], [B(14.5), 0]]), glide(t, [[B(5), 2.2], [B(9.75), -1.5], [B(14.5), 0]]));
+    const gY = t < B(16) ? glide(t, [[B(5), -9], [B(14.5), 0]]) : 0;
+    const gRy = t < B(16) ? glide(t, [[B(5), 2.2], [B(9.75), -1.5], [B(14.5), 0]]) : 0;
+    place($('phone'), ph, 0, gY, gRy);
     // 01 Data collection.
     fields.forEach((el, i) => typeField(el, t, i));
     $('saveBtn').style.transform = `scale(${(1 - 0.05 * press(t, 8)).toFixed(4)})`;
