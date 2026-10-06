@@ -573,7 +573,9 @@
   }
   window.prepare = async (times) => {
     await Promise.all([...new Set(times.flatMap(needs))].map((s) => image(s).ready));
-    if (cache.size > 500) for (const [k] of cache) { if (cache.size <= 380) break; if (k.startsWith('build/frames')) cache.delete(k); }
+    // A decoded footage frame is ~4.6 MB and renders walk forward in time, so keep only a short
+    // window; a large cache is what made parallel render workers run out of RAM.
+    if (cache.size > 80) for (const [k] of cache) { if (cache.size <= 56) break; if (k.startsWith('build/frames')) cache.delete(k); }
   };
   window.seek = seek;
   window.LOOP = LOOP;

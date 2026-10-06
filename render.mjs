@@ -2,7 +2,11 @@
 //   node render.mjs              full film -> out/<product.output>.mp4 (60 fps, 4 subframes, H.264 CRF 16)
 //   node render.mjs --contact    one frame per beat -> out/contact-<product.output>.png (look at this first)
 //   node render.mjs --still 7.5  a single frame at t=7.5 s -> out/still.png
-//   --jobs N                     parallel browsers (default: one per CPU core)
+//   --jobs N                     parallel browsers (default: fits RAM, at most half the cores)
+//   --draft                      quick preview: 2 subframes, x264 veryfast -> out/<output>-draft.mp4
+//   --subframes N  --preset P    override motion-blur subframes (4) / x264 preset (medium)
+//   --cpu                        paint with SwiftShader instead of the GPU (slower; fallback)
+//   --range A:B                  render only frames [A, B) (benchmarking; no mux)
 //
 // Every frame is a pure function of time, so the film is cut into chunks that a pool of
 // browsers renders in parallel; each chunk becomes a video segment, and the segments are
@@ -19,18 +23,33 @@ import { prep } from './prep.mjs';
 
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
 const OUT = path.join(ROOT, 'out');
-const FPS = 60, SUBFRAMES = 4, CHUNK = 60, JPEG_Q = 95;
 const args = process.argv.slice(2);
 const opt = (name, dflt) => (args.includes(name) ? args[args.indexOf(name) + 1] : dflt);
+const DRAFT = args.includes('--draft');
+const FPS = 60, CHUNK = 30, JPEG_Q = 95;
+const SUBFRAMES = Number(opt('--subframes', DRAFT ? 2 : 4));
+const X264_PRESET = opt('--preset', DRAFT ? 'veryfast' : 'medium');
 const mode = args.includes('--contact') ? 'contact' : args.includes('--still') ? 'still' : 'film';
 // The product decides the output name; the engine (film.html) is the same for every product.
 const PRODUCT = JSON.parse(fs.readFileSync(path.join(ROOT, 'product/product.json'), 'utf8'));
-const FILM = { html: 'film.html', audio: 'audio/score.wav', out: PRODUCT.output || 'launch', capture: 'dom' };
-const JOBS = Math.max(1, Number(opt('--jobs', os.cpus().length)));
+const FILM = { html: 'film.html', audio: 'audio/score.wav', out: (PRODUCT.output || 'launch') + (DRAFT ? '-draft' : ''), capture: 'dom' };
+// Each GPU worker (Chromium at 1080p + its encoder) adds ~0.7 GB; one per core ran a 7 GB laptop
+// out of memory. Size the pool from the RAM that's actually available now, keeping 0.5 GB spare.
+const availGB = (() => {
+  try { return Number(/MemAvailable:\s+(\d+)/.exec(fs.readFileSync('/proc/meminfo', 'utf8'))[1]) / 2 ** 20; } catch { return os.freemem() / 2 ** 30; }
+})();
+const AUTO_JOBS = Math.min(Math.floor(os.cpus().length / 2), Math.floor((availGB - 0.5) / 0.7));
+// Headless Chromium paints with SwiftShader (software) by default: ~220 ms per 1080p capture.
+// Through ANGLE on the real GPU it's ~75 ms and lighter on RAM.
+const GPU_ARGS = args.includes('--cpu') ? [] : ['--enable-gpu', '--use-gl=angle', '--use-angle=gl', '--ignore-gpu-blocklist'];
+const JOBS = Math.max(1, Number(opt('--jobs', AUTO_JOBS)));
+if (!args.includes("--jobs")) console.log(`${availGB.toFixed(1)} GB RAM available -> ${JOBS} worker(s) (override with --jobs N)`);
 const DOM = FILM.capture === 'dom';
 
-const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.json': 'application/json', '.png': 'image/png',
-  '.jpg': 'image/jpeg', '.svg': 'image/svg+xml', '.otf': 'font/otf', '.ttf': 'font/ttf' };
+const TYPES = {
+  '.html': 'text/html', '.js': 'text/javascript', '.json': 'application/json', '.png': 'image/png',
+  '.jpg': 'image/jpeg', '.svg': 'image/svg+xml', '.otf': 'font/otf', '.ttf': 'font/ttf'
+};
 
 function serve() {
   const server = http.createServer((req, res) => {
@@ -54,7 +73,7 @@ const subTimes = (f) => Array.from({ length: SUBFRAMES }, (_, k) => (f + ((k + 0
 
 // One browser + page. Separate browser instances so each gets its own renderer process.
 async function openWorker(base) {
-  const browser = await chromium.launch({ args: ['--disable-gpu-vsync', '--force-color-profile=srgb', '--disable-dev-shm-usage'] });
+  const browser = await chromium.launch({ args: ['--disable-gpu-vsync', '--force-color-profile=srgb', '--disable-dev-shm-usage', ...GPU_ARGS] });
   const page = await browser.newPage({ viewport: { width: 1920, height: 1080 }, deviceScaleFactor: 1 });
   page.on('pageerror', (e) => { console.error('page error:', e.message); process.exitCode = 1; });
   page.on('console', (m) => { if (m.type() === 'error') console.error('console:', m.text()); });
@@ -93,7 +112,7 @@ async function openWorker(base) {
 async function renderChunk(w, a, b, file) {
   const blend = DOM ? ['-vf', `tmix=frames=${SUBFRAMES},select='eq(mod(n\\,${SUBFRAMES})\\,${SUBFRAMES - 1})',setpts=N/${FPS}/TB`] : [];
   const ff = spawn('ffmpeg', ['-y', '-v', 'error', '-f', 'image2pipe', '-framerate', String(DOM ? FPS * SUBFRAMES : FPS), '-i', '-',
-    ...blend, '-r', String(FPS), '-c:v', 'libx264', '-preset', 'slow', '-crf', '16', '-pix_fmt', 'yuv420p',
+    ...blend, '-r', String(FPS), '-c:v', 'libx264', '-preset', X264_PRESET, '-crf', '16', '-threads', '2', '-pix_fmt', 'yuv420p',
     '-color_primaries', 'bt709', '-color_trc', 'bt709', '-colorspace', 'bt709', '-an', file], { stdio: ['pipe', 'inherit', 'inherit'] });
   const done = new Promise((resolve, reject) => ff.on('close', (c) => (c === 0 ? resolve() : reject(new Error('ffmpeg ' + c)))));
   for (let f = a; f < b; f++) {
@@ -136,10 +155,14 @@ if (mode === 'still' || mode === 'contact') {
   const LOOP = await probeWorker.page.evaluate(() => window.LOOP);
   await probeWorker.browser.close();
   const frames = Math.round(LOOP * FPS);
-  const segDir = path.join(ROOT, 'build', 'segments', FILM.out);
+  const RANGE = opt('--range', null)?.split(':').map(Number);
+  // Segments are cached per setting so a draft never gets stitched into a final.
+  const segDir = path.join(ROOT, 'build', 'segments', `${FILM.out}-s${SUBFRAMES}-${X264_PRESET}${RANGE ? '-bench' : ''}`);
+  if (RANGE) fs.rmSync(segDir, { recursive: true, force: true });
   fs.mkdirSync(segDir, { recursive: true });
   const chunks = [];
-  for (let a = 0; a < frames; a += CHUNK) chunks.push([a, Math.min(frames, a + CHUNK), path.join(segDir, `${String(a).padStart(5, '0')}.mp4`)]);
+  const [ra, rb] = RANGE || [0, frames];
+  for (let a = ra; a < rb; a += CHUNK) chunks.push([a, Math.min(rb, a + CHUNK), path.join(segDir, `${String(a).padStart(5, '0')}.mp4`)]);
   const t0 = Date.now();
   let next = 0, done = 0;
   const log = () => {
@@ -147,25 +170,29 @@ if (mode === 'still' || mode === 'contact') {
     const eta = done ? (s / done) * (chunks.length - done) : 0;
     console.log(`chunks ${done}/${chunks.length}  ${s.toFixed(0)}s elapsed${done ? `  ~${eta.toFixed(0)}s left` : ''}`);
   };
-  console.log(`rendering ${frames} frames (${DOM ? SUBFRAMES + ' subframes each' : 'in-page blur'}) with ${JOBS} worker slots`);
-  await Promise.all(Array.from({ length: JOBS }, async () => {
-    while (next < chunks.length) {
-      const [a, b, file] = chunks[next++];
-      if (fs.existsSync(file) && fs.statSync(file).size > 10000) {
+  console.log(`rendering ${rb - ra} frames (${DOM ? SUBFRAMES + ' subframes each' : 'in-page blur'}, x264 ${X264_PRESET}) with ${JOBS} worker slots`);
+  // One browser per slot, reused across its chunks (launching + loading the page costs seconds).
+  await Promise.all(Array.from({ length: Math.min(JOBS, chunks.length) }, async () => {
+    let w = null;
+    try {
+      while (next < chunks.length) {
+        const [a, b, file] = chunks[next++];
+        if (!(fs.existsSync(file) && fs.statSync(file).size > 10000)) {
+          w ??= await openWorker(base);
+          await renderChunk(w, a, b, file);
+        }
         done++;
         log();
-        continue;
       }
-      const w = await openWorker(base);
-      try {
-        await renderChunk(w, a, b, file);
-      } finally {
-        await w.browser.close().catch(() => {});
-      }
-      done++;
-      log();
+    } finally {
+      await w?.browser.close().catch(() => { });
     }
   }));
+  if (RANGE) {
+    console.log(`bench: ${rb - ra} frames in ${((Date.now() - t0) / 1000).toFixed(1)}s`);
+    server.close();
+    process.exit(process.exitCode ?? 0);
+  }
 
   // Join segments (stream copy) and mux the score; write to a temp name, rename when done.
   const list = path.join(segDir, 'list.txt');

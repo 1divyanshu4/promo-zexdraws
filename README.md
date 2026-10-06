@@ -7,7 +7,8 @@ from a Linux build of the app and replay footage exported from the app. The plan
 ```
 node render.mjs --contact          # one frame per beat -> out/contact-zexdraws-studio.png (check this first)
 node tools/strip.mjs 5.3 6.3 8     # frames across a transition -> out/strip-*.png
-node render.mjs                    # full film -> out/zexdraws-studio.mp4 (~6 min on 4 cores)
+node render.mjs --draft            # quick preview: 2 subframes, fast encode -> out/zexdraws-studio-draft.mp4
+node render.mjs                    # full film -> out/zexdraws-studio.mp4 (~3 min, 2 GPU workers on a 7 GB laptop)
 python3 audio/score.py             # re-synthesize the score after editing timeline.json
 ```
 
@@ -25,7 +26,8 @@ Open `film.html` through any static server to preview it in real time (after one
 - `timeline.json`: the score's arrangement and every UI sound, in beats. `audio/score.py`
   synthesizes the track, measures the beat grid into `beats.json`, and masters to -14 LUFS.
 - `render.mjs`: parallel headless-Chromium renderer, with 4 motion-blur subframes per frame and
-  H.264 CRF 16. `prep.mjs` extracts footage frames, and `tools/assets.py` builds the page-less
+  H.264 CRF 16. Chromium paints on the GPU (`--cpu` falls back to SwiftShader, ~3x slower), and the
+  worker count is sized from free RAM (~0.7 GB each); pass `--jobs N` to override. `prep.mjs` extracts footage frames, and `tools/assets.py` builds the page-less
   and blurred studio stills. `render.mjs` runs both.
 
 ## Making another promo film
